@@ -423,7 +423,7 @@ export function EvidenceConstellation({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
             zIndex: 5,
           }}
         >
@@ -471,7 +471,7 @@ export function EvidenceConstellation({
               fontFamily: "var(--font-display)",
               fontStyle: "italic",
               fontSize: "clamp(1.1rem, 1.6vw, 1.5rem)",
-              color: "rgba(247,241,230,0.78)",
+              color: "color-mix(in srgb, var(--text) 78%, transparent)",
               maxWidth: "32em",
               lineHeight: 1.3,
             }}
@@ -696,7 +696,7 @@ function Constellation({ text, color, starCount, seed, delay }: ConstellationPro
         style={{
           fontFamily: "var(--font-display)",
           fontSize: "clamp(1rem, 1.4vw, 1.4rem)",
-          color: "rgba(247,241,230,0.92)",
+          color: "var(--text)",
           lineHeight: 1.3,
           textShadow: "0 2px 12px rgba(0,0,0,0.6)",
         }}

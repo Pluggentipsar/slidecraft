@@ -144,7 +144,7 @@ export function RevealList({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
             zIndex: 3,
           }}
         >
@@ -220,7 +220,7 @@ export function RevealList({
                   fontSize: "clamp(2.2rem, 4vw, 4rem)",
                   lineHeight: 1.1,
                   letterSpacing: "-0.02em",
-                  color: "#F7F1E6",
+                  color: "var(--text)",
                   textShadow: "0 4px 24px rgba(0,0,0,0.5)",
                   position: "relative",
                 }}

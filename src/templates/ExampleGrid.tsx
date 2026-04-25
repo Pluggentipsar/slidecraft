@@ -141,7 +141,7 @@ export function ExampleGrid({
                 fontSize: "clamp(1.8rem, 3.2vw, 2.8rem)",
                 lineHeight: 1,
                 letterSpacing: "-0.02em",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 margin: 0,
                 textShadow: "0 6px 30px rgba(0,0,0,0.4)",
               }}
@@ -158,7 +158,7 @@ export function ExampleGrid({
                 fontFamily: "var(--font-display)",
                 fontStyle: "italic",
                 fontSize: "clamp(0.9rem, 1.1vw, 1.15rem)",
-                color: "rgba(247,241,230,0.72)",
+                color: "color-mix(in srgb, var(--text) 72%, transparent)",
                 margin: 0,
                 lineHeight: 1.4,
               }}
@@ -198,7 +198,7 @@ export function ExampleGrid({
                   gap: "0.6rem",
                   padding: "clamp(0.6rem, 0.9vw, 0.85rem) clamp(0.75rem, 1.1vw, 1.05rem)",
                   borderRadius: "0.55rem",
-                  background: "rgba(247,241,230,0.06)",
+                  background: "color-mix(in srgb, var(--text) 6%, transparent)",
                   backdropFilter: "blur(14px) saturate(140%)",
                   WebkitBackdropFilter: "blur(14px) saturate(140%)",
                   border: "1px solid rgba(255,255,255,0.08)",
@@ -224,7 +224,7 @@ export function ExampleGrid({
                   style={{
                     fontFamily: "var(--font-body)",
                     fontSize: "clamp(0.78rem, 0.88vw, 0.92rem)",
-                    color: "rgba(247,241,230,0.92)",
+                    color: "var(--text)",
                     lineHeight: 1.35,
                     flex: 1,
                   }}

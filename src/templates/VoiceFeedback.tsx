@@ -246,7 +246,7 @@ export function VoiceFeedback({
                 fontSize: "clamp(1.8rem, 3vw, 2.6rem)",
                 lineHeight: 1,
                 letterSpacing: "-0.02em",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 margin: 0,
               }}
             >
@@ -262,7 +262,7 @@ export function VoiceFeedback({
                 fontFamily: "var(--font-display)",
                 fontStyle: "italic",
                 fontSize: "clamp(0.9rem, 1.05vw, 1.1rem)",
-                color: "rgba(247,241,230,0.72)",
+                color: "color-mix(in srgb, var(--text) 72%, transparent)",
                 margin: 0,
                 lineHeight: 1.35,
               }}
@@ -358,7 +358,7 @@ export function VoiceFeedback({
               fontStyle: "italic",
               fontSize: "clamp(0.82rem, 0.95vw, 0.98rem)",
               lineHeight: 1.5,
-              color: "rgba(247,241,230,0.82)",
+              color: "var(--text)",
               paddingLeft: "1rem",
               borderLeft: `2px solid ${accent}50`,
             }}
@@ -396,7 +396,7 @@ export function VoiceFeedback({
                 gap: "0.55rem",
                 padding: "clamp(0.9rem, 1.2vw, 1.2rem) clamp(1rem, 1.3vw, 1.3rem)",
                 borderRadius: "0.65rem",
-                background: "rgba(247,241,230,0.06)",
+                background: "color-mix(in srgb, var(--text) 6%, transparent)",
                 backdropFilter: "blur(14px) saturate(140%)",
                 WebkitBackdropFilter: "blur(14px) saturate(140%)",
                 border: `1px solid ${accent}35`,
@@ -421,7 +421,7 @@ export function VoiceFeedback({
                   fontFamily: "var(--font-display)",
                   fontWeight: 700,
                   fontSize: "clamp(1rem, 1.2vw, 1.2rem)",
-                  color: "#F7F1E6",
+                  color: "var(--text)",
                   letterSpacing: "-0.01em",
                   lineHeight: 1.2,
                 }}
@@ -433,7 +433,7 @@ export function VoiceFeedback({
                   fontFamily: "var(--font-body)",
                   fontStyle: "italic",
                   fontSize: "clamp(0.77rem, 0.88vw, 0.9rem)",
-                  color: "rgba(247,241,230,0.78)",
+                  color: "color-mix(in srgb, var(--text) 78%, transparent)",
                   lineHeight: 1.4,
                 }}
               >
@@ -458,7 +458,7 @@ export function VoiceFeedback({
                       alignItems: "flex-start",
                       fontFamily: "var(--font-body)",
                       fontSize: "clamp(0.75rem, 0.85vw, 0.87rem)",
-                      color: "rgba(247,241,230,0.88)",
+                      color: "var(--text)",
                       lineHeight: 1.4,
                     }}
                   >

@@ -124,7 +124,7 @@ export function QuizDemo({
                 fontSize: "clamp(2rem, 3.5vw, 3rem)",
                 lineHeight: 1,
                 letterSpacing: "-0.025em",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 margin: 0,
               }}
             >
@@ -140,7 +140,7 @@ export function QuizDemo({
                 fontFamily: "var(--font-display)",
                 fontStyle: "italic",
                 fontSize: "clamp(0.95rem, 1.1vw, 1.15rem)",
-                color: "rgba(247,241,230,0.75)",
+                color: "color-mix(in srgb, var(--text) 75%, transparent)",
                 margin: 0,
                 lineHeight: 1.4,
                 maxWidth: "30em",
@@ -213,7 +213,7 @@ export function QuizDemo({
             style={{
               width: "100%",
               maxWidth: "32em",
-              background: "#F7F1E6",
+              background: "var(--text)",
               borderRadius: "1.2rem",
               padding: "clamp(1.3rem, 2vw, 2rem)",
               boxShadow: `0 40px 80px -20px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.15), 0 0 60px -20px ${accent}60`,

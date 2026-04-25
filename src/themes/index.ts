@@ -361,5 +361,10 @@ export function themeToCssVars(theme: ThemeTokens): Record<string, string> {
 
     // Ornament
     "--ornament-color": theme.ornamentColor,
+
+    // Bakgrundstextur (URL eller CSS-värde) — appliceras via globals.css
+    "--bg-texture": theme.backgroundTexture
+      ? `url("${theme.backgroundTexture}")`
+      : "none",
   };
 }

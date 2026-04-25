@@ -134,7 +134,7 @@ export function PromptHero({
               fontSize: TITLE_SIZES[titleSize],
               lineHeight: 0.88,
               letterSpacing: "-0.045em",
-              color: "#F7F1E6",
+              color: "var(--text)",
               margin: 0,
               textShadow: "0 8px 40px rgba(0,0,0,0.4)",
             }}
@@ -164,7 +164,7 @@ export function PromptHero({
               }}
             >
               <EditableText path="subtitle" value={subtitle}>
-                {renderBold(subtitle, accent, "rgba(247,241,230,0.92)")}
+                {renderBold(subtitle, accent, "var(--text)")}
               </EditableText>
             </motion.p>
           ) : null}
@@ -219,7 +219,7 @@ export function PromptHero({
                   borderRadius: "1.1rem",
                   borderTopLeftRadius: "0.35rem",
                   padding: "0.95rem 1.2rem",
-                  color: "#F7F1E6",
+                  color: "var(--text)",
                   fontFamily: "var(--font-body)",
                   fontSize: "clamp(0.85rem, 1.02vw, 1rem)",
                   lineHeight: 1.5,
@@ -233,7 +233,7 @@ export function PromptHero({
                     fontSize: "0.7rem",
                     letterSpacing: "0.18em",
                     textTransform: "uppercase",
-                    color: "rgba(247,241,230,0.5)",
+                    color: "var(--text-muted)",
                     marginBottom: "0.4rem",
                   }}
                 >

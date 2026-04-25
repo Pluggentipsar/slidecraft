@@ -133,7 +133,7 @@ export function CodeGeneration({
             : "clamp(0.85rem, 1.05vw, 1.15rem)",
         lineHeight: 1.55,
         color:
-          variant === "fullbg" ? "rgba(103,212,205,0.35)" : "rgba(247,241,230,0.9)",
+          variant === "fullbg" ? "rgba(103,212,205,0.35)" : "var(--text)",
         margin: 0,
         whiteSpace: "pre-wrap",
         wordBreak: "break-word",
@@ -202,7 +202,7 @@ export function CodeGeneration({
                 textAlign: "center",
               }}
             >
-              <EditableText path="eyebrow" value={eyebrow ?? ""}>{renderBold(eyebrow, accent, "rgba(247,241,230,0.85)")}</EditableText>
+              <EditableText path="eyebrow" value={eyebrow ?? ""}>{renderBold(eyebrow, accent, "var(--text)")}</EditableText>
             </motion.div>
           ) : null}
           {title ? (
@@ -216,14 +216,14 @@ export function CodeGeneration({
                 fontSize: "clamp(3rem, 7vw, 7rem)",
                 lineHeight: 1.05,
                 letterSpacing: "-0.03em",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 margin: 0,
                 textAlign: "center",
                 maxWidth: "18em",
                 textShadow: "0 6px 40px rgba(0,0,0,0.6)",
               }}
             >
-              <EditableText path="title" value={title ?? ""}>{renderBold(title, accent, "#F7F1E6")}</EditableText>
+              <EditableText path="title" value={title ?? ""}>{renderBold(title, accent, "var(--text)")}</EditableText>
             </motion.h1>
           ) : null}
           {subtitle ? (
@@ -238,10 +238,10 @@ export function CodeGeneration({
                 fontSize: "clamp(1rem, 1.4vw, 1.4rem)",
                 textAlign: "center",
                 maxWidth: "32em",
-                color: "rgba(247,241,230,0.9)",
+                color: "var(--text)",
               }}
             >
-              <EditableText path="subtitle" value={subtitle ?? ""}>{renderBold(subtitle, accent, "rgba(247,241,230,0.9)")}</EditableText>
+              <EditableText path="subtitle" value={subtitle ?? ""}>{renderBold(subtitle, accent, "var(--text)")}</EditableText>
             </motion.p>
           ) : null}
         </div>
@@ -288,7 +288,7 @@ export function CodeGeneration({
                 fontSize: "clamp(1.1rem, 1.6vw, 1.6rem)",
               }}
             >
-              <EditableText path="eyebrow" value={eyebrow ?? ""}>{renderBold(eyebrow, accent, "rgba(247,241,230,0.85)")}</EditableText>
+              <EditableText path="eyebrow" value={eyebrow ?? ""}>{renderBold(eyebrow, accent, "var(--text)")}</EditableText>
             </div>
           ) : null}
           {title ? (
@@ -299,7 +299,7 @@ export function CodeGeneration({
                 fontSize: "clamp(2.5rem, 5vw, 5rem)",
                 lineHeight: 1,
                 letterSpacing: "-0.02em",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 margin: 0,
               }}
             >

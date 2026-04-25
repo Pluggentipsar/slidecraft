@@ -137,7 +137,7 @@ export function TwoPaths({
               fontSize: "clamp(1.75rem, 3.5vw, 3rem)",
               lineHeight: 1.05,
               letterSpacing: "-0.02em",
-              color: "rgba(247,241,230,0.85)",
+              color: "var(--text)",
               margin: 0,
               textAlign: "center",
               maxWidth: "30em",
@@ -185,7 +185,7 @@ export function TwoPaths({
                     fontWeight: 600,
                     fontSize: "clamp(1.4rem, 2.2vw, 2.2rem)",
                     lineHeight: 1.1,
-                    color: "#F7F1E6",
+                    color: "var(--text)",
                     letterSpacing: "-0.015em",
                   }}
                 >
@@ -231,7 +231,7 @@ export function TwoPaths({
                       fontStyle: "italic",
                       fontSize: "clamp(1rem, 1.35vw, 1.4rem)",
                       lineHeight: 1.35,
-                      color: "#F7F1E6",
+                      color: "var(--text)",
                     }}
                   >
                     {row.left}
@@ -254,7 +254,7 @@ export function TwoPaths({
               style={{
                 position: "absolute",
                 inset: 0,
-                background: "rgba(247,241,230,0.06)",
+                background: "color-mix(in srgb, var(--text) 6%, transparent)",
               }}
             />
             <motion.div
@@ -298,7 +298,7 @@ export function TwoPaths({
                     fontWeight: 500,
                     fontSize: "clamp(1.4rem, 2.2vw, 2.2rem)",
                     lineHeight: 1.1,
-                    color: "rgba(247,241,230,0.78)",
+                    color: "color-mix(in srgb, var(--text) 78%, transparent)",
                     letterSpacing: "-0.015em",
                   }}
                 >
@@ -347,7 +347,7 @@ export function TwoPaths({
                       fontFamily: "var(--font-display)",
                       fontSize: "clamp(1rem, 1.35vw, 1.4rem)",
                       lineHeight: 1.35,
-                      color: "rgba(247,241,230,0.72)",
+                      color: "color-mix(in srgb, var(--text) 72%, transparent)",
                     }}
                   >
                     {row.right}
@@ -372,7 +372,7 @@ export function TwoPaths({
               key={i}
               animate={{
                 background:
-                  i <= activeStep ? leftAccent : "rgba(247,241,230,0.15)",
+                  i <= activeStep ? leftAccent : "color-mix(in srgb, var(--text) 15%, transparent)",
                 width: i === activeStep ? "2rem" : "0.5rem",
               }}
               transition={{ duration: 0.4 }}

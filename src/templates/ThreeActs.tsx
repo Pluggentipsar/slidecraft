@@ -122,7 +122,7 @@ export function ThreeActs({
             fontSize: "clamp(0.7rem, 0.85vw, 0.9rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.5)",
+            color: "var(--text-muted)",
             zIndex: 3,
           }}
         >
@@ -143,7 +143,7 @@ export function ThreeActs({
             fontSize: "clamp(0.7rem, 0.85vw, 0.9rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.5)",
+            color: "var(--text-muted)",
             zIndex: 3,
           }}
         >
@@ -217,7 +217,7 @@ export function ThreeActs({
                     fontSize: "clamp(4rem, 9vw, 10rem)",
                     lineHeight: 0.92,
                     letterSpacing: "-0.045em",
-                    color: "#F7F1E6",
+                    color: "var(--text)",
                     textAlign: "center",
                     textShadow: "0 8px 40px rgba(0,0,0,0.5)",
                     position: "relative",
@@ -297,7 +297,7 @@ export function ThreeActs({
                           fontFamily: "var(--font-body)",
                           fontSize: "clamp(0.85rem, 1vw, 1rem)",
                           lineHeight: 1.45,
-                          color: "rgba(247,241,230,0.85)",
+                          color: "var(--text)",
                         }}
                       >
                         {bullet}
@@ -319,7 +319,7 @@ export function ThreeActs({
                         fontWeight: 700,
                         fontSize: "clamp(0.9rem, 1.05vw, 1.1rem)",
                         lineHeight: 1.4,
-                        color: "#F7F1E6",
+                        color: "var(--text)",
                         marginTop: "0.4rem",
                         paddingTop: "0.8rem",
                         borderTop: `1px solid ${act.color}40`,
@@ -353,7 +353,7 @@ export function ThreeActs({
               fontStyle: "italic",
               fontSize: "clamp(1rem, 1.4vw, 1.55rem)",
               lineHeight: 1.4,
-              color: "#F7F1E6",
+              color: "var(--text)",
               textAlign: "center",
               letterSpacing: "-0.01em",
             }}

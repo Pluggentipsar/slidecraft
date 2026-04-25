@@ -151,7 +151,7 @@ export function AcronymList({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
             zIndex: 5,
           }}
         >
@@ -200,7 +200,7 @@ export function AcronymList({
               fontFamily: "var(--font-display)",
               fontWeight: 700,
               fontSize: "clamp(1.6rem, 2.5vw, 2.6rem)",
-              color: "#F7F1E6",
+              color: "var(--text)",
               letterSpacing: "-0.02em",
               lineHeight: 1.1,
             }}
@@ -240,7 +240,7 @@ export function AcronymList({
               fontFamily: "var(--font-display)",
               fontStyle: "italic",
               fontSize: "clamp(1rem, 1.4vw, 1.4rem)",
-              color: "rgba(247,241,230,0.7)",
+              color: "color-mix(in srgb, var(--text) 70%, transparent)",
               maxWidth: "32em",
               lineHeight: 1.35,
               borderLeft: `2px solid ${accent}66`,
@@ -319,7 +319,7 @@ function AcronymRow({
             fontFamily: "var(--font-display)",
             fontWeight: 700,
             fontSize: "clamp(1.4rem, 2.4vw, 2.4rem)",
-            color: "#F7F1E6",
+            color: "var(--text)",
             letterSpacing: "-0.02em",
             lineHeight: 1.1,
           }}
@@ -332,7 +332,7 @@ function AcronymRow({
               fontFamily: "var(--font-display)",
               fontStyle: "italic",
               fontSize: "clamp(0.95rem, 1.3vw, 1.3rem)",
-              color: "rgba(247,241,230,0.62)",
+              color: "color-mix(in srgb, var(--text) 62%, transparent)",
               lineHeight: 1.3,
             }}
           >

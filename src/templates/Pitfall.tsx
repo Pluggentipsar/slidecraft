@@ -149,7 +149,7 @@ export function Pitfall({
             fontSize: "clamp(0.7rem, 0.85vw, 0.9rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.5)",
+            color: "var(--text-muted)",
             zIndex: 3,
           }}
         >
@@ -178,7 +178,7 @@ export function Pitfall({
             fontSize: "clamp(4rem, 11vw, 13rem)",
             lineHeight: 0.92,
             letterSpacing: "-0.045em",
-            color: "#F7F1E6",
+            color: "var(--text)",
             margin: 0,
             textShadow: `0 8px 40px rgba(0,0,0,0.5), 0 0 60px ${accent}20`,
           }}
@@ -196,7 +196,7 @@ export function Pitfall({
               fontStyle: "italic",
               fontSize: "clamp(1.15rem, 1.6vw, 1.7rem)",
               lineHeight: 1.35,
-              color: "rgba(247,241,230,0.82)",
+              color: "var(--text)",
               margin: 0,
               maxWidth: "32em",
             }}
@@ -233,7 +233,7 @@ export function Pitfall({
                     width: "2rem",
                     height: "2rem",
                     borderRadius: "50%",
-                    background: "rgba(247,241,230,0.12)",
+                    background: "color-mix(in srgb, var(--text) 12%, transparent)",
                     border: "1px solid rgba(255,255,255,0.18)",
                     display: "flex",
                     alignItems: "center",
@@ -241,7 +241,7 @@ export function Pitfall({
                     fontFamily: "var(--font-mono)",
                     fontSize: "0.7rem",
                     fontWeight: 700,
-                    color: "#F7F1E6",
+                    color: "var(--text)",
                   }}
                 >
                   DU
@@ -257,7 +257,7 @@ export function Pitfall({
                     fontFamily: "var(--font-body)",
                     fontSize: "clamp(0.9rem, 1.05vw, 1.05rem)",
                     lineHeight: 1.4,
-                    color: "#F7F1E6",
+                    color: "var(--text)",
                   }}
                 >
                   {question}
@@ -307,7 +307,7 @@ export function Pitfall({
                     fontFamily: "var(--font-body)",
                     fontSize: "clamp(0.95rem, 1.1vw, 1.1rem)",
                     lineHeight: 1.5,
-                    color: "#F7F1E6",
+                    color: "var(--text)",
                     maxWidth: "36em",
                     boxShadow: `0 12px 40px -10px rgba(0,0,0,0.5), 0 0 0 1px ${accent}20`,
                   }}

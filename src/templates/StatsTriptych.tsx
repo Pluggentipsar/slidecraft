@@ -150,7 +150,7 @@ function Counter({
           <span
             style={{
               fontSize: "clamp(2rem, 4vw, 3.5rem)",
-              color: "rgba(247,241,230,0.7)",
+              color: "color-mix(in srgb, var(--text) 70%, transparent)",
               marginRight: "0.2rem",
             }}
           >
@@ -160,7 +160,7 @@ function Counter({
         <span
           style={{
             fontSize: "clamp(5rem, 12vw, 13rem)",
-            color: "#F7F1E6",
+            color: "var(--text)",
             textShadow: `0 0 40px ${accent}50, 0 8px 30px rgba(0,0,0,0.5)`,
           }}
         >
@@ -184,7 +184,7 @@ function Counter({
           fontFamily: "var(--font-display)",
           fontStyle: "italic",
           fontSize: "clamp(1.05rem, 1.4vw, 1.5rem)",
-          color: "rgba(247,241,230,0.82)",
+          color: "var(--text)",
           maxWidth: "14em",
           lineHeight: 1.25,
         }}
@@ -236,7 +236,7 @@ export function StatsTriptych({
                 fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
                 letterSpacing: "0.32em",
                 textTransform: "uppercase",
-                color: "rgba(247,241,230,0.6)",
+                color: "color-mix(in srgb, var(--text) 60%, transparent)",
               }}
             >
               <EditableText path="kicker" value={kicker ?? ""}>{kicker}</EditableText>
@@ -253,7 +253,7 @@ export function StatsTriptych({
                 fontSize: "clamp(2rem, 4.5vw, 4rem)",
                 lineHeight: 1.02,
                 letterSpacing: "-0.025em",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 margin: 0,
               }}
             >
@@ -269,7 +269,7 @@ export function StatsTriptych({
                 fontFamily: "var(--font-display)",
                 fontStyle: "italic",
                 fontSize: "clamp(1.1rem, 1.4vw, 1.45rem)",
-                color: "rgba(247,241,230,0.72)",
+                color: "color-mix(in srgb, var(--text) 72%, transparent)",
                 margin: 0,
                 lineHeight: 1.4,
                 maxWidth: "30em",
@@ -313,7 +313,7 @@ export function StatsTriptych({
               fontSize: "clamp(0.7rem, 0.82vw, 0.85rem)",
               letterSpacing: "0.22em",
               textTransform: "uppercase",
-              color: "rgba(247,241,230,0.45)",
+              color: "var(--text-muted)",
               marginTop: "auto",
             }}
           >

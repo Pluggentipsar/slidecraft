@@ -126,7 +126,7 @@ export function StudentVoices({
                 fontSize: "clamp(0.7rem, 0.9vw, 0.9rem)",
                 letterSpacing: "0.3em",
                 textTransform: "uppercase",
-                color: "rgba(247,241,230,0.7)",
+                color: "color-mix(in srgb, var(--text) 70%, transparent)",
               }}
             >
               <EditableText path="kicker" value={kicker ?? ""}>{kicker}</EditableText>
@@ -143,7 +143,7 @@ export function StudentVoices({
                 fontSize: "clamp(2.2rem, 4.8vw, 4.5rem)",
                 lineHeight: 1.02,
                 letterSpacing: "-0.025em",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 margin: 0,
               }}
             >
@@ -158,7 +158,7 @@ export function StudentVoices({
               style={{
                 fontFamily: "var(--font-body)",
                 fontSize: "clamp(0.95rem, 1.1vw, 1.15rem)",
-                color: "rgba(247,241,230,0.75)",
+                color: "color-mix(in srgb, var(--text) 75%, transparent)",
                 margin: 0,
                 maxWidth: "30em",
                 lineHeight: 1.5,
@@ -231,7 +231,7 @@ export function StudentVoices({
                     fontFamily: "var(--font-display)",
                     fontStyle: "italic",
                     fontSize: "clamp(0.95rem, 1.15vw, 1.25rem)",
-                    color: "#F7F1E6",
+                    color: "var(--text)",
                     lineHeight: 1.35,
                     position: "relative",
                   }}

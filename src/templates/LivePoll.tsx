@@ -322,7 +322,7 @@ export function LivePoll({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
             zIndex: 3,
           }}
         >
@@ -365,7 +365,7 @@ export function LivePoll({
               style={{
                 fontFamily: "var(--font-mono)",
                 fontSize: "clamp(0.65rem, 0.8vw, 0.8rem)",
-                color: "rgba(247,241,230,0.6)",
+                color: "color-mix(in srgb, var(--text) 60%, transparent)",
                 letterSpacing: "0.18em",
               }}
             >
@@ -398,7 +398,7 @@ export function LivePoll({
                 fontSize: "clamp(2rem, 3.8vw, 3.5rem)",
                 lineHeight: 1,
                 letterSpacing: "-0.025em",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 margin: 0,
                 textShadow: "0 6px 30px rgba(0,0,0,0.5)",
               }}
@@ -417,7 +417,7 @@ export function LivePoll({
                 fontFamily: "var(--font-display)",
                 fontStyle: "italic",
                 fontSize: "clamp(1rem, 1.3vw, 1.35rem)",
-                color: "rgba(247,241,230,0.72)",
+                color: "color-mix(in srgb, var(--text) 72%, transparent)",
                 margin: "0.4rem 0 0 0",
               }}
             >
@@ -534,7 +534,7 @@ function PollBar({ option, color, count, pct, delay, showLive }: PollBarProps) {
             style={{
               fontFamily: "var(--font-body)",
               fontSize: "clamp(0.75rem, 0.9vw, 0.95rem)",
-              color: "rgba(247,241,230,0.6)",
+              color: "color-mix(in srgb, var(--text) 60%, transparent)",
               lineHeight: 1.3,
             }}
           >
@@ -573,7 +573,7 @@ function PollBar({ option, color, count, pct, delay, showLive }: PollBarProps) {
           fontFamily: "var(--font-mono)",
           fontWeight: 700,
           fontSize: "clamp(1.1rem, 1.6vw, 1.7rem)",
-          color: showLive ? "#F7F1E6" : "rgba(247,241,230,0.3)",
+          color: showLive ? "var(--text)" : "color-mix(in srgb, var(--text) 30%, transparent)",
           minWidth: "4.5rem",
           textAlign: "right",
           fontVariantNumeric: "tabular-nums",
@@ -629,7 +629,7 @@ function StatusMessage({ message, subtle }: { message: string; subtle: string })
             fontFamily: "var(--font-display)",
             fontStyle: "italic",
             fontSize: "clamp(0.9rem, 1.2vw, 1.2rem)",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
             textAlign: "center",
             maxWidth: "28em",
           }}

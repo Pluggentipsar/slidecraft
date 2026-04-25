@@ -154,7 +154,7 @@ export function HookStatement({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.45)",
+            color: "var(--text-muted)",
             zIndex: 3,
           }}
         >
@@ -179,10 +179,10 @@ export function HookStatement({
             fontSize: "clamp(2rem, 3.8vw, 3.6rem)",
             lineHeight: 1.2,
             letterSpacing: "-0.02em",
-            color: "#F7F1E6",
+            color: "var(--text)",
             textAlign: "center",
             maxWidth: "22em",
-            textShadow: "0 8px 40px rgba(0,0,0,0.6)",
+            textShadow: "none",
           }}
         >
           {timings.map((t, i) => {

@@ -82,8 +82,8 @@ export function ErrorSlide({
         >
           ERROR
         </span>
-        <span style={{ color: "rgba(247,241,230,0.85)" }}>{errorTag}</span>
-        <span style={{ color: "rgba(247,241,230,0.45)" }}>· {timestamp}</span>
+        <span style={{ color: "var(--text)" }}>{errorTag}</span>
+        <span style={{ color: "var(--text-muted)" }}>· {timestamp}</span>
       </motion.div>
 
       {/* Mitten */}
@@ -176,7 +176,7 @@ export function ErrorSlide({
             style={{
               fontFamily: "var(--font-mono)",
               fontSize: "clamp(0.7rem, 0.9vw, 0.88rem)",
-              color: "rgba(247,241,230,0.65)",
+              color: "color-mix(in srgb, var(--text) 65%, transparent)",
               marginBottom: "0.7rem",
               letterSpacing: "0.18em",
               display: "flex",

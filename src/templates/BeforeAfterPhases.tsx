@@ -143,7 +143,7 @@ export function BeforeAfterPhases({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
             zIndex: 5,
           }}
         >
@@ -191,7 +191,7 @@ export function BeforeAfterPhases({
               fontFamily: "var(--font-display)",
               fontStyle: "italic",
               fontSize: "clamp(1.1rem, 1.6vw, 1.6rem)",
-              color: "rgba(247,241,230,0.78)",
+              color: "color-mix(in srgb, var(--text) 78%, transparent)",
               maxWidth: "32em",
               lineHeight: 1.3,
             }}
@@ -300,7 +300,7 @@ function PhaseColumn({
           fontFamily: "var(--font-display)",
           fontWeight: 800,
           fontSize: "clamp(2rem, 3.2vw, 3.4rem)",
-          color: "#F7F1E6",
+          color: "var(--text)",
           letterSpacing: "-0.03em",
           lineHeight: 0.95,
           textShadow: "0 4px 20px rgba(0,0,0,0.5)",
@@ -317,7 +317,7 @@ function PhaseColumn({
             fontSize: "clamp(0.7rem, 0.85vw, 0.85rem)",
             letterSpacing: "0.22em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
           }}
         >
           {phase.timeMark}
@@ -331,7 +331,7 @@ function PhaseColumn({
             fontFamily: "var(--font-display)",
             fontStyle: "italic",
             fontSize: "clamp(0.95rem, 1.25vw, 1.25rem)",
-            color: "rgba(247,241,230,0.85)",
+            color: "var(--text)",
             lineHeight: 1.3,
             paddingBottom: "clamp(0.4rem, 0.8vh, 0.7rem)",
             borderBottom: `1px solid ${accent}33`,
@@ -358,7 +358,7 @@ function PhaseColumn({
             style={{
               fontFamily: "var(--font-display)",
               fontSize: "clamp(0.9rem, 1.15vw, 1.2rem)",
-              color: "rgba(247,241,230,0.82)",
+              color: "var(--text)",
               lineHeight: 1.3,
               display: "flex",
               gap: "0.55rem",
@@ -510,7 +510,7 @@ function Timeline({
           fontSize: "clamp(0.6rem, 0.75vw, 0.75rem)",
           letterSpacing: "0.25em",
           textTransform: "uppercase",
-          color: "rgba(247,241,230,0.4)",
+          color: "color-mix(in srgb, var(--text-muted) 80%, transparent)",
         }}
       >
         <span>Tid →</span>

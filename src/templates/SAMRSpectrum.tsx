@@ -177,7 +177,7 @@ export function SAMRSpectrum({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
             zIndex: 5,
           }}
         >
@@ -225,7 +225,7 @@ export function SAMRSpectrum({
               fontFamily: "var(--font-display)",
               fontStyle: "italic",
               fontSize: "clamp(1.2rem, 1.7vw, 1.7rem)",
-              color: "rgba(247,241,230,0.82)",
+              color: "var(--text)",
               maxWidth: "32em",
               lineHeight: 1.3,
             }}
@@ -268,7 +268,7 @@ export function SAMRSpectrum({
               style={{
                 fontFamily: "var(--font-display)",
                 fontSize: "clamp(1rem, 1.4vw, 1.4rem)",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 fontStyle: "italic",
               }}
             >
@@ -526,7 +526,7 @@ function SpectrumStation({
           fontFamily: "var(--font-display)",
           fontWeight: 700,
           fontSize: "clamp(1.05rem, 1.5vw, 1.5rem)",
-          color: "#F7F1E6",
+          color: "var(--text)",
           textAlign: "center",
           letterSpacing: "-0.015em",
           lineHeight: 1.1,
@@ -548,7 +548,7 @@ function SpectrumStation({
             padding: "clamp(0.8rem, 1.4vh, 1.2rem)",
             fontFamily: "var(--font-display)",
             fontSize: "clamp(0.85rem, 1.1vw, 1.1rem)",
-            color: "rgba(247,241,230,0.88)",
+            color: "var(--text)",
             lineHeight: 1.35,
             textAlign: "left",
             width: "100%",

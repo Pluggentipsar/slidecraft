@@ -132,7 +132,7 @@ export function ThreeUp({
                 fontSize: "clamp(0.7rem, 0.9vw, 0.9rem)",
                 letterSpacing: "0.3em",
                 textTransform: "uppercase",
-                color: "rgba(247,241,230,0.5)",
+                color: "var(--text-muted)",
               }}
             >
               {kicker}
@@ -148,7 +148,7 @@ export function ThreeUp({
               fontSize: "clamp(2.5rem, 5.5vw, 5rem)",
               lineHeight: 1.02,
               letterSpacing: "-0.025em",
-              color: "#F7F1E6",
+              color: "var(--text)",
               margin: 0,
             }}
           >
@@ -163,7 +163,7 @@ export function ThreeUp({
                 fontFamily: "var(--font-body)",
                 fontSize: "clamp(1rem, 1.15vw, 1.2rem)",
                 lineHeight: 1.55,
-                color: "rgba(247,241,230,0.75)",
+                color: "color-mix(in srgb, var(--text) 75%, transparent)",
                 margin: 0,
               }}
             >
@@ -260,7 +260,7 @@ export function ThreeUp({
                           height: "2.2rem",
                           borderRadius: "50%",
                           background: "rgba(10,9,8,0.7)",
-                          color: "#F7F1E6",
+                          color: "var(--text)",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
@@ -322,7 +322,7 @@ export function ThreeUp({
                       fontFamily: "var(--font-display)",
                       fontWeight: 600,
                       fontSize: "clamp(1.1rem, 1.5vw, 1.6rem)",
-                      color: "#F7F1E6",
+                      color: "var(--text)",
                       letterSpacing: "-0.015em",
                       lineHeight: 1.1,
                     }}
@@ -336,7 +336,7 @@ export function ThreeUp({
                         fontFamily: "var(--font-body)",
                         fontStyle: "italic",
                         fontSize: "clamp(0.85rem, 0.95vw, 1rem)",
-                        color: "rgba(247,241,230,0.6)",
+                        color: "color-mix(in srgb, var(--text) 60%, transparent)",
                         lineHeight: 1.4,
                       }}
                     >

@@ -181,7 +181,7 @@ export function TriadStatement({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
             zIndex: 3,
           }}
         >
@@ -294,7 +294,7 @@ function PremiseLine({
         fontSize: "clamp(1.6rem, 2.8vw, 3rem)",
         lineHeight: 1.15,
         letterSpacing: "-0.015em",
-        color: "rgba(247,241,230,0.82)",
+        color: "var(--text)",
         maxWidth: "26em",
         textShadow: "0 4px 20px rgba(0,0,0,0.5)",
       }}
@@ -341,7 +341,7 @@ function LandingLine({
         fontSize: "clamp(2.4rem, 4.5vw, 5rem)",
         lineHeight: 1.05,
         letterSpacing: "-0.03em",
-        color: "#F7F1E6",
+        color: "var(--text)",
         maxWidth: "20em",
         textShadow: "0 6px 30px rgba(0,0,0,0.6)",
       }}

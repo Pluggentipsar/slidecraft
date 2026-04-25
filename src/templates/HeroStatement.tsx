@@ -132,8 +132,8 @@ export function HeroStatement({
   const whisperLine = lines[1] ?? "";
   const shoutLine = lines[2] ?? "";
 
-  const textColor = theme === "cream" ? "#1a1612" : "#F7F1E6";
-  const subtleColor = theme === "cream" ? "rgba(26,22,18,0.55)" : "rgba(247,241,230,0.55)";
+  const textColor = theme === "cream" ? "#1a1612" : "var(--text)";
+  const subtleColor = theme === "cream" ? "rgba(26,22,18,0.55)" : "var(--text-muted)";
 
   return (
     <div

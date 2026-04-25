@@ -239,7 +239,7 @@ export function BloomComparison({
                 fontSize: "clamp(1.75rem, 3vw, 2.5rem)",
                 lineHeight: 1.05,
                 letterSpacing: "-0.02em",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 margin: 0,
               }}
             >
@@ -293,7 +293,7 @@ export function BloomComparison({
                   fontFamily: "var(--font-display)",
                   fontWeight: 700,
                   fontSize: "clamp(1rem, 1.3vw, 1.3rem)",
-                  color: "#F7F1E6",
+                  color: "var(--text)",
                   textAlign: "center",
                   lineHeight: 1.15,
                   letterSpacing: "-0.01em",
@@ -373,7 +373,7 @@ export function BloomComparison({
                   fontFamily: "var(--font-display)",
                   fontWeight: 700,
                   fontSize: "clamp(1rem, 1.3vw, 1.3rem)",
-                  color: "#F7F1E6",
+                  color: "var(--text)",
                   textAlign: "center",
                   lineHeight: 1.15,
                   letterSpacing: "-0.01em",

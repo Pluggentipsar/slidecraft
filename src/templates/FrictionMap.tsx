@@ -94,7 +94,7 @@ export function FrictionMap({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
             zIndex: 5,
           }}
         >
@@ -170,7 +170,7 @@ export function FrictionMap({
               fontSize: "clamp(1.5rem, 2.6vw, 2.6rem)",
               lineHeight: 1.15,
               letterSpacing: "-0.02em",
-              color: "rgba(247,241,230,0.92)",
+              color: "var(--text)",
               textShadow: "0 4px 20px rgba(0,0,0,0.6)",
             }}
           >
@@ -188,7 +188,7 @@ export function FrictionMap({
               fontFamily: "var(--font-display)",
               fontStyle: "italic",
               fontSize: "clamp(1.1rem, 1.6vw, 1.6rem)",
-              color: "rgba(247,241,230,0.65)",
+              color: "color-mix(in srgb, var(--text) 65%, transparent)",
               lineHeight: 1.3,
             }}
           >
@@ -208,7 +208,7 @@ export function FrictionMap({
               fontSize: "clamp(1.8rem, 3.2vw, 3.4rem)",
               lineHeight: 1.05,
               letterSpacing: "-0.03em",
-              color: "#F7F1E6",
+              color: "var(--text)",
               textShadow: "0 6px 30px rgba(0,0,0,0.6)",
               marginTop: "clamp(0.4rem, 1vh, 0.8rem)",
             }}
@@ -274,7 +274,7 @@ function FrictionAnimation({
         y1="500"
         x2="1600"
         y2="500"
-        stroke="rgba(247,241,230,0.08)"
+        stroke="color-mix(in srgb, var(--text) 8%, transparent)"
         strokeWidth="1"
         strokeDasharray="4 8"
         initial={{ opacity: 0 }}
@@ -351,7 +351,7 @@ function FrictionAnimation({
       {/* Smooth terrain — fader in efter waven */}
       <motion.path
         d={SMOOTH_PATH}
-        stroke="rgba(247,241,230,0.45)"
+        stroke="var(--text-muted)"
         strokeWidth="2.5"
         fill="none"
         strokeLinecap="round"
@@ -370,7 +370,7 @@ function FrictionAnimation({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.7, delay: 7.4 }}
-        fill="rgba(247,241,230,0.4)"
+        fill="color-mix(in srgb, var(--text-muted) 80%, transparent)"
         fontFamily="var(--font-mono)"
         fontSize="14"
         letterSpacing="0.3em"
@@ -454,7 +454,7 @@ function PeakMarker({
       <text
         x={x}
         y={labelY}
-        fill="rgba(247,241,230,0.9)"
+        fill="var(--text)"
         fontFamily="var(--font-display)"
         fontSize={fontSize}
         fontStyle="italic"

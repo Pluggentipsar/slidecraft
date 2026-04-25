@@ -60,7 +60,7 @@ export function InputHero({
   imageAlt = "",
   background,
   accent = "#67D4CD",
-  dim = "rgba(247,241,230,0.85)",
+  dim = "var(--text)",
 }: InputHeroProps) {
   return (
     <div className="relative h-full w-full overflow-hidden">
@@ -141,7 +141,7 @@ export function InputHero({
             }}
           >
             <EditableText path="eyebrow" value={eyebrow ?? ""}>
-              {renderBold(eyebrow, "#F7F1E6", accent)}
+              {renderBold(eyebrow, "var(--text)", accent)}
             </EditableText>
           </motion.div>
         ) : null}
@@ -156,7 +156,7 @@ export function InputHero({
             fontSize: "clamp(6rem, 17vw, 19rem)",
             lineHeight: 0.88,
             letterSpacing: "-0.045em",
-            color: "#F7F1E6",
+            color: "var(--text)",
             margin: "clamp(0.5rem, 1vh, 1rem) 0 0 0",
             textShadow: "0 8px 40px rgba(0,0,0,0.4)",
           }}
@@ -270,7 +270,7 @@ export function InputHero({
             }}
           >
             <EditableText path="subtitle" value={subtitle}>
-              {renderBold(subtitle, accent, "#F7F1E6")}
+              {renderBold(subtitle, accent, "var(--text)")}
             </EditableText>
           </motion.div>
         ) : null}

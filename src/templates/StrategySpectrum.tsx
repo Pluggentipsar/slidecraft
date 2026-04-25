@@ -195,7 +195,7 @@ export function StrategySpectrum({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
             zIndex: 5,
           }}
         >
@@ -243,7 +243,7 @@ export function StrategySpectrum({
               fontFamily: "var(--font-display)",
               fontStyle: "italic",
               fontSize: "clamp(1.2rem, 1.8vw, 1.8rem)",
-              color: "rgba(247,241,230,0.82)",
+              color: "var(--text)",
               maxWidth: "32em",
               lineHeight: 1.25,
             }}
@@ -368,7 +368,7 @@ function StrategyCard({
           fontFamily: "var(--font-display)",
           fontWeight: strategy.recommended ? 800 : 700,
           fontSize: "clamp(1.5rem, 2.6vw, 2.6rem)",
-          color: strategy.recommended ? "#F7F1E6" : "rgba(247,241,230,0.85)",
+          color: strategy.recommended ? "var(--text)" : "var(--text)",
           letterSpacing: "-0.025em",
           lineHeight: 1.05,
         }}
@@ -384,8 +384,8 @@ function StrategyCard({
             fontStyle: "italic",
             fontSize: "clamp(0.95rem, 1.25vw, 1.25rem)",
             color: strategy.recommended
-              ? "rgba(247,241,230,0.85)"
-              : "rgba(247,241,230,0.55)",
+              ? "var(--text)"
+              : "var(--text-muted)",
             lineHeight: 1.35,
             marginTop: "auto",
           }}

@@ -171,7 +171,7 @@ export function JagAIJagFlow({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
             zIndex: 5,
           }}
         >
@@ -219,7 +219,7 @@ export function JagAIJagFlow({
               fontFamily: "var(--font-display)",
               fontStyle: "italic",
               fontSize: "clamp(1.1rem, 1.6vw, 1.6rem)",
-              color: "rgba(247,241,230,0.78)",
+              color: "color-mix(in srgb, var(--text) 78%, transparent)",
               maxWidth: "32em",
               lineHeight: 1.3,
             }}
@@ -272,7 +272,7 @@ export function JagAIJagFlow({
               fontFamily: "var(--font-display)",
               fontStyle: "italic",
               fontSize: "clamp(1.1rem, 1.7vw, 1.7rem)",
-              color: "rgba(247,241,230,0.92)",
+              color: "var(--text)",
               lineHeight: 1.35,
               maxWidth: "44em",
               alignSelf: "center",
@@ -364,7 +364,7 @@ function PhaseCard({
           fontFamily: "var(--font-display)",
           fontWeight: 800,
           fontSize: "clamp(2.5rem, 4.5vw, 4.5rem)",
-          color: isMiddle ? accent : "#F7F1E6",
+          color: isMiddle ? accent : "var(--text)",
           letterSpacing: "-0.04em",
           lineHeight: 0.95,
           textShadow: isMiddle ? `0 0 30px ${accent}66` : "0 4px 20px rgba(0,0,0,0.5)",
@@ -381,7 +381,7 @@ function PhaseCard({
             fontStyle: "italic",
             fontWeight: 500,
             fontSize: "clamp(0.95rem, 1.3vw, 1.3rem)",
-            color: "rgba(247,241,230,0.85)",
+            color: "var(--text)",
             lineHeight: 1.25,
             paddingBottom: "clamp(0.4rem, 0.8vh, 0.6rem)",
             borderBottom: `1px solid ${accent}33`,
@@ -408,7 +408,7 @@ function PhaseCard({
             style={{
               fontFamily: "var(--font-display)",
               fontSize: "clamp(0.9rem, 1.15vw, 1.15rem)",
-              color: "rgba(247,241,230,0.78)",
+              color: "color-mix(in srgb, var(--text) 78%, transparent)",
               lineHeight: 1.3,
               display: "flex",
               gap: "0.5rem",

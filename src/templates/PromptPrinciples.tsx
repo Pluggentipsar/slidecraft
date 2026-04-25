@@ -152,7 +152,7 @@ export function PromptPrinciples({
                 fontSize: "clamp(1.75rem, 3vw, 2.5rem)",
                 lineHeight: 1.05,
                 letterSpacing: "-0.02em",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 margin: 0,
               }}
             >
@@ -168,7 +168,7 @@ export function PromptPrinciples({
                 fontFamily: "var(--font-display)",
                 fontStyle: "italic",
                 fontSize: "clamp(0.95rem, 1.1vw, 1.15rem)",
-                color: "rgba(247,241,230,0.7)",
+                color: "color-mix(in srgb, var(--text) 70%, transparent)",
                 margin: 0,
                 lineHeight: 1.4,
               }}
@@ -229,7 +229,7 @@ export function PromptPrinciples({
                       fontSize: "0.72rem",
                       letterSpacing: "0.25em",
                       textTransform: "uppercase",
-                      color: "rgba(247,241,230,0.5)",
+                      color: "var(--text-muted)",
                     }}
                   >
                     {String(activeStep + 1).padStart(2, "0")} / {String(principles.length).padStart(2, "0")}
@@ -250,7 +250,7 @@ export function PromptPrinciples({
                         fontSize: "clamp(2.2rem, 4.5vw, 4.2rem)",
                         lineHeight: 1.02,
                         letterSpacing: "-0.025em",
-                        color: "#F7F1E6",
+                        color: "var(--text)",
                         marginBottom: "0.4rem",
                       }}
                     >
@@ -264,7 +264,7 @@ export function PromptPrinciples({
                         fontFamily: "var(--font-display)",
                         fontStyle: "italic",
                         fontSize: "clamp(1rem, 1.3vw, 1.3rem)",
-                        color: "rgba(247,241,230,0.75)",
+                        color: "color-mix(in srgb, var(--text) 75%, transparent)",
                         lineHeight: 1.35,
                         maxWidth: "32em",
                       }}
@@ -302,7 +302,7 @@ export function PromptPrinciples({
                           fontSize: "0.65rem",
                           letterSpacing: "0.25em",
                           textTransform: "uppercase",
-                          color: "rgba(247,241,230,0.5)",
+                          color: "var(--text-muted)",
                           marginBottom: "0.5rem",
                           fontWeight: 600,
                         }}
@@ -313,7 +313,7 @@ export function PromptPrinciples({
                         style={{
                           fontFamily: "var(--font-body)",
                           fontSize: "clamp(0.85rem, 1vw, 1rem)",
-                          color: "rgba(247,241,230,0.68)",
+                          color: "color-mix(in srgb, var(--text) 68%, transparent)",
                           lineHeight: 1.4,
                           fontStyle: "italic",
                         }}
@@ -365,7 +365,7 @@ export function PromptPrinciples({
                         style={{
                           fontFamily: "var(--font-body)",
                           fontSize: "clamp(0.9rem, 1.05vw, 1.08rem)",
-                          color: "#F7F1E6",
+                          color: "var(--text)",
                           lineHeight: 1.45,
                         }}
                       >
@@ -397,7 +397,7 @@ export function PromptPrinciples({
                     ? accent
                     : i < activeStep
                       ? `${accent}60`
-                      : "rgba(247,241,230,0.12)",
+                      : "color-mix(in srgb, var(--text) 12%, transparent)",
                 width: i === activeStep ? "2rem" : "0.5rem",
               }}
               transition={{ duration: 0.4 }}

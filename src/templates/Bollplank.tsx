@@ -172,7 +172,7 @@ export function Bollplank({
                 fontSize: "clamp(1.7rem, 3vw, 2.6rem)",
                 lineHeight: 1.05,
                 letterSpacing: "-0.02em",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 margin: 0,
               }}
             >
@@ -188,7 +188,7 @@ export function Bollplank({
                 fontFamily: "var(--font-display)",
                 fontStyle: "italic",
                 fontSize: "clamp(0.9rem, 1.05vw, 1.1rem)",
-                color: "rgba(247,241,230,0.7)",
+                color: "color-mix(in srgb, var(--text) 70%, transparent)",
                 margin: 0,
                 lineHeight: 1.35,
               }}
@@ -307,7 +307,7 @@ export function Bollplank({
                 fontFamily: "var(--font-body)",
                 fontSize: "clamp(0.88rem, 1vw, 1rem)",
                 lineHeight: 1.5,
-                color: "#F7F1E6",
+                color: "var(--text)",
                 whiteSpace: "pre-wrap",
                 flex: 1,
                 minHeight: 0,
@@ -339,7 +339,7 @@ export function Bollplank({
                         width: "0.5rem",
                         height: "0.5rem",
                         borderRadius: "50%",
-                        background: "rgba(247,241,230,0.6)",
+                        background: "color-mix(in srgb, var(--text) 60%, transparent)",
                       }}
                     />
                   ))}
@@ -408,7 +408,7 @@ export function Bollplank({
                 style={{
                   padding: "clamp(0.8rem, 1.1vw, 1.1rem) clamp(1rem, 1.3vw, 1.3rem)",
                   borderRadius: "0.75rem",
-                  background: "rgba(247,241,230,0.08)",
+                  background: "color-mix(in srgb, var(--text) 8%, transparent)",
                   backdropFilter: "blur(18px) saturate(140%)",
                   WebkitBackdropFilter: "blur(18px) saturate(140%)",
                   border: `1px solid ${accent}45`,
@@ -425,7 +425,7 @@ export function Bollplank({
                       fontFamily: "var(--font-display)",
                       fontWeight: 700,
                       fontSize: "clamp(1rem, 1.25vw, 1.2rem)",
-                      color: "#F7F1E6",
+                      color: "var(--text)",
                     }}
                   >
                     {elev.name}
@@ -487,7 +487,7 @@ function MiniField({ label, value, accent }: { label: string; value: string; acc
         style={{
           fontFamily: "var(--font-body)",
           fontSize: "clamp(0.78rem, 0.9vw, 0.92rem)",
-          color: "rgba(247,241,230,0.88)",
+          color: "var(--text)",
           lineHeight: 1.35,
         }}
       >

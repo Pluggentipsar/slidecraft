@@ -151,7 +151,7 @@ export function SamrLadder({
                   transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   style={{
                     background: step.color,
-                    color: "#F7F1E6",
+                    color: "var(--text)",
                     padding: "0.9rem 1.3rem",
                     borderRadius: "0.4rem",
                     boxShadow:

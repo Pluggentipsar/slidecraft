@@ -258,7 +258,7 @@ export function TwoSides({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
             zIndex: 3,
           }}
         >
@@ -306,7 +306,7 @@ export function TwoSides({
               fontFamily: "var(--font-display)",
               fontStyle: "italic",
               fontSize: "clamp(1.1rem, 1.6vw, 1.6rem)",
-              color: "rgba(247,241,230,0.78)",
+              color: "color-mix(in srgb, var(--text) 78%, transparent)",
               maxWidth: "32em",
               lineHeight: 1.3,
             }}
@@ -355,7 +355,7 @@ export function TwoSides({
                   fontFamily: "var(--font-display)",
                   fontWeight: 300,
                   fontSize: "clamp(2rem, 4vw, 4rem)",
-                  color: "rgba(247,241,230,0.35)",
+                  color: "color-mix(in srgb, var(--text) 35%, transparent)",
                   fontStyle: "italic",
                 }}
               >
@@ -423,7 +423,7 @@ function SideColumn({ label, meta, colors, data, variant, delay, from }: SideCol
             fontSize: "clamp(0.7rem, 0.85vw, 0.9rem)",
             letterSpacing: "0.25em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
           }}
         >
           {meta}
@@ -519,7 +519,7 @@ function ListRow({
         style={{
           fontFamily: "var(--font-display)",
           fontSize: "clamp(1rem, 1.4vw, 1.4rem)",
-          color: "rgba(247,241,230,0.92)",
+          color: "var(--text)",
           lineHeight: 1.35,
         }}
       >
@@ -554,7 +554,7 @@ function StudyParagraph({
           fontFamily: "var(--font-display)",
           fontWeight: 500,
           fontSize: "clamp(1.1rem, 1.7vw, 1.7rem)",
-          color: "#F7F1E6",
+          color: "var(--text)",
           lineHeight: 1.25,
           letterSpacing: "-0.01em",
           textShadow: "0 4px 20px rgba(0,0,0,0.5)",
@@ -577,7 +577,7 @@ function StudyParagraph({
         alignItems: "baseline",
         marginTop: "auto",
         paddingTop: "clamp(0.6rem, 1.2vh, 1rem)",
-        borderTop: "1px solid rgba(247,241,230,0.12)",
+        borderTop: "1px solid color-mix(in srgb, var(--text) 12%, transparent)",
       }}
     >
       <div
@@ -586,7 +586,7 @@ function StudyParagraph({
           fontSize: "clamp(0.55rem, 0.7vw, 0.7rem)",
           letterSpacing: "0.25em",
           textTransform: "uppercase",
-          color: "rgba(247,241,230,0.45)",
+          color: "var(--text-muted)",
           lineHeight: 1.4,
         }}
       >
@@ -596,7 +596,7 @@ function StudyParagraph({
         style={{
           fontFamily: "var(--font-body)",
           fontSize: "clamp(0.8rem, 1vw, 1rem)",
-          color: "rgba(247,241,230,0.62)",
+          color: "color-mix(in srgb, var(--text) 62%, transparent)",
           lineHeight: 1.4,
           fontStyle: "italic",
         }}

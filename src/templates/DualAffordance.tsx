@@ -181,7 +181,7 @@ export function DualAffordance({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
             zIndex: 5,
           }}
         >
@@ -229,7 +229,7 @@ export function DualAffordance({
               fontFamily: "var(--font-display)",
               fontStyle: "italic",
               fontSize: "clamp(1.1rem, 1.6vw, 1.6rem)",
-              color: "rgba(247,241,230,0.78)",
+              color: "color-mix(in srgb, var(--text) 78%, transparent)",
               maxWidth: "32em",
               lineHeight: 1.3,
             }}
@@ -273,7 +273,7 @@ export function DualAffordance({
               fontSize: "clamp(0.65rem, 0.8vw, 0.85rem)",
               letterSpacing: "0.3em",
               textTransform: "uppercase",
-              color: "rgba(247,241,230,0.4)",
+              color: "color-mix(in srgb, var(--text-muted) 80%, transparent)",
               textAlign: "center",
             }}
           >
@@ -357,7 +357,7 @@ function ToolRow({
         style={{
           fontFamily: "var(--font-display)",
           fontSize: "clamp(1rem, 1.4vw, 1.4rem)",
-          color: "rgba(247,241,230,0.92)",
+          color: "var(--text)",
           textAlign: "right",
           lineHeight: 1.3,
         }}
@@ -402,7 +402,7 @@ function ToolRow({
             fontFamily: "var(--font-display)",
             fontWeight: 800,
             fontSize: "clamp(1.1rem, 1.7vw, 1.6rem)",
-            color: "#F7F1E6",
+            color: "var(--text)",
             letterSpacing: "-0.015em",
             textAlign: "center",
             background: "rgba(10,9,8,0.85)",
@@ -425,7 +425,7 @@ function ToolRow({
         style={{
           fontFamily: "var(--font-display)",
           fontSize: "clamp(1rem, 1.4vw, 1.4rem)",
-          color: "rgba(247,241,230,0.92)",
+          color: "var(--text)",
           textAlign: "left",
           lineHeight: 1.3,
         }}

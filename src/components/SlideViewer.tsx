@@ -307,7 +307,7 @@ export function SlideViewer({
 
   return (
     <div
-      className="relative h-screen w-screen overflow-hidden bg-bg text-text"
+      className="relative h-screen w-screen overflow-hidden text-text"
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >

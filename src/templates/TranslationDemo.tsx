@@ -100,7 +100,7 @@ export function TranslationDemo({
                 fontSize: "clamp(1.6rem, 2.8vw, 2.3rem)",
                 lineHeight: 1,
                 letterSpacing: "-0.02em",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 margin: 0,
               }}
             >
@@ -116,7 +116,7 @@ export function TranslationDemo({
                 fontFamily: "var(--font-display)",
                 fontStyle: "italic",
                 fontSize: "clamp(0.88rem, 1vw, 1.05rem)",
-                color: "rgba(247,241,230,0.72)",
+                color: "color-mix(in srgb, var(--text) 72%, transparent)",
                 margin: 0,
                 lineHeight: 1.3,
               }}
@@ -241,7 +241,7 @@ export function TranslationDemo({
                       fontFamily: "var(--font-body)",
                       fontWeight: 600,
                       fontSize: "clamp(0.85rem, 0.95vw, 0.98rem)",
-                      color: "#F7F1E6",
+                      color: "var(--text)",
                     }}
                   >
                     {t.sv}
@@ -287,7 +287,7 @@ function panelBodyStyle(rtl: boolean): React.CSSProperties {
     fontFamily: "var(--font-body)",
     fontSize: "clamp(0.82rem, 0.95vw, 0.98rem)",
     lineHeight: 1.55,
-    color: "rgba(247,241,230,0.92)",
+    color: "var(--text)",
     direction: rtl ? ("rtl" as const) : ("ltr" as const),
     overflow: "hidden",
   };

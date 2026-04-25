@@ -70,7 +70,7 @@ export function NoviceDilemma({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
             zIndex: 3,
           }}
         >
@@ -101,7 +101,7 @@ export function NoviceDilemma({
               fontSize: "clamp(1.8rem, 3.4vw, 3rem)",
               lineHeight: 1,
               letterSpacing: "-0.025em",
-              color: "#F7F1E6",
+              color: "var(--text)",
               margin: 0,
               textAlign: "center",
               textShadow: "0 6px 30px rgba(0,0,0,0.5)",
@@ -285,7 +285,7 @@ function ColumnCharacter({
           fontFamily: "var(--font-display)",
           fontStyle: "italic",
           fontSize: "clamp(0.95rem, 1.15vw, 1.2rem)",
-          color: isRich ? "rgba(247,241,230,0.95)" : "rgba(247,241,230,0.65)",
+          color: isRich ? "var(--text)" : "color-mix(in srgb, var(--text) 65%, transparent)",
           textAlign: "center",
           lineHeight: 1.3,
           maxWidth: "18em",

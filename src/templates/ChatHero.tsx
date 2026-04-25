@@ -206,7 +206,7 @@ export function ChatHero({
                 fontSize: TITLE_SIZES[titleSize],
                 lineHeight: 0.88,
                 letterSpacing: "-0.045em",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 margin: 0,
                 textShadow: "0 8px 40px rgba(0,0,0,0.4)",
               }}
@@ -269,7 +269,7 @@ export function ChatHero({
               }}
             >
               <EditableText path="subtitle" value={subtitle}>
-                {renderBold(subtitle, accent, "rgba(247,241,230,0.85)")}
+                {renderBold(subtitle, accent, "var(--text)")}
               </EditableText>
             </motion.p>
           ) : null}
@@ -334,7 +334,7 @@ export function ChatHero({
                       color:
                         msg.side === "user"
                           ? "#0a0908"
-                          : "#F7F1E6",
+                          : "var(--text)",
                       padding: "0.75rem 1.05rem",
                       borderRadius: "1.1rem",
                       borderTopLeftRadius: msg.side === "ai" ? "0.35rem" : "1.1rem",

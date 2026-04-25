@@ -113,7 +113,7 @@ export function GrowingStatement({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
             zIndex: 3,
           }}
         >
@@ -173,7 +173,7 @@ export function GrowingStatement({
               fontStyle: "italic",
               fontWeight: 400,
               fontSize: "clamp(1.25rem, 2.2vw, 2.2rem)",
-              color: "rgba(247,241,230,0.78)",
+              color: "color-mix(in srgb, var(--text) 75%, transparent)",
               textAlign: align,
               lineHeight: 1.25,
               letterSpacing: "-0.015em",
@@ -200,10 +200,10 @@ export function GrowingStatement({
             fontSize: "clamp(3.5rem, 8.5vw, 10rem)",
             lineHeight: 1.02,
             letterSpacing: "-0.035em",
-            color: "#F7F1E6",
+            color: "var(--text)",
             textAlign: align,
             maxWidth: "16em",
-            textShadow: "0 8px 40px rgba(0,0,0,0.5)",
+            textShadow: "none",
           }}
         >
           {chunks.map((chunk, ci) => {

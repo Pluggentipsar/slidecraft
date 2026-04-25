@@ -109,6 +109,7 @@ import {
   JagAIJagFlow,
   LensApplication,
   BeforeAfterPhases,
+  InvisibleChildPatterns,
 } from "@/templates";
 import { Slide } from "./Slide";
 import { SlideViewer } from "./SlideViewer";
@@ -241,6 +242,7 @@ const mdxComponents = {
   JagAIJagFlow,
   LensApplication,
   BeforeAfterPhases,
+  InvisibleChildPatterns,
 };
 
 export async function PresentationRenderer({ source, slug, theme, title, brand, ambient }: PresentationRendererProps) {

@@ -234,7 +234,7 @@ export function UCurveChart({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
             zIndex: 3,
           }}
         >
@@ -266,7 +266,7 @@ export function UCurveChart({
                 fontSize: "clamp(2.4rem, 4.5vw, 4.2rem)",
                 lineHeight: 1,
                 letterSpacing: "-0.03em",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 margin: 0,
               }}
             >
@@ -284,7 +284,7 @@ export function UCurveChart({
                 fontFamily: "var(--font-display)",
                 fontStyle: "italic",
                 fontSize: "clamp(1.1rem, 1.4vw, 1.5rem)",
-                color: "rgba(247,241,230,0.7)",
+                color: "color-mix(in srgb, var(--text) 70%, transparent)",
                 marginTop: "0.4rem",
               }}
             >
@@ -316,7 +316,7 @@ export function UCurveChart({
               y1={padT + plotH}
               x2={padL + plotW}
               y2={padT + plotH}
-              stroke="rgba(247,241,230,0.3)"
+              stroke="color-mix(in srgb, var(--text) 30%, transparent)"
               strokeWidth="1.5"
               initial={{ pathLength: 0 }}
               animate={{ pathLength: 1 }}
@@ -327,7 +327,7 @@ export function UCurveChart({
               y1={padT}
               x2={padL}
               y2={padT + plotH}
-              stroke="rgba(247,241,230,0.3)"
+              stroke="color-mix(in srgb, var(--text) 30%, transparent)"
               strokeWidth="1.5"
               initial={{ pathLength: 0 }}
               animate={{ pathLength: 1 }}
@@ -347,7 +347,7 @@ export function UCurveChart({
                 fontSize: "16px",
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",
-                fill: "rgba(247,241,230,0.6)",
+                fill: "color-mix(in srgb, var(--text) 60%, transparent)",
               }}
             >
               {xLabel}
@@ -365,7 +365,7 @@ export function UCurveChart({
                 fontSize: "16px",
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",
-                fill: "rgba(247,241,230,0.6)",
+                fill: "color-mix(in srgb, var(--text) 60%, transparent)",
               }}
             >
               {yLabel}
@@ -388,7 +388,7 @@ export function UCurveChart({
             <motion.path
               d={pathData}
               fill="none"
-              stroke="#F7F1E6"
+              stroke="var(--text)"
               strokeWidth="3"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -510,7 +510,7 @@ export function UCurveChart({
                   style={{
                     fontFamily: "var(--font-body)",
                     fontSize: "clamp(0.78rem, 0.95vw, 0.95rem)",
-                    color: "rgba(247,241,230,0.82)",
+                    color: "var(--text)",
                     lineHeight: 1.4,
                   }}
                 >

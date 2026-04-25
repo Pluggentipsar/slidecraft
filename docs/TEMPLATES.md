@@ -1915,3 +1915,60 @@ utan akronym-bokstav), TwoSides för jämförelser med tonalitet, LensApplicatio
 konkreta klassrumsexempel med media + linskoppling, BeforeAfterPhases för designramar
 med tidsperspektiv. Jag-AI-Jag → JagAIJagFlow. Spektrum-modeller → SAMRSpectrum eller
 BloomPyramid. Forskningsdata → EvidenceConstellation eller UCurveChart.
+
+---
+
+## Fas 9: Mönster-modell-templates (2026-04-25)
+
+En template för pedagogiska och kliniska mönster-modeller med forskningskällor —
+designad för situationer där varje mönster behöver namn, en-radig sammanfattning
+och källattribution direkt på kortet, och föreläsaren går igenom dem ett i taget.
+
+### `<InvisibleChildPatterns>` — Numrerat mönster-grid med källor
+
+Rutnät av N mönster (testat med 7), stegad reveal — ett kort i taget tonas fram
+medan övriga är dämpade. Varje kort har: stort numrerat märke (01–NN),
+mönsternamn (display-typografi), en-rads sammanfattning, källattribution
+(uppercase småtext längst ned).
+
+**Syfte:** Pedagogiska/kliniska mönster-modeller där varje mönster behöver
+namn + en-radig pitch + forskningskälla, och föreläsaren går igenom dem
+en i taget. Bra för Bloom-varianter, ACE-symtom, trauma-symtomkategorier,
+PTSD-subkluster, eller egendefinierade pedagogiska ramverk.
+
+**Stegsystem:** Ja. Antal steg = antal mönster.
+
+**Props:**
+- `title?` — rubrik
+- `tag?` — UPPERCASE tag ovanför titeln
+- `titleSize?` — `sm` | `md` (default) | `lg` | `xl`
+- `columns?` — antal kolumner i gridden (default 3)
+
+**Children-format:**
+```
+- **Mönster-namn** · En-rads sammanfattning · Källa(n)
+```
+
+**Exempel:**
+```mdx
+<InvisibleChildPatterns
+  tag="MODELL"
+  title="Patterns där bördan döljer sig"
+  columns={3}
+>
+- **Pattern A** · One-line summary som landar fort i salen. · Källa 2024
+- **Pattern B** · Parallell struktur visar att flera mönster delar logik. · Källa 2023
+- **Pattern C** · Varje kort tonas in när space trycks. · Källa 2022
+- **Pattern D** · Källattributionen sitter UPPERCASE längst ned. · Källa 2021
+- **Pattern E** · Sju mönster passar bra i 3-kolumners grid (3+3+1). · Källa 2020
+</InvisibleChildPatterns>
+```
+
+**Undvik när:** Mönstren saknar källattribution (använd `MetricGrid` eller
+`NumberedReveal`). Du har > 9 mönster (gridden blir trångt — splitta i två slides).
+Mönstren ska gås igenom i strikt ordning och kräver pil-animation i en lista
+(använd `NumberedReveal`).
+
+---
+
+**Totalt templates nu: 107** (106 + InvisibleChildPatterns).

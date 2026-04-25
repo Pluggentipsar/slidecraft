@@ -235,7 +235,7 @@ export function PromptWindow({
               style={{
                 fontFamily: "var(--font-body)",
                 fontSize: "0.85rem",
-                color: "rgba(247,241,230,0.7)",
+                color: "color-mix(in srgb, var(--text) 70%, transparent)",
                 letterSpacing: "0.02em",
                 marginLeft: "0.5rem",
               }}
@@ -247,7 +247,7 @@ export function PromptWindow({
                 marginLeft: "auto",
                 fontFamily: "var(--font-body)",
                 fontSize: "0.72rem",
-                color: "rgba(247,241,230,0.45)",
+                color: "var(--text-muted)",
                 letterSpacing: "0.16em",
                 textTransform: "uppercase",
               }}
@@ -264,7 +264,7 @@ export function PromptWindow({
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "rgba(247,241,230,0.35)",
+              color: "color-mix(in srgb, var(--text) 35%, transparent)",
               fontFamily: "var(--font-body)",
               fontSize: "0.85rem",
               fontStyle: "italic",
@@ -334,7 +334,7 @@ export function PromptWindow({
                   width: "2.25rem",
                   height: "2.25rem",
                   borderRadius: "9999px",
-                  background: done ? "#B4763A" : "rgba(247,241,230,0.15)",
+                  background: done ? "#B4763A" : "color-mix(in srgb, var(--text) 15%, transparent)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -344,7 +344,7 @@ export function PromptWindow({
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                   <path
                     d="M12 19V5M12 5L5 12M12 5L19 12"
-                    stroke={done ? "#17150f" : "rgba(247,241,230,0.5)"}
+                    stroke={done ? "#17150f" : "var(--text-muted)"}
                     strokeWidth="2.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"

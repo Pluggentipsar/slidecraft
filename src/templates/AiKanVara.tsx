@@ -51,7 +51,7 @@ const SIZE_MAP: Record<
   },
 };
 
-const BG = "#F7F1E6";
+const BG = "var(--text)";
 const TEXT = "#111111";
 const ACCENT = "#B4763A";
 

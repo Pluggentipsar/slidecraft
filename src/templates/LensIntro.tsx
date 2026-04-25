@@ -77,7 +77,7 @@ export function LensIntro({
           fontFamily: "var(--font-display)",
           fontWeight: 900,
           fontSize: "clamp(28rem, 65vw, 80rem)",
-          color: "#F7F1E6",
+          color: "var(--text)",
           letterSpacing: "-0.08em",
           lineHeight: 0.85,
           userSelect: "none",
@@ -102,7 +102,7 @@ export function LensIntro({
           fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
           letterSpacing: "0.32em",
           textTransform: "uppercase",
-          color: "rgba(247,241,230,0.55)",
+          color: "var(--text-muted)",
           zIndex: 5,
         }}
       >
@@ -168,7 +168,7 @@ export function LensIntro({
             fontSize: "clamp(4.5rem, 11vw, 12rem)",
             lineHeight: 0.95,
             letterSpacing: "-0.04em",
-            color: "#F7F1E6",
+            color: "var(--text)",
             margin: 0,
             textShadow: "0 8px 50px rgba(0,0,0,0.6)",
           }}
@@ -190,7 +190,7 @@ export function LensIntro({
               fontWeight: 400,
               fontSize: "clamp(1.5rem, 2.6vw, 2.8rem)",
               lineHeight: 1.15,
-              color: "rgba(247,241,230,0.9)",
+              color: "var(--text)",
               maxWidth: "26em",
               textShadow: "0 4px 20px rgba(0,0,0,0.4)",
             }}
@@ -210,7 +210,7 @@ export function LensIntro({
             style={{
               fontFamily: "var(--font-body)",
               fontSize: "clamp(0.95rem, 1.2vw, 1.25rem)",
-              color: "rgba(247,241,230,0.55)",
+              color: "var(--text-muted)",
               maxWidth: "34em",
               lineHeight: 1.45,
               marginTop: "clamp(0.5rem, 1vh, 1rem)",

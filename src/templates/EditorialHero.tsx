@@ -50,9 +50,9 @@ export function EditorialHero({
   accent = "#B4763A",
   theme = "dark",
 }: EditorialHeroProps) {
-  const textColor = theme === "cream" ? "#1a1612" : "#F7F1E6";
-  const subtleColor = theme === "cream" ? "rgba(26,22,18,0.6)" : "rgba(247,241,230,0.55)";
-  const bodyColor = theme === "cream" ? "rgba(26,22,18,0.78)" : "rgba(247,241,230,0.82)";
+  const textColor = theme === "cream" ? "#1a1612" : "var(--text)";
+  const subtleColor = theme === "cream" ? "rgba(26,22,18,0.6)" : "var(--text-muted)";
+  const bodyColor = theme === "cream" ? "rgba(26,22,18,0.78)" : "var(--text)";
   const decorationColor = theme === "cream" ? "rgba(26,22,18,0.035)" : "rgba(247,241,230,0.04)";
   const defaultBg =
     theme === "cream"

@@ -135,7 +135,7 @@ export function ChatSplit({
             fontSize: "clamp(0.7rem, 0.85vw, 0.9rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
             zIndex: 3,
           }}
         >
@@ -195,7 +195,7 @@ export function ChatSplit({
                 fontSize: "clamp(2rem, 3.8vw, 3.5rem)",
                 lineHeight: 1.05,
                 letterSpacing: "-0.025em",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 margin: 0,
                 maxWidth: "22em",
                 textShadow: "0 6px 30px rgba(0,0,0,0.5)",
@@ -216,7 +216,7 @@ export function ChatSplit({
                 fontStyle: "italic",
                 fontSize: "clamp(1rem, 1.25vw, 1.35rem)",
                 lineHeight: 1.4,
-                color: "rgba(247,241,230,0.78)",
+                color: "color-mix(in srgb, var(--text) 78%, transparent)",
                 maxWidth: "34em",
                 margin: 0,
               }}
@@ -330,7 +330,7 @@ function ChatColumn({
               fontFamily: "var(--font-display)",
               fontStyle: "italic",
               fontSize: "clamp(0.85rem, 1vw, 1rem)",
-              color: "rgba(247,241,230,0.7)",
+              color: "color-mix(in srgb, var(--text) 70%, transparent)",
               textAlign: "center",
               lineHeight: 1.3,
             }}
@@ -384,7 +384,7 @@ function ChatColumn({
                     letterSpacing: "0.22em",
                     textTransform: "uppercase",
                     fontWeight: 700,
-                    color: isUser ? accent : "rgba(247,241,230,0.55)",
+                    color: isUser ? accent : "var(--text-muted)",
                     marginBottom: "0.35rem",
                   }}
                 >

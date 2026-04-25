@@ -127,7 +127,7 @@ export function LensApplication({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
             zIndex: 5,
           }}
         >
@@ -225,7 +225,7 @@ export function LensApplication({
               fontSize: "clamp(2rem, 3.6vw, 3.6rem)",
               lineHeight: 1.05,
               letterSpacing: "-0.03em",
-              color: "#F7F1E6",
+              color: "var(--text)",
               margin: 0,
               textShadow: "0 6px 30px rgba(0,0,0,0.5)",
             }}
@@ -245,7 +245,7 @@ export function LensApplication({
                 fontFamily: "var(--font-display)",
                 fontSize: "clamp(1.05rem, 1.4vw, 1.4rem)",
                 lineHeight: 1.4,
-                color: "rgba(247,241,230,0.82)",
+                color: "var(--text)",
                 maxWidth: "32em",
                 fontStyle: "normal",
               }}
@@ -275,7 +275,7 @@ export function LensApplication({
                   fontSize: "clamp(0.65rem, 0.8vw, 0.85rem)",
                   letterSpacing: "0.28em",
                   textTransform: "uppercase",
-                  color: "rgba(247,241,230,0.45)",
+                  color: "var(--text-muted)",
                   alignSelf: "center",
                   paddingRight: "0.4rem",
                 }}
@@ -295,7 +295,7 @@ export function LensApplication({
                     fontFamily: "var(--font-display)",
                     fontWeight: 700,
                     fontSize: "clamp(0.9rem, 1.1vw, 1.1rem)",
-                    color: "#F7F1E6",
+                    color: "var(--text)",
                     background: `linear-gradient(140deg, ${accent}33 0%, ${accent}14 100%)`,
                     border: `1px solid ${accent}66`,
                     padding: "0.4rem 0.9rem",
@@ -396,7 +396,7 @@ function MediaPanel({
             justifyContent: "center",
             fontFamily: "var(--font-mono)",
             fontSize: "clamp(0.7rem, 0.9vw, 0.9rem)",
-            color: "rgba(247,241,230,0.35)",
+            color: "color-mix(in srgb, var(--text) 35%, transparent)",
             letterSpacing: "0.3em",
           }}
         >

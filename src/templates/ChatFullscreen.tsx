@@ -186,7 +186,7 @@ export function ChatFullscreen({
                   fontSize: "clamp(1.5rem, 3vw, 2.5rem)",
                   lineHeight: 1.05,
                   letterSpacing: "-0.02em",
-                  color: "#F7F1E6",
+                  color: "var(--text)",
                   margin: 0,
                 }}
               >
@@ -202,7 +202,7 @@ export function ChatFullscreen({
                   fontFamily: "var(--font-display)",
                   fontStyle: "italic",
                   fontSize: "clamp(0.95rem, 1.1vw, 1.15rem)",
-                  color: "rgba(247,241,230,0.65)",
+                  color: "color-mix(in srgb, var(--text) 65%, transparent)",
                   margin: 0,
                 }}
               >
@@ -352,7 +352,7 @@ function Bubble({
             fontSize: "0.68rem",
             letterSpacing: "0.2em",
             textTransform: "uppercase",
-            color: isUser ? accent : "rgba(247,241,230,0.55)",
+            color: isUser ? accent : "var(--text-muted)",
             fontWeight: 600,
           }}
         >
@@ -363,7 +363,7 @@ function Bubble({
             padding: "0.85rem 1.15rem",
             borderRadius: isUser ? "1.2rem 1.2rem 0.3rem 1.2rem" : "1.2rem 1.2rem 1.2rem 0.3rem",
             background: isUser ? `${accent}` : "rgba(20, 18, 15, 0.65)",
-            color: isUser ? "#0a0908" : "#F7F1E6",
+            color: isUser ? "#0a0908" : "var(--text)",
             fontFamily: "var(--font-body)",
             fontSize: "clamp(0.95rem, 1.1vw, 1.1rem)",
             lineHeight: 1.5,
@@ -394,7 +394,7 @@ function Bubble({
                       width: "0.5rem",
                       height: "0.5rem",
                       borderRadius: "50%",
-                      background: "rgba(247,241,230,0.6)",
+                      background: "color-mix(in srgb, var(--text) 60%, transparent)",
                     }}
                     animate={{ y: [0, -4, 0], opacity: [0.4, 1, 0.4] }}
                     transition={{ duration: 0.9, repeat: Infinity, delay: i * 0.15 }}
@@ -436,8 +436,8 @@ function Bubble({
             width: "2.1rem",
             height: "2.1rem",
             borderRadius: "50%",
-            background: "rgba(247,241,230,0.15)",
-            color: "#F7F1E6",
+            background: "color-mix(in srgb, var(--text) 15%, transparent)",
+            color: "var(--text)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",

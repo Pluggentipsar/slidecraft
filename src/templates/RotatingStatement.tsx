@@ -134,7 +134,7 @@ export function RotatingStatement({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.65)",
+            color: "color-mix(in srgb, var(--text) 65%, transparent)",
             zIndex: 3,
           }}
         >
@@ -239,7 +239,7 @@ export function RotatingStatement({
               fontSize: "clamp(2.5rem, 5vw, 5rem)",
               lineHeight: 1,
               letterSpacing: "-0.02em",
-              color: "#F7F1E6",
+              color: "var(--text)",
               textAlign: "center",
               textShadow: "0 4px 24px rgba(0,0,0,0.5)",
               margin: 0,

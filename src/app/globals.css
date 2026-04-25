@@ -55,6 +55,69 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Bakgrundstextur per tema (sätts via theme.backgroundTexture).
+   Renderas under slide-innehållet på presentation-wrappen. */
+[data-theme] {
+  background-color: var(--bg);
+  background-image: var(--bg-texture, none);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* === Frosted-glass content panels (auto-aktiveras när temat har --bg-texture) ===
+   Förbättrar läsbarheten när bakgrundsbilden är livlig. Selektorer matchar på
+   inline-style attributet på [data-theme]-wrappen — om temat har
+   `backgroundTexture` satt så innehåller style-attributet `--bg-texture:url(`.
+   Detta gör reglerna helt opt-in via tema-tokens — ingen tema-specifik scoping. */
+
+/* (1) slide-container-templates: yttre flex-wrappen är slide-container,
+   den inre innehållsdiven får frostat glas + blur av bakgrundsbilden. */
+[data-theme][style*="--bg-texture:url("] .slide-container > div,
+[data-theme][style*="--bg-texture: url("] .slide-container > div {
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: blur(18px) saturate(125%);
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
+  border-radius: 1.25rem;
+  padding: clamp(1.75rem, 3vw, 3rem) clamp(2.25rem, 4vw, 4rem);
+  border: 1px solid color-mix(in srgb, var(--text) 7%, transparent);
+  box-shadow: 0 8px 32px -8px color-mix(in srgb, var(--text) 10%, transparent);
+}
+
+/* (2) fullskärms-templates (Manifesto, EditorialQuote, GrowingStatement,
+   HookStatement, StatsTriptych, AcronymList, TwoPaths, ExampleGrid,
+   TriadStatement, TwoSides, RevealList): inre relativa innehållswrapp
+   får frostat glas. Marginal lämnar bakgrundsbilden synlig kring panelen. */
+[data-theme][style*="--bg-texture:url("]
+  div.relative.h-full.w-full.overflow-hidden
+  > div.relative:not(.flex-shrink-0),
+[data-theme][style*="--bg-texture: url("]
+  div.relative.h-full.w-full.overflow-hidden
+  > div.relative:not(.flex-shrink-0) {
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: blur(18px) saturate(125%);
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--text) 7%, transparent);
+  box-shadow: 0 8px 32px -8px color-mix(in srgb, var(--text) 10%, transparent);
+  margin: clamp(2rem, 4vw, 3.5rem);
+  height: auto;
+  max-height: calc(100% - clamp(4rem, 8vw, 7rem));
+}
+
+/* (3) Absolut-positionerade dekorationer ärver inte frostningen. */
+[data-theme][style*="--bg-texture:url("] .slide-container > div.absolute,
+[data-theme][style*="--bg-texture:url("] .slide-container > div.fixed,
+[data-theme][style*="--bg-texture: url("] .slide-container > div.absolute,
+[data-theme][style*="--bg-texture: url("] .slide-container > div.fixed {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
 body.allow-scroll {
   overflow: auto;
 }

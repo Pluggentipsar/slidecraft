@@ -356,7 +356,7 @@ export function SpeakerIntro({
                 position: "relative",
                 zIndex: 2,
                 width: "clamp(400px, 45vw, 660px)",
-                background: "#F7F1E6",
+                background: "var(--text)",
                 padding: "16px 16px 60px 16px",
                 boxShadow:
                   "0 42px 72px -18px rgba(154, 58, 42, 0.48), 0 20px 32px -12px rgba(0,0,0,0.6)",
@@ -409,7 +409,7 @@ export function SpeakerIntro({
                         width="38%"
                         height="42%"
                         viewBox="0 0 24 24"
-                        fill="#F7F1E6"
+                        fill="var(--text)"
                         style={{ marginLeft: "10%" }}
                       >
                         <path d="M6 4 L20 12 L6 20 Z" />

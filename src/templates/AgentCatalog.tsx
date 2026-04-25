@@ -145,7 +145,7 @@ export function AgentCatalog({
                   fontSize: "clamp(2rem, 4vw, 3.5rem)",
                   lineHeight: 1,
                   letterSpacing: "-0.03em",
-                  color: "#F7F1E6",
+                  color: "var(--text)",
                   margin: 0,
                   textShadow: "0 8px 40px rgba(0,0,0,0.4)",
                 }}
@@ -162,7 +162,7 @@ export function AgentCatalog({
                   fontFamily: "var(--font-display)",
                   fontStyle: "italic",
                   fontSize: "clamp(1rem, 1.2vw, 1.3rem)",
-                  color: "rgba(247,241,230,0.75)",
+                  color: "color-mix(in srgb, var(--text) 75%, transparent)",
                   margin: 0,
                   lineHeight: 1.4,
                   maxWidth: "28em",
@@ -197,7 +197,7 @@ export function AgentCatalog({
                   gap: "0.9rem",
                   padding: "clamp(0.7rem, 1vw, 0.95rem) clamp(0.9rem, 1.3vw, 1.2rem)",
                   borderRadius: "0.65rem",
-                  background: "rgba(247,241,230,0.05)",
+                  background: "color-mix(in srgb, var(--text) 5%, transparent)",
                   backdropFilter: "blur(16px) saturate(140%)",
                   WebkitBackdropFilter: "blur(16px) saturate(140%)",
                   border: "1px solid rgba(255,255,255,0.08)",
@@ -234,7 +234,7 @@ export function AgentCatalog({
                       fontFamily: "var(--font-display)",
                       fontWeight: 700,
                       fontSize: "clamp(0.95rem, 1.15vw, 1.15rem)",
-                      color: "#F7F1E6",
+                      color: "var(--text)",
                       lineHeight: 1.25,
                       letterSpacing: "-0.01em",
                     }}
@@ -245,7 +245,7 @@ export function AgentCatalog({
                     style={{
                       fontFamily: "var(--font-body)",
                       fontSize: "clamp(0.82rem, 0.95vw, 0.95rem)",
-                      color: "rgba(247,241,230,0.72)",
+                      color: "color-mix(in srgb, var(--text) 72%, transparent)",
                       lineHeight: 1.4,
                     }}
                   >

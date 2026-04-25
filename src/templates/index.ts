@@ -104,3 +104,4 @@ export { BloomPyramid } from "./BloomPyramid";
 export { JagAIJagFlow } from "./JagAIJagFlow";
 export { LensApplication } from "./LensApplication";
 export { BeforeAfterPhases } from "./BeforeAfterPhases";
+export { InvisibleChildPatterns } from "./InvisibleChildPatterns";

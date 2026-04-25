@@ -119,7 +119,7 @@ export function VibeCoding({
                 fontSize: "clamp(0.75rem, 0.9vw, 0.95rem)",
                 letterSpacing: "0.28em",
                 textTransform: "uppercase",
-                color: "rgba(247,241,230,0.7)",
+                color: "color-mix(in srgb, var(--text) 70%, transparent)",
                 fontWeight: 500,
               }}
             >
@@ -138,7 +138,7 @@ export function VibeCoding({
                 fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
                 lineHeight: 1,
                 letterSpacing: "-0.03em",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 margin: 0,
                 textShadow: "0 8px 40px rgba(0,0,0,0.5)",
               }}
@@ -156,7 +156,7 @@ export function VibeCoding({
                 fontFamily: "var(--font-body)",
                 fontStyle: "italic",
                 fontSize: "clamp(0.85rem, 1vw, 1rem)",
-                color: "rgba(247,241,230,0.6)",
+                color: "color-mix(in srgb, var(--text) 60%, transparent)",
               }}
             >
               — <EditableText path="student" value={student ?? ""}>{student}</EditableText>
@@ -184,7 +184,7 @@ export function VibeCoding({
                 fontFamily: "var(--font-body)",
                 fontSize: "clamp(0.95rem, 1.05vw, 1.1rem)",
                 lineHeight: 1.55,
-                color: "#F7F1E6",
+                color: "var(--text)",
                 maxWidth: "38em",
               }}
             >
@@ -233,7 +233,7 @@ export function VibeCoding({
                   fontFamily: "var(--font-display)",
                   fontStyle: "italic",
                   fontSize: "clamp(0.95rem, 1.1vw, 1.15rem)",
-                  color: "rgba(247,241,230,0.8)",
+                  color: "color-mix(in srgb, var(--text) 80%, transparent)",
                 }}
               >
                 <EditableText path="caption" value={caption ?? ""}>{caption}</EditableText>

@@ -159,7 +159,7 @@ export function BloomPyramid({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.55)",
+            color: "var(--text-muted)",
             zIndex: 5,
           }}
         >
@@ -207,7 +207,7 @@ export function BloomPyramid({
               fontFamily: "var(--font-display)",
               fontStyle: "italic",
               fontSize: "clamp(1.1rem, 1.6vw, 1.6rem)",
-              color: "rgba(247,241,230,0.78)",
+              color: "color-mix(in srgb, var(--text) 78%, transparent)",
               maxWidth: "32em",
               lineHeight: 1.3,
             }}
@@ -315,7 +315,7 @@ function BloomBand({
           fontFamily: "var(--font-display)",
           fontWeight: 700,
           fontSize: "clamp(1.1rem, 1.7vw, 1.7rem)",
-          color: "#F7F1E6",
+          color: "var(--text)",
           letterSpacing: "-0.02em",
           lineHeight: 1.1,
         }}
@@ -328,7 +328,7 @@ function BloomBand({
             fontFamily: "var(--font-display)",
             fontStyle: "italic",
             fontSize: "clamp(0.85rem, 1.1vw, 1.1rem)",
-            color: "rgba(247,241,230,0.62)",
+            color: "color-mix(in srgb, var(--text) 62%, transparent)",
             lineHeight: 1.25,
           }}
         >

@@ -141,7 +141,7 @@ export function AiArMedia({
                       width="38%"
                       height="42%"
                       viewBox="0 0 24 24"
-                      fill="#F7F1E6"
+                      fill="var(--text)"
                       style={{ marginLeft: "10%" }}
                     >
                       <path d="M6 4 L20 12 L6 20 Z" />
@@ -382,7 +382,7 @@ export function AiArBackdrop() {
             width: "6px",
             height: "6px",
             borderRadius: "9999px",
-            background: "rgba(247,241,230,0.45)",
+            background: "var(--text-muted)",
             boxShadow: "0 0 8px rgba(247,241,230,0.4)",
           }}
         />

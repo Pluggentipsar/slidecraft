@@ -170,7 +170,7 @@ export function LixPanels({
                 fontSize: "clamp(1.8rem, 3.2vw, 2.7rem)",
                 lineHeight: 1.02,
                 letterSpacing: "-0.02em",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 margin: 0,
               }}
             >
@@ -186,7 +186,7 @@ export function LixPanels({
                 fontFamily: "var(--font-display)",
                 fontStyle: "italic",
                 fontSize: "clamp(0.9rem, 1.1vw, 1.1rem)",
-                color: "rgba(247,241,230,0.72)",
+                color: "color-mix(in srgb, var(--text) 72%, transparent)",
                 margin: 0,
                 lineHeight: 1.35,
               }}
@@ -310,7 +310,7 @@ export function LixPanels({
                       fontSize: "0.7rem",
                       letterSpacing: "0.22em",
                       textTransform: "uppercase",
-                      color: "rgba(247,241,230,0.6)",
+                      color: "color-mix(in srgb, var(--text) 60%, transparent)",
                       fontWeight: 600,
                     }}
                   >
@@ -335,7 +335,7 @@ export function LixPanels({
                     fontFamily: "var(--font-body)",
                     fontSize: "clamp(0.85rem, 1vw, 1rem)",
                     lineHeight: 1.5,
-                    color: "#F7F1E6",
+                    color: "var(--text)",
                     flex: 1,
                   }}
                 >

@@ -116,7 +116,7 @@ function TypewriterSentence({
         fontFamily: "var(--font-display)",
         fontStyle: "italic",
         fontWeight: 400,
-        color: "#F7F1E6",
+        color: "var(--text)",
         lineHeight: 1.2,
         textAlign: "center",
         letterSpacing: "-0.01em",
@@ -236,7 +236,7 @@ export function StarterSentences({
                 fontSize: "clamp(1.5rem, 2.8vw, 2.5rem)",
                 lineHeight: 1.05,
                 letterSpacing: "-0.02em",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 margin: 0,
               }}
             >
@@ -252,7 +252,7 @@ export function StarterSentences({
                 fontFamily: "var(--font-display)",
                 fontStyle: "italic",
                 fontSize: "clamp(0.95rem, 1.1vw, 1.15rem)",
-                color: "rgba(247,241,230,0.7)",
+                color: "color-mix(in srgb, var(--text) 70%, transparent)",
                 margin: 0,
                 lineHeight: 1.4,
               }}
@@ -389,7 +389,7 @@ export function StarterSentences({
                     ? accent
                     : i < activeStep
                       ? `${accent}60`
-                      : "rgba(247,241,230,0.12)",
+                      : "color-mix(in srgb, var(--text) 12%, transparent)",
                 width: i === activeStep ? "2rem" : "0.5rem",
               }}
               transition={{ duration: 0.4 }}
@@ -406,7 +406,7 @@ export function StarterSentences({
               fontSize: "0.7rem",
               letterSpacing: "0.2em",
               textTransform: "uppercase",
-              color: "rgba(247,241,230,0.4)",
+              color: "color-mix(in srgb, var(--text-muted) 80%, transparent)",
             }}
           >
             {String(activeStep + 1).padStart(2, "0")} / {String(starters.length).padStart(2, "0")}

@@ -152,7 +152,7 @@ export function ProcessChain({
                 fontSize: "clamp(0.7rem, 0.9vw, 0.9rem)",
                 letterSpacing: "0.3em",
                 textTransform: "uppercase",
-                color: "rgba(247,241,230,0.5)",
+                color: "var(--text-muted)",
               }}
             >
               <EditableText path="kicker" value={kicker ?? ""}>{kicker}</EditableText>
@@ -169,7 +169,7 @@ export function ProcessChain({
                 fontSize: "clamp(2.5rem, 5.5vw, 5rem)",
                 lineHeight: 1.02,
                 letterSpacing: "-0.025em",
-                color: "#F7F1E6",
+                color: "var(--text)",
                 margin: 0,
               }}
             >
@@ -185,7 +185,7 @@ export function ProcessChain({
                 fontFamily: "var(--font-body)",
                 fontSize: "clamp(1rem, 1.15vw, 1.2rem)",
                 lineHeight: 1.55,
-                color: "rgba(247,241,230,0.75)",
+                color: "color-mix(in srgb, var(--text) 75%, transparent)",
                 margin: 0,
               }}
             >
@@ -292,7 +292,7 @@ export function ProcessChain({
                           fontFamily: "var(--font-display)",
                           fontWeight: 600,
                           fontSize: "clamp(0.95rem, 1.1vw, 1.2rem)",
-                          color: "#F7F1E6",
+                          color: "var(--text)",
                           letterSpacing: "-0.01em",
                         }}
                       >
@@ -304,7 +304,7 @@ export function ProcessChain({
                             fontFamily: "var(--font-body)",
                             fontStyle: "italic",
                             fontSize: "clamp(0.75rem, 0.85vw, 0.9rem)",
-                            color: "rgba(247,241,230,0.55)",
+                            color: "var(--text-muted)",
                             marginTop: "0.25rem",
                             lineHeight: 1.3,
                             maxWidth: "12em",

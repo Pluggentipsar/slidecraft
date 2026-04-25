@@ -2414,6 +2414,31 @@ export const templateSchemas: Record<string, TemplateSchema> = {
     ],
     hasContent: true,
   },
+
+  InvisibleChildPatterns: {
+    name: "InvisibleChildPatterns",
+    description:
+      'Numrerat rutnät av mönster med stegad reveal. Format per rad: "**Namn** · sammanfattning · källa". Byggd för "det osynliga barnet" men generellt återanvändbar för pedagogiska/kliniska mönster-modeller.',
+    fields: [
+      { name: "title", label: "Rubrik", type: "text" },
+      { name: "tag", label: "Tag (UPPERCASE)", type: "text" },
+      {
+        name: "titleSize",
+        label: "Titel-storlek",
+        type: "select",
+        options: ["sm", "md", "lg", "xl"],
+        default: "md",
+      },
+      {
+        name: "columns",
+        label: "Antal kolumner",
+        type: "number",
+        default: 3,
+        hint: "3 fungerar bäst för 6-9 mönster",
+      },
+    ],
+    hasContent: true,
+  },
 };
 
 export function getTemplateSchema(name: string): TemplateSchema | undefined {

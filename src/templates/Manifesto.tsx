@@ -166,7 +166,7 @@ export function Manifesto({
             fontFamily: "var(--font-display)",
             fontWeight: 900,
             fontSize: "clamp(20rem, 50vw, 60rem)",
-            color: "#F7F1E6",
+            color: "var(--text)",
             letterSpacing: "-0.08em",
             lineHeight: 0.85,
             userSelect: "none",
@@ -190,7 +190,7 @@ export function Manifesto({
             fontSize: "clamp(0.7rem, 0.9vw, 0.95rem)",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(247,241,230,0.45)",
+            color: "var(--text-muted)",
             zIndex: 3,
           }}
         >
@@ -248,14 +248,14 @@ export function Manifesto({
           wrapperStyle={{
             ...variantStyle,
             maxWidth: align === "center" ? "22em" : "18em",
-            color: "rgba(247,241,230,0.95)",
+            color: "var(--text)",
           }}
         >
           <div
             style={{
               ...variantStyle,
               maxWidth: align === "center" ? "22em" : "18em",
-              color: "rgba(247,241,230,0.95)",
+              color: "var(--text)",
             }}
           >
             {words.map((w, i) => {

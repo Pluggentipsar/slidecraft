@@ -104,7 +104,7 @@ export function Lightbox({ open, onClose, image, video, caption }: LightboxProps
                   fontFamily: "var(--font-body)",
                   fontStyle: "italic",
                   fontSize: "clamp(0.9rem, 1.1vw, 1.1rem)",
-                  color: "rgba(247,241,230,0.75)",
+                  color: "color-mix(in srgb, var(--text) 75%, transparent)",
                   textAlign: "center",
                   maxWidth: "50em",
                 }}
@@ -127,7 +127,7 @@ export function Lightbox({ open, onClose, image, video, caption }: LightboxProps
               borderRadius: "50%",
               border: "1px solid rgba(255,255,255,0.15)",
               background: "rgba(255,255,255,0.05)",
-              color: "rgba(247,241,230,0.85)",
+              color: "var(--text)",
               fontSize: "1.5rem",
               lineHeight: 1,
               cursor: "pointer",
@@ -151,7 +151,7 @@ export function Lightbox({ open, onClose, image, video, caption }: LightboxProps
               fontSize: "0.75rem",
               letterSpacing: "0.2em",
               textTransform: "uppercase",
-              color: "rgba(247,241,230,0.4)",
+              color: "color-mix(in srgb, var(--text-muted) 80%, transparent)",
             }}
           >
             Klicka utanför eller tryck ESC för att stänga

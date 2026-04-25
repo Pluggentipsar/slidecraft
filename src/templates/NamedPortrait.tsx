@@ -87,7 +87,7 @@ export function NamedPortrait({
           fontSize: "clamp(14rem, 44vh, 30rem)",
           lineHeight: 0.85,
           letterSpacing: "-0.04em",
-          color: "rgba(247,241,230,0.12)",
+          color: "color-mix(in srgb, var(--text) 12%, transparent)",
           pointerEvents: "none",
           zIndex: 1,
           willChange: "transform",
