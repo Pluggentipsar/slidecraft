@@ -1,0 +1,37 @@
+---
+title: LayeredScroll demo
+event: Template demo
+author: Joel
+date: '2026-04-18'
+description: Demonstration av LayeredScroll — bakgrund + rullande ord + objekt framför.
+theme: editorial
+---
+
+<TitleSlide title="LayeredScroll" subtitle="Ett ord som bär hela beskedet." />
+
+<LayeredScroll
+  text="Lärande"
+  bgColor="#d4a585"
+  textColor="#1a1a1a"
+  secondsPerInstance={22}
+  bgImage=""
+  foregroundImage="https://cdn.midjourney.com/ef0ab691-2664-4f38-8464-bbfca6f8be50/0_1.png"
+/>
+
+<LayeredScroll
+  text="William"
+  bgColor="#bfbf9e"
+  textColor="#2a2e1a"
+  secondsPerInstance={18}
+  direction="right"
+/>
+
+<LayeredScroll
+  text="Källkritik"
+  bgColor="#c9b892"
+  textColor="#3a2a1a"
+  secondsPerInstance={26}
+  heightRatio={0.65}
+/>
+
+<Outro title="Slut" subtitle="Fortsätt med nästa slide-innehåll." />

@@ -1,0 +1,256 @@
+---
+title: "Slidecraft showcase"
+slug: showcase
+theme: default
+description: "A guided tour of the slidecraft template catalog — each slide demonstrates the template it's built with."
+date: "2026-04-25"
+tags: [showcase, reference]
+---
+
+<TitleSlide
+  title="Slidecraft"
+  subtitle="Slides as code. A guided tour of the template catalog."
+  author="Open Source"
+  event="Showcase"
+  date="2026-04-25"
+/>
+
+<GiantText align="left" size="lg">
+  Each slide explains the **template** it's built with.
+</GiantText>
+
+<SectionDivider number="01" title="Statements & openers" duration="3 min" />
+
+<HeroStatement
+  kicker="HERO STATEMENT"
+  whisper="The kicker line — small, set the frame."
+  shout="A shout line that **lands**."
+  caption="HeroStatement is a three-tier opener: kicker / whisper / shout. Use **bold** for accent emphasis."
+/>
+
+<Manifesto variant="display">
+We **build** decks like we build software.
+We **commit** them, we **diff** them, we **review** them.
+Slides should not be a separate world.
+</Manifesto>
+
+<Quote attribution="Bret Victor" context="A LATE BINDING OF SLIDES TO MEDIUM">
+The most important thing about a tool is how it **shapes** the work that's done with it.
+</Quote>
+
+<RotatingStatement
+  prefix="We need to learn"
+  words={["MED", "OM", "GENOM", "TROTS"]}
+  suffix="AI."
+  caption="RotatingStatement — one word morphs through alternatives. Great for variations on a theme."
+/>
+
+<SectionDivider number="02" title="Stepped reveals" duration="4 min" />
+
+<BulletBuild title="BulletBuild — bullets revealed by space">
+- Press space to reveal the next bullet
+- Each one builds on the previous
+- The slide itself doesn't advance until all bullets are out
+- Perfect for **arguments that build**
+</BulletBuild>
+
+<NumberedReveal title="NumberedReveal — same idea, with numbers + arrow animation">
+- First step
+- Second step
+- Third step — pointer animates here
+</NumberedReveal>
+
+<Timeline title="Timeline — events along a horizontal axis" orientation="horizontal">
+  <TimelineEvent date="1968" title="The Mother of All Demos">
+    Doug Engelbart shows hypertext, video conferencing, mouse — at once.
+  </TimelineEvent>
+  <TimelineEvent date="1987" title="HyperCard">
+    Atkinson's stack-based authoring system. The web of its time.
+  </TimelineEvent>
+  <TimelineEvent date="2006" title="Slideware critique">
+    Tufte: "PowerPoint Is Evil." A whole essay.
+  </TimelineEvent>
+  <TimelineEvent date="2026" title="Slidecraft">
+    Slides finally become code, again.
+  </TimelineEvent>
+</Timeline>
+
+<SideScrollList title="SideScrollList — large numbered blob, one per click">
+- Each item scrolls in from the side
+- The number gets large; the text gets oxygen
+- Final click summarises all of them
+- Use for **principles, axioms, manifestos**
+</SideScrollList>
+
+<RevealList title="RevealList — items stack as they appear" prefix="We can build slides that…">
+- **Animate** with real motion, not pixel-jumps
+- **Respond** to live audience input
+- **Compute** values at render time
+- **Diff** in code review
+- **Compose** like any other component
+</RevealList>
+
+<SectionDivider number="03" title="Comparison" duration="2 min" />
+
+<Comparison title="Comparison — two columns, optional accent" accentSide="right">
+  <ComparisonColumn title="PowerPoint">
+  - Visual editor, opaque files
+  - Hand-tuned per slide
+  - Animations are clip-art
+  - Hard to diff, harder to review
+  </ComparisonColumn>
+  <ComparisonColumn title="Slidecraft">
+  - **MDX** files, plain-text
+  - **Reusable** templates
+  - **Real** animations via framer-motion
+  - Diffs like any code
+  </ComparisonColumn>
+</Comparison>
+
+<TwoPaths
+  title="TwoPaths — two divergent options framed against each other"
+  leftLabel="The hand-crafted way"
+  leftBody="Spend an hour aligning a single slide. Beautiful. Unrepeatable."
+  rightLabel="The composed way"
+  rightBody="Pick a template. Fill the props. Move on. Reusable forever."
+/>
+
+<SpotlightContrast
+  title="SpotlightContrast — second card 'wins' on click"
+  hero="right"
+  intensity="balanced"
+>
+  <SpotlightCard tag="OPTION A" title="Stay in PowerPoint">
+  Familiar. Slow. Locked file format.
+  </SpotlightCard>
+  <SpotlightCard tag="OPTION B" title="Move to slidecraft">
+  Steeper start. Faster after. **Yours forever.**
+  </SpotlightCard>
+</SpotlightContrast>
+
+<SectionDivider number="04" title="Statistics" duration="2 min" />
+
+<BigStat
+  eyebrow="From the catalog"
+  contextAbove="Slidecraft ships with"
+  value={106}
+  contextBelow="purpose-built slide templates."
+  source="src/templates/, this repo"
+/>
+
+<StatCounter
+  value={8}
+  label="Themes that ship by default — full token sets, not just colour swaps"
+  source="src/themes/index.ts"
+/>
+
+<StatCompare
+  fromLabel="MANUAL"
+  from={45}
+  fromSuffix=" min"
+  toLabel="WITH SLIDECRAFT"
+  to={5}
+  toSuffix=" min"
+  title="Time to draft a 20-slide deck"
+  caption="Using the /planera skill from a brief."
+/>
+
+<MetricGrid title="MetricGrid — small KPI cards">
+- **106** Templates
+- **8** Themes
+- **3** Audience modes
+- **1** MDX file = 1 deck
+</MetricGrid>
+
+<SectionDivider number="05" title="AI-flavoured templates" duration="3 min" />
+
+<PromptAnimation
+  promptText="Draft a 5-slide opener for a talk on deep learning."
+  resultText={`<TitleSlide title="Designing for deep learning" />\n<GiantText align="left">We've been arguing about **the wrong thing**.</GiantText>\n<Quote attribution="…">Set up the tension here.</Quote>\n<SectionDivider number="01" title="The premise" />`}
+  layout="right"
+  typeSpeed={20}
+/>
+
+<AiConversation title="AiConversation — simulated dialogue, typed character by character" stepped>
+- **You:** Why use slidecraft over PowerPoint?
+- **AI:** Because slides are content, and content deserves to live in version control. PowerPoint forces you to choose between visual fidelity and the rest of your tooling.
+- **You:** Fair. What's the catch?
+- **AI:** It's MDX. You'll see angle brackets. If that's a dealbreaker, you'll know fast.
+</AiConversation>
+
+<BeforeAfter
+  promptText="Generate a slide explaining what slidecraft is."
+  promptLabel="PROMPT"
+  resultText="A presentation system where slides are React components, MDX is the format, and your laptop becomes a live broadcast hub for the audience."
+  resultLabel="GENERATED"
+  layout="row"
+/>
+
+<SectionDivider number="06" title="Audience interaction" duration="3 min" />
+
+<PollQuestion
+  question="Which slide-tool do you use most often?"
+  options="PowerPoint, Keynote, Google Slides, Notion / Markdown, Reveal.js / similar"
+  results="48, 18, 25, 6, 3"
+  reveal="In a small in-room poll, expect the distribution above. Slidecraft is for the bottom 9%."
+/>
+
+<Reflection
+  title="Reflection — open-text prompt"
+  tag="WHILE WE WAIT"
+  duration="2 min individually"
+>
+- What's one slide you've made that *only* worked because you cheated the tool?
+- Could it be a template?
+- Would you maintain it?
+</Reflection>
+
+<SectionDivider number="07" title="Visual & motion" duration="2 min" />
+
+<ParticleField
+  count={500}
+  formations="scatter, circle, square, scatter, heart"
+  color="var(--accent)"
+>
+ParticleField — canvas particles morph between named shapes on space.
+</ParticleField>
+
+<GiantScroll
+  text="SLIDES ARE CODE · SLIDES ARE CODE · SLIDES ARE CODE · "
+  direction="left"
+  secondsPerInstance={45}
+  outline
+/>
+
+<SectionDivider number="08" title="Pedagogical models" duration="2 min" />
+
+<BloomPyramid title="BloomPyramid — taxonomy with directional arrows">
+- **Skapa** · produce something new
+- **Värdera** · judge & critique
+- **Analysera** · break down & connect
+- **Tillämpa** · apply in context
+- **Förstå** · interpret & exemplify
+- **Komma ihåg** · recall facts
+</BloomPyramid>
+
+<JagAIJagFlow title="JagAIJagFlow — JAG-AI-JAG, a model for deliberate AI use">
+- **Jag tänker själv** · what do I actually want? · what counts as good? · what's at stake?
+- **Använder AI medvetet** · with a clear goal · with a clear question · with verifiable inputs
+- **Värderar resultatet** · is it accurate? · does it reflect my voice? · what did I learn?
+</JagAIJagFlow>
+
+<SectionDivider number="09" title="Closing" duration="1 min" />
+
+<Manifesto variant="condensed">
+Build templates **once**. Use them **forever**. Share them **freely**.
+</Manifesto>
+
+<Outro
+  title="Tack"
+  subtitle="Open source. MIT-licensed. PRs welcome."
+  email="hello@example.com"
+  web="github.com/Pluggentipsar/slidecraft"
+  qrUrl="https://github.com/Pluggentipsar/slidecraft"
+  qrCaption="Star the repo · file an issue · ship a template"
+  cta="Slidecraft"
+/>

@@ -1,0 +1,116 @@
+---
+title: Fas 4 - Animation och interaktivitet
+event: Template demo
+author: Joel Rangsjö
+date: "2026-04-17"
+description: Sidoscrollande listor, tidslinjer, partiklar, morfning. Alla stödjer space/pil för stegvis navigation.
+theme: default
+---
+
+<TitleSlide
+  title="Fas 4"
+  subtitle="Steg-för-steg-templates. Tryck space eller pil höger för att bygga inuti sliden. Nästa slide byts när stegen är slut."
+/>
+
+<SideScrollList title="Tre principer för AI i klassrummet">
+- Lärande måste få vara ansträngande, men vi ska inte bedöma ansträngningen
+- AI är språket med vilket du definierar vilket lärande som ska ske
+- Aldrig AI för AI:s skull - alltid med ett pedagogiskt syfte
+</SideScrollList>
+
+<NumberedReveal title="Så här börjar du">
+- Välj en uppgift du redan gör och fundera på vad eleverna egentligen ska lära sig
+- Identifiera var friktionen ska ligga, och var AI kan ta bort onödig friktion
+- Skriv en tydlig spelplan för eleverna innan du lanserar uppgiften
+</NumberedReveal>
+
+<Timeline title="AI i skolan" orientation="horizontal">
+  <TimelineEvent date="Nov 2022" title="ChatGPT">
+    Generativ AI når allmänheten.
+  </TimelineEvent>
+  <TimelineEvent date="Apr 2023" title="My AI">
+    Snapchat rullar ut till 750M.
+  </TimelineEvent>
+  <TimelineEvent date="2025" title="Kognitiv atrofi">
+    Anthropic rapporterar effekter.
+  </TimelineEvent>
+  <TimelineEvent date="2026" title="Nationell strategi">
+    Sverige får AI-plan för skolan.
+  </TimelineEvent>
+</Timeline>
+
+<Timeline title="Elevens resa" orientation="vertical">
+  <TimelineEvent date="Åk 1-3" title="Möt Maja och Gnista">
+    Berättelsen om AI som sagomodell.
+  </TimelineEvent>
+  <TimelineEvent date="Åk 4-6" title="AI som verktyg">
+    Första praktiska övningarna.
+  </TimelineEvent>
+  <TimelineEvent date="Åk 7-9" title="Kritiskt tänkande">
+    Källkritik, bias, sykofantism.
+  </TimelineEvent>
+  <TimelineEvent date="Gymnasiet" title="Epistemisk medvetenhet">
+    Förstå hur kunskap skapas med AI.
+  </TimelineEvent>
+</Timeline>
+
+<GiantScroll text="LÄRANDE MÅSTE FÅ VARA ANSTRÄNGANDE" secondsPerInstance="60" />
+
+<GiantScroll text="Agens > intelligens" outline heightRatio="0.55" secondsPerInstance="45" />
+
+<ParticleField count="700" formations="scatter, circle, square, spiral, heart, scatter" />
+
+<LoadingSlide variant="pulse" title="AI tänker" subtitle="Generativa modeller förutspår nästa token baserat på mönster i träningsdata." />
+
+<LoadingSlide variant="orbit" title="Alltid i rörelse" subtitle="Fältet förändras varje vecka." />
+
+<LoadingSlide variant="dots" title="Processing" />
+
+<SlideshowMorph
+  morph="zoom-blur"
+  images="https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=2400, https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2400, https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=2400, https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=2400"
+  captions="Först, Sedan, Vidare, Slutligen"
+/>
+
+<SectionDivider
+  number="02"
+  title="Interaktivitet"
+  subtitle="Nya templates för publik-aktivering och uppmärksamhet."
+  duration="15 min"
+  variant="hero"
+/>
+
+<PollQuestion
+  question="Hur stor andel av gymnasieelever i Sverige använder AI?"
+  options="under 30%, 30-60%, 60-80%, över 80%"
+  results="5, 15, 55, 25"
+  correct="2"
+  reveal="Närmare 77% enligt Internetstiftelsen 2026. Och bland alla användare - ungefär hälften använder det istället för att googla."
+/>
+
+<Callout variant="insight" tag="Nyckelinsikt" title="Det handlar inte om verktyget">
+  Det handlar om vilket lärande vi designar för. AI är bara språket
+  med vilket vi definierar det lärandet.
+</Callout>
+
+<Callout variant="warning" tag="Varningssignal" title="Halvhjärtad AI-användning är värst">
+  Forskningen visar en U-formad kurva: ingen avlastning eller committed
+  avlastning funkar. Att använda AI lite grann utan design - det är sämst.
+</Callout>
+
+<SectionDivider
+  number="03"
+  title="Avsnittsövergång - left"
+  subtitle="En annan variant av SectionDivider."
+  duration="2 min"
+  variant="left"
+/>
+
+<SectionDivider
+  number="01"
+  title="Centered-variant"
+  subtitle="Ren och symmetrisk avsnittsmarkör."
+  variant="centered"
+/>
+
+<TitleSlide title="Slut." subtitle="Steg och animation i samspel." />

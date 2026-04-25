@@ -1,0 +1,61 @@
+---
+title: Bilder och komposition
+event: Tema demo
+author: Joel
+date: '2026-04-17'
+description: Fyra nya bild-baserade templates för visuell slagkraft.
+theme: default
+---
+
+<TitleSlide
+  title="Bilder och komposition"
+  subtitle="Fyra nya templates för visuell slagkraft. HeroImage, LayeredText, ImageBleed, Collage."
+/>
+
+<HeroImage src="/bilder/pexels/pexels-16172593.jpg" align="bottom-left" gradient="bottom">
+  # Bergen kallar
+  Full-bild i bakgrunden. Text med gradient för läsbarhet. Perfekt för emotionella öppningar.
+</HeroImage>
+
+<LayeredText
+  image="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1600"
+  imagePosition="right"
+  background="#1a1a24"
+>
+  # En ny sele
+  ## för lille Lucky!
+</LayeredText>
+
+<HeroImage
+  src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=2400"
+  align="top-left"
+  gradient="top"
+  overlay="0.2"
+>
+  # Note
+  LayeredText behöver PNG med transparent bakgrund för full effekt (subjekt urklippt ovanpå text). Med vanlig JPG blir det mer som en bild-med-text-brevid.
+</HeroImage>
+
+<ImageBleed
+  image="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1600"
+  corner="top-right"
+  size="55"
+  rotate="-3"
+>
+  # Dynamiskt hörn
+  Bilden spiller ut ur slide-ramen och skapar rörelse. Lätt rotation ger den liv.
+</ImageBleed>
+
+<Collage
+  layout="grid-4"
+  images="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800, https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800, https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=800, https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800"
+  title="Fyra bilder i rutnät"
+/>
+
+<Collage
+  layout="grid-5-hero"
+  images="https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=1200, https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800, https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800, https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=800, https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800"
+  title="Hero + fyra små"
+/>
+
+<TitleSlide title="Slut." subtitle="Nu är slides inte bara text i rutor." />
