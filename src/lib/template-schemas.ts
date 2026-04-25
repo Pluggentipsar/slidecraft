@@ -44,7 +44,7 @@ export interface TemplateSchema {
   description: string;
   fields: FieldSchema[];
   /** Special: templates som tar barn-komponenter (Timeline → TimelineEvent, Comparison → ComparisonColumn) */
-  childrenType?: "slot" | "TimelineEvent" | "ComparisonColumn";
+  childrenType?: "slot" | "TimelineEvent" | "ComparisonColumn" | "SpotlightCard" | "TeamMember";
   /** När template har children som är ren text/markdown */
   hasContent?: boolean;
 }
@@ -1338,6 +1338,1082 @@ export const templateSchemas: Record<string, TemplateSchema> = {
     ],
     hasContent: true,
   },
+
+  SpeakerIntro: {
+    name: "SpeakerIntro",
+    description:
+      "Föreläsarens visitkort: stort namn, polaroid-video, fotobakgrund, sociala kanaler",
+    fields: [
+      { name: "name", label: "Namn", type: "text", required: true },
+      { name: "title", label: "Roll/titel (radbryt med \\n)", type: "multiline" },
+      { name: "eyebrow", label: "Eyebrow (UPPERCASE)", type: "text" },
+      { name: "videoSrc", label: "Video (path)", type: "text", required: true },
+      { name: "videoPoster", label: "Poster-bild för videon", type: "image" },
+      { name: "background", label: "Fotobakgrund (path)", type: "image" },
+      { name: "bookSrc", label: "Bok/produkt-bild", type: "image" },
+      { name: "bookAlt", label: "Alt-text bok", type: "text" },
+      { name: "linkedin", label: "LinkedIn-handle", type: "text" },
+      { name: "instagram", label: "Instagram-handle", type: "text" },
+      { name: "email", label: "E-post", type: "text" },
+      { name: "spotify1", label: "Spotify-länk 1", type: "text" },
+      { name: "spotify2", label: "Spotify-länk 2", type: "text" },
+      { name: "website", label: "Webbsida", type: "text" },
+    ],
+  },
+
+  AiArHero: {
+    name: "AiArHero",
+    description:
+      "Öppningsslide för AI-är-sektionen. Gigantiskt 'AI är…' centrerat med pulserande prickar",
+    fields: [],
+  },
+
+  AiArMedia: {
+    name: "AiArMedia",
+    description:
+      "Återkommande mall för AI-är-sektionen. Visar video (manuell play) eller bild (klick-för-förstor) med 'AI är…'-ankare top-left",
+    fields: [
+      { name: "video", label: "Video (path)", type: "text" },
+      { name: "image", label: "Bild", type: "image" },
+      { name: "alt", label: "Alt-text", type: "text" },
+      { name: "caption", label: "Caption under mediet", type: "text" },
+      { name: "label", label: "Ankare top-left", type: "text", default: "AI är…" },
+      {
+        name: "aspectRatio",
+        label: "Aspect ratio",
+        type: "text",
+        placeholder: "16 / 9",
+        hint: "Default 16/9 för video, auto för bild",
+      },
+    ],
+  },
+
+  RealOrFake: {
+    name: "RealOrFake",
+    description:
+      "Två porträtt — publiken gissar vilken är riktig, vid steg avslöjas AI-influencer",
+    fields: [
+      { name: "leftImage", label: "Vänster bild", type: "image", required: true },
+      { name: "leftName", label: "Vänster namn", type: "text", required: true },
+      { name: "rightImage", label: "Höger bild", type: "image", required: true },
+      { name: "rightName", label: "Höger namn", type: "text", required: true },
+      {
+        name: "realSide",
+        label: "Vilken sida är riktig",
+        type: "select",
+        options: ["left", "right"],
+        required: true,
+        variant: "pills",
+      },
+      {
+        name: "question",
+        label: "Frågan på steg 0",
+        type: "text",
+        default: "Vilken är på riktigt?",
+      },
+      { name: "realLabel", label: "Etikett riktig person", type: "text", default: "Faktisk person" },
+      { name: "fakeLabel", label: "Etikett AI-influencer", type: "text", default: "Syntetisk · AI" },
+      { name: "label", label: "Ankare top-left", type: "text", default: "AI är…" },
+    ],
+  },
+
+  PromptWindow: {
+    name: "PromptWindow",
+    description:
+      "Fejk-ChatGPT-fönster där en lång prompt typas in. För 'eleven fuskar'-moment",
+    fields: [
+      { name: "promptText", label: "Prompt-text", type: "multiline", hint: "Lämna tomt för att använda children" },
+      { name: "typeSpeed", label: "Typhastighet (ms/tecken)", type: "number", default: 8 },
+      { name: "label", label: "AI är…-ankare", type: "text", default: "AI är…", hint: "Sätt till tom sträng för att dölja" },
+      { name: "modelName", label: "Modell-namn i header", type: "text", default: "ChatGPT" },
+      { name: "portrait", label: "Porträttbild (vänster)", type: "image" },
+      { name: "portraitAlt", label: "Alt-text porträtt", type: "text" },
+      { name: "portraitCaption", label: "Caption under porträtt", type: "text" },
+      { name: "background", label: "Fotobakgrund (path)", type: "image" },
+      { name: "darken", label: "Mörker-opacity (0-1)", type: "number", default: 0.6 },
+    ],
+    hasContent: true,
+  },
+
+  AiKanVara: {
+    name: "AiKanVara",
+    description:
+      "Stort typewriter-typsatt nyckelord till vänster + PNG-objekt till höger. Bryter AI-är-sektionens snabba tempo",
+    fields: [
+      { name: "word", label: "Nyckelord", type: "text", required: true },
+      { name: "image", label: "PNG-bild (transparent)", type: "image" },
+      { name: "alt", label: "Alt-text", type: "text" },
+      {
+        name: "size",
+        label: "Storleksskala",
+        type: "select",
+        options: ["sm", "md", "lg"],
+        default: "md",
+        variant: "pills",
+      },
+      { name: "label", label: "Ankare top-left", type: "text", default: "AI kan vara…" },
+      { name: "typeSpeed", label: "Ms per tecken", type: "number", default: 55 },
+      { name: "imageRotation", label: "Bildrotation (grader)", type: "number" },
+      { name: "imageOffsetY", label: "Bildens vertikala förskjutning (px)", type: "number" },
+      { name: "background", label: "Fotobakgrund (path)", type: "image" },
+    ],
+  },
+
+  AiHyperobject: {
+    name: "AiHyperobject",
+    description:
+      "Hyperobjekt: AI som kraft som genomsyrar allt. Stor titel + hoptrasslade taggar mot fotobakgrund",
+    fields: [
+      { name: "title", label: "Titel", type: "text", default: "AI är inte en sak till!" },
+      { name: "emphasis", label: "Betonat ord (konjak-färgat)", type: "text", default: "inte" },
+      { name: "tags", label: "Taggar (komma-separerat)", type: "multiline" },
+      { name: "background", label: "Fotobakgrund (path)", type: "image" },
+      { name: "darken", label: "Overlay-opacity (0-1)", type: "number", default: 0.72 },
+    ],
+  },
+
+  NamedPortrait: {
+    name: "NamedPortrait",
+    description:
+      "Porträtt centrerat med namnet rullande som ambient vattenstämpel bakom",
+    fields: [
+      { name: "image", label: "Porträttbild", type: "image", required: true },
+      { name: "alt", label: "Alt-text", type: "text" },
+      { name: "name", label: "Namn", type: "text", required: true },
+      { name: "background", label: "Fotobakgrund (path)", type: "image" },
+      { name: "darken", label: "Mörker-opacity (0-1)", type: "number", default: 0.55 },
+      { name: "scrollDuration", label: "Sekunder per rullning", type: "number", default: 40 },
+      {
+        name: "direction",
+        label: "Rullningsriktning",
+        type: "select",
+        options: ["left", "right"],
+        default: "left",
+        variant: "pills",
+      },
+    ],
+  },
+
+  FigureQuote: {
+    name: "FigureQuote",
+    description:
+      "Citat + figurbild flush mot ett hörn. Diagonal gradient så textsidan blir läsbar",
+    fields: [
+      { name: "quote", label: "Citat", type: "multiline", required: true },
+      { name: "attribution", label: "Avsändare", type: "text" },
+      { name: "context", label: "Kontext (årtal/roll)", type: "text" },
+      { name: "image", label: "Figurbild (transparent PNG)", type: "image" },
+      { name: "alt", label: "Alt-text", type: "text" },
+      { name: "background", label: "Fotobakgrund (path)", type: "image", default: "/bilder/karlskrona/bg-caramel.jpg" },
+      {
+        name: "imageCorner",
+        label: "Bildens hörn",
+        type: "select",
+        options: ["bottom-right", "bottom-left"],
+        default: "bottom-right",
+        variant: "pills",
+      },
+      { name: "darken", label: "Overlay-mörker (0-1)", type: "number", default: 0.55 },
+      {
+        name: "quoteSize",
+        label: "Citat-storlek",
+        type: "select",
+        options: ["md", "lg", "xl"],
+        default: "xl",
+        variant: "pills",
+      },
+    ],
+  },
+
+  ErrorSlide: {
+    name: "ErrorSlide",
+    description:
+      "Fejkad 404/system-felsida för satiriska moment. Glitchande felkod + framstegsindikator",
+    fields: [
+      { name: "errorCode", label: "Felkod", type: "text", default: "404" },
+      { name: "errorTitle", label: "Underrubrik (UPPERCASE)", type: "text", default: "FÖRELÄSNINGEN KUNDE INTE LADDAS" },
+      { name: "errorMessage", label: "Beskrivning (\\n för radbrytning)", type: "multiline" },
+      { name: "errorTag", label: "Tag uppe vänster", type: "text", default: "ERR_AI_TAKEOVER" },
+      { name: "timestamp", label: "Tidsstämpel", type: "text" },
+      { name: "showProgress", label: "Visa progress-indikator", type: "boolean", default: true },
+      { name: "progressLabel", label: "Progress-text", type: "text", default: "ÅTERSTÄLLER KONTROLLEN…" },
+    ],
+  },
+
+  FullscreenVideo: {
+    name: "FullscreenVideo",
+    description:
+      "Distraktionsfri videospelare på hela sliden. Inget overlay, inga kontroller som default",
+    fields: [
+      { name: "src", label: "Video-path", type: "text", required: true },
+      { name: "poster", label: "Poster-bild", type: "image" },
+      { name: "loop", label: "Loop", type: "boolean", default: false },
+      { name: "autoPlay", label: "Autoplay", type: "boolean", default: true },
+      { name: "muted", label: "Mutad", type: "boolean", default: true },
+      { name: "controls", label: "Visa kontroller", type: "boolean", default: false },
+      {
+        name: "fit",
+        label: "Object-fit",
+        type: "select",
+        options: ["cover", "contain"],
+        default: "contain",
+        variant: "pills",
+      },
+      { name: "background", label: "Bakgrund vid contain", type: "color", default: "#000" },
+    ],
+  },
+
+  SamrLadder: {
+    name: "SamrLadder",
+    description:
+      "SAMR-modellen som färgkodad trappa, video i höger halva. Stegas fram med space",
+    fields: [
+      { name: "videoSrc", label: "Video (path)", type: "text" },
+      { name: "background", label: "Bakgrundsbild", type: "image" },
+      { name: "eyebrow", label: "Eyebrow (UPPERCASE)", type: "text", default: "SAMR" },
+      { name: "title", label: "Titel", type: "text", default: "Fyra sätt att använda AI." },
+      { name: "subtitle", label: "Undertitel", type: "multiline" },
+      { name: "videoFocusY", label: "Video vertikal fokus (0-100)", type: "number", default: 62, hint: "Högre = visa lägre del av källan" },
+      { name: "videoZoom", label: "Video extra-zoom", type: "number", default: 1.4 },
+    ],
+  },
+
+  ChatHero: {
+    name: "ChatHero",
+    description:
+      "Hero med stor titel, bild höger och fler-turnerande chattkonversation som animeras in",
+    fields: [
+      { name: "eyebrow", label: "Eyebrow", type: "text" },
+      { name: "title", label: "Titel", type: "text", required: true },
+      {
+        name: "titleSize",
+        label: "Titel-storlek",
+        type: "select",
+        options: ["md", "lg", "xl"],
+        default: "xl",
+        variant: "pills",
+      },
+      { name: "subtitle", label: "Undertitel", type: "multiline" },
+      { name: "image", label: "Bild höger", type: "image" },
+      { name: "imageAlt", label: "Alt-text bild", type: "text" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "aiLabel", label: "AI-avatar-etikett", type: "text", default: "AI" },
+      { name: "userPattern", label: "Regex för user-sida", type: "text", default: "elev|du|user|jag|erik" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      { name: "beat", label: "Ms mellan meddelanden", type: "number", default: 1600 },
+      { name: "voice", label: "Visa pulserande mikrofon-ikon", type: "boolean" },
+    ],
+    hasContent: true,
+  },
+
+  InputHero: {
+    name: "InputHero",
+    description:
+      "Hero med stor titel, ChatGPT-stilad input-bar som prompt och bild flush mot bottenhögre",
+    fields: [
+      { name: "eyebrow", label: "Eyebrow (stödjer **fet**)", type: "text" },
+      { name: "title", label: "Titel", type: "text", required: true },
+      { name: "subtitle", label: "Undertitel (stödjer **fet**)", type: "multiline" },
+      { name: "prompt", label: "Prompt-text i input-bar", type: "multiline", required: true },
+      { name: "image", label: "Bild (bottenhögre)", type: "image", required: true },
+      { name: "imageAlt", label: "Alt-text bild", type: "text" },
+      { name: "background", label: "Bakgrundsbild", type: "image" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      { name: "dim", label: "Dim-färg för otonade ord", type: "color" },
+    ],
+  },
+
+  CodeGeneration: {
+    name: "CodeGeneration",
+    description:
+      "Prompt animeras fram i input-bar, sen typas kod ut bokstav för bokstav. Stödjer fullbg-variant",
+    fields: [
+      { name: "eyebrow", label: "Eyebrow (stödjer **fet**)", type: "text" },
+      { name: "title", label: "Titel (stödjer **fet**)", type: "text" },
+      { name: "subtitle", label: "Undertitel (stödjer **fet**)", type: "multiline" },
+      { name: "prompt", label: "Prompt-text", type: "multiline" },
+      { name: "code", label: "Kod-sträng (eller via children)", type: "multiline" },
+      { name: "codeSpeed", label: "Tecken per sekund", type: "number", default: 55 },
+      { name: "background", label: "Bakgrundsbild", type: "image" },
+      { name: "videoSrc", label: "Video (höger sida)", type: "text" },
+      { name: "videoAspect", label: "Video aspect", type: "text", placeholder: "16 / 9" },
+      {
+        name: "variant",
+        label: "Layout-variant",
+        type: "select",
+        options: ["split", "fullbg"],
+        default: "split",
+        variant: "pills",
+      },
+      { name: "accent", label: "Accentfärg", type: "color" },
+    ],
+    hasContent: true,
+  },
+
+  EditorialHero: {
+    name: "EditorialHero",
+    description:
+      "Magazine-style section opener: gigantiskt italic-ord, mono-kicker, dekorativt bakgrundsnummer",
+    fields: [
+      { name: "kicker", label: "Kicker (UPPERCASE)", type: "text" },
+      { name: "number", label: "Bakgrundsnummer", type: "text", placeholder: "04" },
+      { name: "word", label: "Huvudordet", type: "text", required: true },
+      { name: "body", label: "Brödtext (1-2 meningar)", type: "multiline" },
+      { name: "image", label: "Bild (valfri)", type: "image" },
+      { name: "imageAlt", label: "Alt-text", type: "text" },
+      {
+        name: "imagePlacement",
+        label: "Bildens placering",
+        type: "select",
+        options: ["right", "bottom-right", "full-bleed-right"],
+        default: "right",
+        variant: "pills",
+      },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      {
+        name: "theme",
+        label: "Bakgrundston",
+        type: "select",
+        options: ["dark", "cream"],
+        default: "dark",
+        variant: "pills",
+      },
+    ],
+  },
+
+  ProcessChain: {
+    name: "ProcessChain",
+    description:
+      "Kedja av processteg, stegas fram. Format per punkt: **Label** · hint · kind[:image-url]",
+    fields: [
+      { name: "kicker", label: "Kicker (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text" },
+      { name: "body", label: "Brödtext", type: "multiline" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      {
+        name: "direction",
+        label: "Riktning",
+        type: "select",
+        options: ["horizontal", "vertical"],
+        default: "horizontal",
+        variant: "pills",
+      },
+    ],
+    hasContent: true,
+  },
+
+  Lightbox: {
+    name: "Lightbox",
+    description:
+      "Fullskärms-overlay för bild eller video i förstorad storlek. Styrs via open/onClose-state",
+    fields: [
+      { name: "image", label: "Bild-URL", type: "image" },
+      { name: "video", label: "Video-URL", type: "text" },
+      { name: "caption", label: "Caption", type: "text" },
+    ],
+  },
+
+  StudentVoices: {
+    name: "StudentVoices",
+    description:
+      "Grid av elev-citat i glasmorfism-kort. Format: `- **Avsändare:** Citat`",
+    fields: [
+      { name: "kicker", label: "Kicker (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text" },
+      { name: "body", label: "Brödtext", type: "multiline" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+    ],
+    hasContent: true,
+  },
+
+  TwoPaths: {
+    name: "TwoPaths",
+    description:
+      "Två kolumner sida vid sida med olika accent. Format: `- Vänster · Höger`",
+    fields: [
+      { name: "title", label: "Gemensam titel", type: "text" },
+      { name: "leftTitle", label: "Vänster rubrik", type: "text" },
+      { name: "rightTitle", label: "Höger rubrik", type: "text" },
+      { name: "leftAccent", label: "Vänster accent", type: "color" },
+      { name: "rightAccent", label: "Höger accent", type: "color" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+    ],
+    hasContent: true,
+  },
+
+  StatsTriptych: {
+    name: "StatsTriptych",
+    description:
+      "Tre siffror med animerad räkning. Format per punkt: `värde · etikett`",
+    fields: [
+      { name: "kicker", label: "Kicker (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text" },
+      { name: "subtitle", label: "Undertitel", type: "multiline" },
+      { name: "source", label: "Källa (UPPERCASE)", type: "text" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+    ],
+    hasContent: true,
+  },
+
+  GrowingStatement: {
+    name: "GrowingStatement",
+    description:
+      "Texten växer in bokstav för bokstav. **fet** ger accent + glow",
+    fields: [
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      {
+        name: "align",
+        label: "Justering",
+        type: "select",
+        options: ["center", "left"],
+        default: "center",
+        variant: "pills",
+      },
+      { name: "whisper", label: "Italic whisper-text ovanför", type: "text" },
+    ],
+    hasContent: true,
+  },
+
+  ChatFullscreen: {
+    name: "ChatFullscreen",
+    description:
+      "Helsides-chattflöde där meddelanden typas fram med pacing. Format: `- **Roll:** text`",
+    fields: [
+      { name: "kicker", label: "Kicker (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text" },
+      { name: "subtitle", label: "Undertitel", type: "multiline" },
+      { name: "aiLabel", label: "AI-avsändare-etikett", type: "text", default: "Tutor" },
+      { name: "userLabel", label: "User-etikett", type: "text", default: "Elev" },
+      { name: "userPattern", label: "Regex för user-sida", type: "text" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      { name: "aiSpeed", label: "AI ms/tecken", type: "number", default: 14 },
+      { name: "userSpeed", label: "User ms/tecken", type: "number", default: 10 },
+      { name: "thinkingDelay", label: "AI tänker-paus (ms)", type: "number", default: 600 },
+      { name: "betweenDelay", label: "Paus mellan meddelanden (ms)", type: "number", default: 400 },
+    ],
+    hasContent: true,
+  },
+
+  VibeCoding: {
+    name: "VibeCoding",
+    description:
+      "Elev skriver prompt → video av resultatet spelas upp till höger. För 'vibecoding'-exempel",
+    fields: [
+      { name: "kicker", label: "Kicker (UPPERCASE)", type: "text" },
+      { name: "subject", label: "Ämne (small caps)", type: "text" },
+      { name: "student", label: "Ålder/avsändare", type: "text" },
+      { name: "title", label: "Titel — vad eleven byggde", type: "text" },
+      { name: "caption", label: "Caption under prompt-bubblan", type: "text" },
+      { name: "videoSrc", label: "Video (path)", type: "text" },
+      { name: "videoAspect", label: "Video aspect", type: "text", default: "9 / 16", placeholder: "16 / 9" },
+      { name: "background", label: "Bakgrundsbild", type: "image" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+    ],
+    hasContent: true,
+  },
+
+  StarterSentences: {
+    name: "StarterSentences",
+    description:
+      "Startmeningar som typas fram en i taget. Format: `- Kategori · Startmening`",
+    fields: [
+      { name: "kicker", label: "Kicker (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text" },
+      { name: "subtitle", label: "Undertitel", type: "multiline" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      { name: "typeSpeed", label: "Ms per tecken", type: "number", default: 35 },
+    ],
+    hasContent: true,
+  },
+
+  Bollplank: {
+    name: "Bollplank",
+    description:
+      "Lärare ställer fråga till AI om elevgrupp; AI 'tänker högt' och svarar",
+    fields: [
+      { name: "kicker", label: "Kicker (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text" },
+      { name: "subtitle", label: "Undertitel", type: "multiline" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      { name: "prompt", label: "Lärarens fråga", type: "multiline" },
+      { name: "aiResponse", label: "AI:s svar (override default)", type: "multiline" },
+      { name: "aiSpeed", label: "Ms per tecken (AI)", type: "number" },
+      { name: "thinkingDelay", label: "AI tänker-paus (ms)", type: "number" },
+    ],
+    hasContent: true,
+  },
+
+  BloomComparison: {
+    name: "BloomComparison",
+    description:
+      "Bloom-pyramid med två kolumner per nivå. Format: `- **Verb** · vänster · höger · #färg`",
+    fields: [
+      { name: "kicker", label: "Kicker (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text" },
+      { name: "leftTitle", label: "Vänster rubrik", type: "text" },
+      { name: "rightTitle", label: "Höger rubrik", type: "text" },
+      { name: "leftBadge", label: "Vänster badge", type: "text" },
+      { name: "rightBadge", label: "Höger badge", type: "text" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+    ],
+    hasContent: true,
+  },
+
+  ThreeActs: {
+    name: "ThreeActs",
+    description:
+      "Tre kolumner med stegad reveal. Format: `- **Ord** · #färg · Tagline · b1 | b2 | b3 · Avslutning`",
+    fields: [
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text" },
+      { name: "bottomLine", label: "Sammanfattande rad i botten", type: "multiline" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+    ],
+    hasContent: true,
+  },
+
+  Pitfall: {
+    name: "Pitfall",
+    description:
+      "AI-fälla: stort ord, fejkad fråga + AI-svar typas fram, sen röd korrigering",
+    fields: [
+      { name: "badge", label: "Badge (UPPERCASE)", type: "text", placeholder: "FÄLLA 01" },
+      { name: "chapter", label: "Kapitel-markör", type: "text" },
+      { name: "word", label: "Det stora ordet", type: "text", required: true },
+      { name: "subtitle", label: "Beskrivning under", type: "multiline" },
+      { name: "question", label: "Exempel-fråga (user-bubbla)", type: "multiline" },
+      { name: "answer", label: "AI:s fel svar", type: "multiline" },
+      { name: "correction", label: "Korrigering (röd)", type: "multiline" },
+      { name: "tagline", label: "Italic-rad i botten", type: "text" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color", default: "#E84D4D" },
+      { name: "typeSpeed", label: "Ms per tecken", type: "number", default: 22 },
+    ],
+    hasContent: true,
+  },
+
+  PromptPrinciples: {
+    name: "PromptPrinciples",
+    description:
+      "Promptprinciper med dålig vs bra exempel. Format: `- **Namn** · Beskrivning · Dålig · Bra`",
+    fields: [
+      { name: "kicker", label: "Kicker (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text" },
+      { name: "subtitle", label: "Undertitel", type: "multiline" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+    ],
+    hasContent: true,
+  },
+
+  AgentCatalog: {
+    name: "AgentCatalog",
+    description:
+      "Header + agent-katalog (numrerade kort) vänster, video höger. Format: `- **Namn** · Beskrivning`",
+    fields: [
+      { name: "kicker", label: "Kicker (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text" },
+      { name: "subtitle", label: "Italic undertitel", type: "multiline" },
+      { name: "tagline", label: "Avslutande rad (citat-stil)", type: "multiline" },
+      { name: "videoSrc", label: "Video (path)", type: "text" },
+      { name: "videoAspect", label: "Video aspect", type: "text", default: "16 / 9" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color", default: "#EC7E26" },
+    ],
+    hasContent: true,
+  },
+
+  ExampleGrid: {
+    name: "ExampleGrid",
+    description:
+      "Rutnät av kort med korta textinnehåll. Stödjer **fet** för accent",
+    fields: [
+      { name: "kicker", label: "Kicker (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text" },
+      { name: "subtitle", label: "Undertitel", type: "multiline" },
+      { name: "tagline", label: "Tagline under", type: "multiline" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      { name: "columns", label: "Antal kolumner", type: "number", default: 3 },
+    ],
+    hasContent: true,
+  },
+
+  LixPanels: {
+    name: "LixPanels",
+    description:
+      "ChatGPT-bar med prompt + tre nivåkortpanel. Format: `- **Nivå** · Etikett · Texten`",
+    fields: [
+      { name: "kicker", label: "Kicker (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text" },
+      { name: "subtitle", label: "Undertitel", type: "multiline" },
+      { name: "prompt", label: "ChatGPT-prompt", type: "multiline" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      { name: "typeSpeed", label: "Ms per tecken", type: "number", default: 12 },
+    ],
+    hasContent: true,
+  },
+
+  TranslationDemo: {
+    name: "TranslationDemo",
+    description:
+      "Stegad demo: prompt → svensk text → arabisk text → ord-par. Default-content om inget anges",
+    fields: [
+      { name: "kicker", label: "Kicker (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text" },
+      { name: "subtitle", label: "Undertitel", type: "multiline" },
+      { name: "prompt", label: "Prompt", type: "multiline" },
+      { name: "swedishText", label: "Svensk text", type: "multiline", hint: "Lämna tomt för default" },
+      { name: "arabicText", label: "Arabisk text", type: "multiline", hint: "Lämna tomt för default" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+    ],
+  },
+
+  QuizDemo: {
+    name: "QuizDemo",
+    description:
+      "Animerad quiz-demo: ChatGPT-prompt + flerval där fel klick visas först, sen rätt",
+    fields: [
+      { name: "kicker", label: "Kicker (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text" },
+      { name: "subtitle", label: "Undertitel", type: "multiline" },
+      { name: "prompt", label: "ChatGPT-prompt", type: "multiline" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      { name: "question", label: "Frågan", type: "multiline" },
+      { name: "correctIndex", label: "Index för rätt svar", type: "number", default: 1 },
+      { name: "wrongFirstIndex", label: "Index för fel klick först", type: "number", default: 0 },
+      { name: "explanation", label: "Förklaring vid rätt svar", type: "multiline" },
+    ],
+  },
+
+  VoiceFeedback: {
+    name: "VoiceFeedback",
+    description:
+      "Talad prompt typas fram + feedback-sektioner. Format: `- **Rubrik** · Beskrivning · Övning1 | Övning2`",
+    fields: [
+      { name: "kicker", label: "Kicker (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text" },
+      { name: "subtitle", label: "Undertitel", type: "multiline" },
+      { name: "transcript", label: "Transkriberad talprompt", type: "multiline" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      { name: "typeSpeed", label: "Ms per tecken", type: "number", default: 14 },
+    ],
+    hasContent: true,
+  },
+
+  RotatingStatement: {
+    name: "RotatingStatement",
+    description:
+      "Stor typografi där ett ord roterar. Pedagogisk modell: 'Vi behöver lära MED/OM/MOT/GENOM AI'",
+    fields: [
+      { name: "prefix", label: "Text före roterande ord", type: "text" },
+      { name: "words", label: "Roterande ord (komma-separerat)", type: "multiline", placeholder: "med, om, mot, genom, trots" },
+      { name: "suffix", label: "Text efter roterande ord", type: "text" },
+      { name: "interval", label: "Ms mellan byten", type: "number", default: 2800 },
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+      { name: "background", label: "Bakgrund (bild eller video-path)", type: "text" },
+      {
+        name: "backgroundType",
+        label: "Bakgrundstyp",
+        type: "select",
+        options: ["image", "video"],
+        hint: "Auto-detekteras om tomt",
+        variant: "pills",
+      },
+      { name: "accent", label: "Accentfärg", type: "color", default: "#EC7E26" },
+      { name: "overlay", label: "Overlay-opacity (0-1)", type: "number", default: 0.5 },
+    ],
+  },
+
+  ChatSplit: {
+    name: "ChatSplit",
+    description:
+      "Två chattfönster sida vid sida. Format: `- L **Roll:** text` eller `- R **Roll:** text`",
+    fields: [
+      { name: "kicker", label: "Kicker (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text" },
+      { name: "subtitle", label: "Undertitel", type: "multiline" },
+      { name: "leftTitle", label: "Vänster rubrik", type: "text" },
+      { name: "leftSubtitle", label: "Vänster undertitel", type: "text" },
+      { name: "leftAccent", label: "Vänster accent", type: "color" },
+      { name: "rightTitle", label: "Höger rubrik", type: "text" },
+      { name: "rightSubtitle", label: "Höger undertitel", type: "text" },
+      { name: "rightAccent", label: "Höger accent", type: "color" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "chapter", label: "Kapitel-markör", type: "text" },
+    ],
+    hasContent: true,
+  },
+
+  EditorialQuote: {
+    name: "EditorialQuote",
+    description:
+      "Citat med typografisk hierarki per segment. Format: `- Text · style` (whisper|bridge|shout|landing|pause)",
+    fields: [
+      { name: "kicker", label: "Kicker (UPPERCASE)", type: "text" },
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      { name: "decoration", label: "Dekorativ glyph", type: "text", hint: "Default öppnande citattecken" },
+      {
+        name: "align",
+        label: "Justering",
+        type: "select",
+        options: ["left", "center", "right"],
+        default: "left",
+        variant: "pills",
+      },
+    ],
+    hasContent: true,
+  },
+
+  RevealList: {
+    name: "RevealList",
+    description:
+      "Persistent prefix + lista som avslöjas en rad i taget. **fet** ger accent",
+    fields: [
+      { name: "prefix", label: "Persistent text ovanför", type: "text" },
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      { name: "stagger", label: "Sekunder mellan rader", type: "number", default: 0.9 },
+      { name: "overlay", label: "Mörker-opacity (0-1)", type: "number", default: 0.55 },
+    ],
+    hasContent: true,
+  },
+
+  UCurveChart: {
+    name: "UCurveChart",
+    description:
+      "U-formad kurva med zoner. Format: `- Label · tone · Beskrivning` (tones: neutral|danger|success)",
+    fields: [
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text" },
+      { name: "subtitle", label: "Undertitel", type: "multiline" },
+      { name: "xLabel", label: "X-axel-etikett", type: "text" },
+      { name: "yLabel", label: "Y-axel-etikett", type: "text" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      { name: "overlay", label: "Mörker-opacity (0-1)", type: "number" },
+    ],
+    hasContent: true,
+  },
+
+  NoviceDilemma: {
+    name: "NoviceDilemma",
+    description:
+      "Två karaktärer (novis/expert) med AI i mitten. Visar att AI förstärker existerande kompetens",
+    fields: [
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text", default: "Vem gynnas av AI?" },
+      { name: "leftLabel", label: "Vänster etikett", type: "text", default: "Novis" },
+      { name: "leftOutput", label: "Vänster output", type: "text", default: "Plausibelt svar" },
+      { name: "rightLabel", label: "Höger etikett", type: "text", default: "Expert" },
+      { name: "rightOutput", label: "Höger output", type: "text", default: "Granskat + vidareutvecklat" },
+      { name: "middleLabel", label: "Mittetikett", type: "text", default: "AI" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color", default: "#EC7E26" },
+      { name: "overlay", label: "Mörker-opacity (0-1)", type: "number", default: 0.6 },
+    ],
+  },
+
+  LivePoll: {
+    name: "LivePoll",
+    description:
+      "Interaktiv poll mot Supabase. Format: `- Label · tone · Beskrivning` (tones: neutral|danger|success|accent)",
+    fields: [
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text" },
+      { name: "subtitle", label: "Undertitel", type: "multiline" },
+      { name: "pollKey", label: "Unik poll-nyckel", type: "text", required: true, hint: "Kort, beskrivande, t.ex. 'zone-check'" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      { name: "overlay", label: "Mörker-opacity (0-1)", type: "number" },
+    ],
+    hasContent: true,
+  },
+
+  TriadStatement: {
+    name: "TriadStatement",
+    description:
+      "Retorisk triad: 2-3 premisser → en landning. Separera med `---` på egen rad",
+    fields: [
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "overlay", label: "Mörker-opacity (0-1)", type: "number", default: 0.6 },
+      { name: "accent", label: "Accentfärg", type: "color", default: "#EC7E26" },
+    ],
+    hasContent: true,
+  },
+
+  TwoSides: {
+    name: "TwoSides",
+    description:
+      "Två-kolumn-jämförelse med tonalitet. Separera kolumner med `---`. Variants: list eller study",
+    fields: [
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+      { name: "intro", label: "Intro-rad ovanför kolumner", type: "multiline" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "overlay", label: "Mörker-opacity (0-1)", type: "number" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      {
+        name: "variant",
+        label: "Variant",
+        type: "select",
+        options: ["list", "study"],
+        default: "list",
+        variant: "pills",
+      },
+      { name: "leftLabel", label: "Vänster etikett", type: "text", required: true },
+      {
+        name: "leftTone",
+        label: "Vänster tone",
+        type: "select",
+        options: ["positive", "warning", "danger", "neutral"],
+        variant: "pills",
+      },
+      { name: "leftMeta", label: "Vänster meta-tagg (study)", type: "text" },
+      { name: "rightLabel", label: "Höger etikett", type: "text", required: true },
+      {
+        name: "rightTone",
+        label: "Höger tone",
+        type: "select",
+        options: ["positive", "warning", "danger", "neutral"],
+        variant: "pills",
+      },
+      { name: "rightMeta", label: "Höger meta-tagg (study)", type: "text" },
+      { name: "separator", label: "Mittseparator (vs/&)", type: "text" },
+    ],
+    hasContent: true,
+  },
+
+  EvidenceConstellation: {
+    name: "EvidenceConstellation",
+    description:
+      "Forskningsläget som stjärnbilder. Densitet visar evidensstyrkan. Separera kolumner med `---`",
+    fields: [
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+      { name: "intro", label: "Intro-rad ovanför kolumner", type: "multiline" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "overlay", label: "Mörker-opacity (0-1)", type: "number", default: 0.85 },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      { name: "leftLabel", label: "Vänster etikett", type: "text", required: true },
+      {
+        name: "leftTone",
+        label: "Vänster tone",
+        type: "select",
+        options: ["positive", "warning", "danger", "neutral"],
+        variant: "pills",
+      },
+      { name: "leftDensity", label: "Vänster stjärn-densitet", type: "number" },
+      { name: "rightLabel", label: "Höger etikett", type: "text", required: true },
+      {
+        name: "rightTone",
+        label: "Höger tone",
+        type: "select",
+        options: ["positive", "warning", "danger", "neutral"],
+        variant: "pills",
+      },
+      { name: "rightDensity", label: "Höger stjärn-densitet", type: "number" },
+    ],
+    hasContent: true,
+  },
+
+  FrictionMap: {
+    name: "FrictionMap",
+    description:
+      "AI som automatiserande teknologi som flackar ut lärandets friktionspunkter — animerat",
+    fields: [
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text", default: "§ Pedagogiskt ansvar" },
+      { name: "accent", label: "Accentfärg", type: "color", default: "#EC7E26" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "overlay", label: "Mörker-opacity (0-1)", type: "number", default: 0.92 },
+      { name: "peak1Label", label: "Topp 1 etikett", type: "text", default: "Friktion" },
+      { name: "peak2Label", label: "Topp 2 etikett", type: "text", default: "Önskvärd svårighet" },
+      { name: "peak3Label", label: "Topp 3 etikett", type: "text", default: "Meningsfullt motstånd" },
+      { name: "hero", label: "Hero-text", type: "multiline", default: "AI är en *automatiserande* teknologi." },
+      { name: "bridge", label: "Bridge-text", type: "multiline", default: "Den tar bort friktionen." },
+      { name: "landing", label: "Landing-text", type: "multiline", default: "Det är **friktionen** vi måste designa för." },
+    ],
+  },
+
+  StrategySpectrum: {
+    name: "StrategySpectrum",
+    description:
+      "Tre strategiska val sida vid sida. Format: `- Titel · tone · [recommended ·] Beskrivning`",
+    fields: [
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+      { name: "intro", label: "Intro-rad", type: "multiline" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "overlay", label: "Mörker-opacity (0-1)", type: "number" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+    ],
+    hasContent: true,
+  },
+
+  LensIntro: {
+    name: "LensIntro",
+    description:
+      "Typografisk inledning för lins-sektion. Stort lins-namn, dekorativt index, frågan som subtitle",
+    fields: [
+      { name: "number", label: "Linsens nummer", type: "text", default: "01" },
+      { name: "total", label: "Totalt antal linser", type: "text", default: "05" },
+      { name: "name", label: "Linsens namn", type: "text", required: true },
+      { name: "subtitle", label: "Frågan som ramar linsen", type: "multiline" },
+      { name: "tagline", label: "Tagline (lins, inte svar)", type: "multiline" },
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text", hint: "Default '§ Lins X / Y'" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "overlay", label: "Mörker-opacity (0-1)", type: "number", default: 0.7 },
+      { name: "accent", label: "Accentfärg", type: "color", default: "#EC7E26" },
+    ],
+  },
+
+  DualAffordance: {
+    name: "DualAffordance",
+    description:
+      "Verktyg med dubbel affordans (lärande / genväg). Format: `- **Verktyg** · positiv / negativ`",
+    fields: [
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+      { name: "intro", label: "Intro-rad", type: "multiline" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "overlay", label: "Mörker-opacity (0-1)", type: "number" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      { name: "positiveLabel", label: "Positiv kolumn-etikett", type: "text", default: "Inbjuder till lärande" },
+      { name: "negativeLabel", label: "Negativ kolumn-etikett", type: "text", default: "Inbjuder till genväg" },
+      { name: "positiveColor", label: "Positiv färg", type: "color" },
+      { name: "negativeColor", label: "Negativ färg", type: "color" },
+    ],
+    hasContent: true,
+  },
+
+  SAMRSpectrum: {
+    name: "SAMRSpectrum",
+    description:
+      "SAMR som horisontellt spektrum (inte stege). Format: `- **Bokstav** · Namn · Exempel`",
+    fields: [
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+      { name: "intro", label: "Intro-rad", type: "multiline" },
+      { name: "task", label: "Uppgift som tagg", type: "text" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "overlay", label: "Mörker-opacity (0-1)", type: "number" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+    ],
+    hasContent: true,
+  },
+
+  BloomPyramid: {
+    name: "BloomPyramid",
+    description:
+      "Bloom som pyramid med dubbla läsningar. Format: `- **Nivå** · beskrivning` (toppen först)",
+    fields: [
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+      { name: "intro", label: "Intro-rad", type: "multiline" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "overlay", label: "Mörker-opacity (0-1)", type: "number" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      {
+        name: "arrows",
+        label: "Pilar",
+        type: "select",
+        options: ["both", "up", "down", "none"],
+        default: "both",
+        variant: "pills",
+      },
+      { name: "upLabel", label: "Uppåt-pil etikett", type: "text" },
+      { name: "downLabel", label: "Nedåt-pil etikett", type: "text" },
+    ],
+    hasContent: true,
+  },
+
+  JagAIJagFlow: {
+    name: "JagAIJagFlow",
+    description:
+      "JAG-AI-JAG-modellen: tre faser horisontellt. Format: `- **Titel** · caption · item1 · item2 · ...`",
+    fields: [
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+      { name: "intro", label: "Intro-rad", type: "multiline" },
+      { name: "closing", label: "Avslutande mening (citat)", type: "multiline" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "overlay", label: "Mörker-opacity (0-1)", type: "number" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+    ],
+    hasContent: true,
+  },
+
+  LensApplication: {
+    name: "LensApplication",
+    description:
+      "Konkret klassrumsexempel med linskoppling. Split-screen med media på en sida och text på andra",
+    fields: [
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+      { name: "subject", label: "Ämne-tagg (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text", required: true },
+      { name: "mekanism", label: "Mekanism-text (stödjer **fet**)", type: "multiline" },
+      { name: "imageUrl", label: "Bild-URL", type: "image" },
+      { name: "videoUrl", label: "Video-URL (override bild)", type: "text" },
+      {
+        name: "mediaPlacement",
+        label: "Media-placering",
+        type: "select",
+        options: ["left", "right"],
+        default: "right",
+        variant: "pills",
+      },
+      { name: "lenses", label: "Linser (komma-separerat)", type: "text", hint: "Lins-namn som taggar" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "overlay", label: "Mörker-opacity (0-1)", type: "number" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+    ],
+  },
+
+  BeforeAfterPhases: {
+    name: "BeforeAfterPhases",
+    description:
+      "Lärarens designram (Före → AI → Efter) med tidslinje. Format: `- **Fas** · tid · caption · item1 · ...`",
+    fields: [
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+      { name: "intro", label: "Intro-rad", type: "multiline" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "overlay", label: "Mörker-opacity (0-1)", type: "number" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      { name: "highlightLast", label: "Markera sista fasen som länk", type: "boolean", default: true },
+    ],
+    hasContent: true,
+  },
+
+  SpotlightCard: {
+    name: "SpotlightCard",
+    description: "Kort i SpotlightContrast",
+    fields: [
+      { name: "title", label: "Kortets titel", type: "text", required: true },
+      { name: "tag", label: "Tag (UPPERCASE)", type: "text" },
+    ],
+    hasContent: true,
+  },
+
+  TeamMember: {
+    name: "TeamMember",
+    description: "Medlem i TeamIntro",
+    fields: [
+      { name: "name", label: "Namn", type: "text", required: true },
+      { name: "role", label: "Roll/yrke", type: "text" },
+    ],
+    hasContent: true,
+  },
 };
 
 export function getTemplateSchema(name: string): TemplateSchema | undefined {
@@ -1348,7 +2424,12 @@ export function getTemplateSchema(name: string): TemplateSchema | undefined {
  * Lista alla slide-templates (exkluderar sub-components som TimelineEvent,
  * ComparisonColumn som bara används som children).
  */
-export const SUB_COMPONENTS = new Set(["TimelineEvent", "ComparisonColumn"]);
+export const SUB_COMPONENTS = new Set([
+  "TimelineEvent",
+  "ComparisonColumn",
+  "SpotlightCard",
+  "TeamMember",
+]);
 
 export function getSlideTemplates(): Array<{ tag: string; schema: TemplateSchema }> {
   return Object.entries(templateSchemas)
