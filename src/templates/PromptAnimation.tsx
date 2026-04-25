@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import { EditableText } from "@/lib/inline-edit";
 
 interface PromptAnimationProps {
   promptText: string;
@@ -77,7 +78,7 @@ export function PromptAnimation({
                 className="text-[clamp(1.5rem,3.5vw,2.75rem)] font-medium leading-[1.25]"
                 style={{ fontFamily: "var(--font-display)" }}
               >
-                {resultText}
+                <EditableText path="resultText" value={resultText} block>{resultText}</EditableText>
               </p>
             </motion.div>
           )}

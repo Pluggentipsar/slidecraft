@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
+import { EditableText } from "@/lib/inline-edit";
 
 interface LayeredTextProps {
   /** Bild (PNG med transparent bakgrund fungerar bäst) */
@@ -73,12 +74,14 @@ export function LayeredText({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div
-          className="flex max-w-5xl flex-col gap-2"
-          style={textColor ? { color: textColor } : undefined}
-        >
-          {children}
-        </div>
+        <EditableText path="content" block label="Text-innehåll">
+          <div
+            className="flex max-w-5xl flex-col gap-2"
+            style={textColor ? { color: textColor } : undefined}
+          >
+            {children}
+          </div>
+        </EditableText>
       </motion.div>
 
       {/* Subjekt-bild (framför eller bakom) */}

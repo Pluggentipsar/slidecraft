@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Children, isValidElement, useState } from "react";
 import type { ReactElement, ReactNode } from "react";
 import { useSlideSteps } from "@/lib/slide-steps";
+import { EditableText } from "@/lib/inline-edit";
 import { Lightbox } from "./Lightbox";
 
 interface ThreeUpItem {
@@ -135,7 +136,7 @@ export function ThreeUp({
                 color: "var(--text-muted)",
               }}
             >
-              {kicker}
+              <EditableText path="kicker" value={kicker}>{kicker}</EditableText>
             </motion.div>
           ) : null}
           <motion.h2
@@ -152,7 +153,7 @@ export function ThreeUp({
               margin: 0,
             }}
           >
-            {title}
+            <EditableText path="title" value={title}>{title}</EditableText>
           </motion.h2>
           {body ? (
             <motion.p
@@ -167,7 +168,7 @@ export function ThreeUp({
                 margin: 0,
               }}
             >
-              {body}
+              <EditableText path="body" value={body} block>{body}</EditableText>
             </motion.p>
           ) : null}
         </div>

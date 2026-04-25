@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useSlideSteps } from "@/lib/slide-steps";
+import { EditableText } from "@/lib/inline-edit";
 
 interface BeforeAfterProps {
   /** Promptens text (skrivs fram tecken för tecken) */
@@ -80,7 +81,7 @@ export function BeforeAfter({
           transition={{ duration: 0.5 }}
         >
           <div className="text-xs uppercase tracking-[0.25em] text-accent">
-            {promptLabel}
+            <EditableText path="promptLabel" value={promptLabel}>{promptLabel}</EditableText>
           </div>
           <pre
             className="whitespace-pre-wrap text-[clamp(0.9rem,1.5vw,1.125rem)] leading-relaxed text-text"
@@ -107,7 +108,7 @@ export function BeforeAfter({
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
           <div className="text-xs uppercase tracking-[0.25em] text-accent">
-            {resultLabel}
+            <EditableText path="resultLabel" value={resultLabel}>{resultLabel}</EditableText>
           </div>
           <div
             className="relative flex-1 overflow-hidden rounded-xl border border-white/10 bg-bg-surface/30"
@@ -144,7 +145,9 @@ export function BeforeAfter({
             )}
           </div>
           {resultCaption && (
-            <div className="text-sm text-text-muted">{resultCaption}</div>
+            <div className="text-sm text-text-muted">
+              <EditableText path="resultCaption" value={resultCaption}>{resultCaption}</EditableText>
+            </div>
           )}
         </motion.div>
       </div>

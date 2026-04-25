@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { EditableText } from "@/lib/inline-edit";
 
 interface GiantScrollProps {
   text: string;
@@ -75,27 +76,29 @@ export function GiantScroll({
 
   return (
     <div className="relative flex h-full w-full items-center overflow-hidden bg-bg">
-      <motion.div
-        className="flex whitespace-nowrap"
-        style={{
-          fontFamily: "var(--font-display)",
-          fontSize,
-          fontWeight: 900,
-          lineHeight: 1,
-          letterSpacing: "-0.04em",
-          ...textStyle,
-        }}
-        initial={{ x: fromX }}
-        animate={{ x: toX }}
-        transition={{
-          duration: durationNum,
-          ease: "linear",
-          repeat: loop ? Infinity : 0,
-        }}
-      >
-        <span>{repeatedText}</span>
-        <span>{repeatedText}</span>
-      </motion.div>
+      <EditableText path="text" value={text} placeholder="Den rullande texten">
+        <motion.div
+          className="flex whitespace-nowrap"
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize,
+            fontWeight: 900,
+            lineHeight: 1,
+            letterSpacing: "-0.04em",
+            ...textStyle,
+          }}
+          initial={{ x: fromX }}
+          animate={{ x: toX }}
+          transition={{
+            duration: durationNum,
+            ease: "linear",
+            repeat: loop ? Infinity : 0,
+          }}
+        >
+          <span>{repeatedText}</span>
+          <span>{repeatedText}</span>
+        </motion.div>
+      </EditableText>
     </div>
   );
 }

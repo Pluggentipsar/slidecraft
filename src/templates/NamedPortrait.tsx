@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { EditableText } from "@/lib/inline-edit";
 
 interface NamedPortraitProps {
   /** Porträttets bildpath */
@@ -93,9 +94,11 @@ export function NamedPortrait({
           willChange: "transform",
         }}
       >
-        <span style={{ display: "inline-block", paddingRight: "2rem" }}>
-          {repeatedName}
-        </span>
+        <EditableText path="name" value={name} placeholder="Personens namn">
+          <span style={{ display: "inline-block", paddingRight: "2rem" }}>
+            {repeatedName}
+          </span>
+        </EditableText>
         <span style={{ display: "inline-block", paddingRight: "2rem" }}>
           {repeatedName}
         </span>

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useSlideSteps } from "@/lib/slide-steps";
 import { AiArBackdrop, AiArLabel, Spotlight } from "./AiArMedia";
+import { EditableText } from "@/lib/inline-edit";
 
 interface RealOrFakeProps {
   leftImage: string;
@@ -85,7 +86,11 @@ export function RealOrFake({
             margin: 0,
           }}
         >
-          {revealed ? "En av dem finns inte." : question}
+          {revealed ? (
+            "En av dem finns inte."
+          ) : (
+            <EditableText path="question" value={question}>{question}</EditableText>
+          )}
         </motion.p>
       </div>
 
@@ -211,6 +216,7 @@ function Portrait({
         >
           {name}
         </motion.p>
+        {/* Note: name is exposed as leftName/rightName via the parent — edit via form */}
         <motion.p
           initial={{ opacity: 0, y: 6 }}
           animate={{

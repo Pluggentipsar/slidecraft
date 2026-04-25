@@ -2,6 +2,14 @@
 
 import { motion } from "framer-motion";
 import { AiArBackdrop } from "./AiArMedia";
+import { EditableText } from "@/lib/inline-edit";
+
+interface AiArHeroProps {
+  /** Stora rubriken som dominerar slidan. Default "AI är". */
+  text?: string;
+  /** Färg på de tre pulserande prickarna. Default tema-accent. */
+  dotColor?: string;
+}
 
 /**
  * Öppningsslide för AI-är-sektionen. "AI är…" i gigantisk storlek,
@@ -9,7 +17,10 @@ import { AiArBackdrop } from "./AiArMedia";
  * fortsättningar". Använd som första slide i sektionen; de följande
  * sliderna håller "AI är…" kvar i top-left som visuellt ankare.
  */
-export function AiArHero() {
+export function AiArHero({
+  text = "AI är",
+  dotColor = "var(--accent)",
+}: AiArHeroProps) {
   return (
     <div
       className="relative h-full w-full flex items-center justify-center"
@@ -34,7 +45,9 @@ export function AiArHero() {
           zIndex: 1,
         }}
       >
-        <span>AI är</span>
+        <EditableText path="text" value={text}>
+          <span>{text}</span>
+        </EditableText>
         <span style={{ display: "inline-flex", marginLeft: "0.08em" }}>
           {[0, 1, 2].map((i) => (
             <motion.span
@@ -46,7 +59,7 @@ export function AiArHero() {
                 delay: 0.9 + i * 0.22,
                 ease: "easeInOut",
               }}
-              style={{ display: "inline-block", color: "#B4763A" }}
+              style={{ display: "inline-block", color: dotColor }}
             >
               .
             </motion.span>

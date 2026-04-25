@@ -1365,7 +1365,21 @@ export const templateSchemas: Record<string, TemplateSchema> = {
     name: "AiArHero",
     description:
       "Öppningsslide för AI-är-sektionen. Gigantiskt 'AI är…' centrerat med pulserande prickar",
-    fields: [],
+    fields: [
+      {
+        name: "text",
+        label: "Rubriktext",
+        type: "text",
+        default: "AI är",
+        hint: "Stora rubriken som dominerar slidan (de tre prickarna ritas separat).",
+      },
+      {
+        name: "dotColor",
+        label: "Färg på prickar",
+        type: "color",
+        hint: "Default: tema-accent.",
+      },
+    ],
   },
 
   AiArMedia: {

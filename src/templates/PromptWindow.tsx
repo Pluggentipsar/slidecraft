@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Children, isValidElement, useEffect, useMemo, useState } from "react";
 import type { ReactElement, ReactNode } from "react";
 import { AiArBackdrop, AiArLabel, Spotlight } from "./AiArMedia";
+import { EditableText } from "@/lib/inline-edit";
 
 interface PromptWindowProps {
   /** Prompten som typas in i chattfönstret. Alternativt: lägg texten som children. */
@@ -240,7 +241,7 @@ export function PromptWindow({
                 marginLeft: "0.5rem",
               }}
             >
-              {modelName}
+              <EditableText path="modelName" value={modelName}>{modelName}</EditableText>
             </span>
             <span
               style={{

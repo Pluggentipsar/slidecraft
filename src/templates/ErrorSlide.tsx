@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { EditableText } from "@/lib/inline-edit";
 
 interface ErrorSlideProps {
   /** Felkod som visas jättestort i mitten. Default "404". */
@@ -82,8 +83,10 @@ export function ErrorSlide({
         >
           ERROR
         </span>
-        <span style={{ color: "var(--text)" }}>{errorTag}</span>
-        <span style={{ color: "var(--text-muted)" }}>· {timestamp}</span>
+        <span style={{ color: "var(--text)" }}>
+          <EditableText path="errorTag" value={errorTag}>{errorTag}</EditableText>
+        </span>
+        <span style={{ color: "var(--text-muted)" }}>· <EditableText path="timestamp" value={timestamp}>{timestamp}</EditableText></span>
       </motion.div>
 
       {/* Mitten */}
@@ -120,7 +123,7 @@ export function ErrorSlide({
               "4px 0 rgba(154,58,42,0.35), -4px 0 rgba(6,182,212,0.25)",
           }}
         >
-          {errorCode}
+          <EditableText path="errorCode" value={errorCode}>{errorCode}</EditableText>
         </motion.div>
 
         {/* Underrubrik */}
@@ -139,7 +142,7 @@ export function ErrorSlide({
             textAlign: "center",
           }}
         >
-          {errorTitle}
+          <EditableText path="errorTitle" value={errorTitle}>{errorTitle}</EditableText>
         </motion.p>
 
         {/* Beskrivning */}
@@ -160,7 +163,7 @@ export function ErrorSlide({
             lineHeight: 1.4,
           }}
         >
-          {errorMessage}
+          <EditableText path="errorMessage" value={errorMessage} block>{errorMessage}</EditableText>
         </motion.p>
       </div>
 
