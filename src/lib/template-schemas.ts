@@ -1194,6 +1194,150 @@ export const templateSchemas: Record<string, TemplateSchema> = {
     ],
     childrenType: "slot",
   },
+
+  AcronymList: {
+    name: "AcronymList",
+    description:
+      "Akronym/modell som expanderas bokstav för bokstav (SAMR, ECPA, Bloom). Format per punkt: **B** · Ord · Beskrivning",
+    fields: [
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text", placeholder: "§ Puentedura · 2006" },
+      { name: "title", label: "Rubrik", type: "text" },
+      { name: "tagline", label: "Avslutande text", type: "multiline" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "overlay", label: "Mörker-opacity (0–1)", type: "number", default: 0.7 },
+      { name: "accent", label: "Accentfärg", type: "color" },
+    ],
+    hasContent: true,
+  },
+
+  HeroStatement: {
+    name: "HeroStatement",
+    description:
+      "Tre rader med olika typografi: kicker (mono) / whisper (italic) / shout (MEGA bold). Separera med blankrader.",
+    fields: [
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      {
+        name: "theme",
+        label: "Tema",
+        type: "select",
+        options: ["dark", "cream"],
+        default: "dark",
+        variant: "pills",
+      },
+    ],
+    hasContent: true,
+  },
+
+  HookStatement: {
+    name: "HookStatement",
+    description:
+      "Provokativ öppningsmening som reveals ord-för-ord med dramatisk pacing. **fet** = accent + extra paus.",
+    fields: [
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      { name: "overlay", label: "Mörker-opacity (0–1)", type: "number", default: 0.7 },
+      {
+        name: "pauseAfter",
+        label: "Paus efter sista ord (ms)",
+        type: "number",
+        default: 2400,
+      },
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text" },
+    ],
+    hasContent: true,
+  },
+
+  Manifesto: {
+    name: "Manifesto",
+    description:
+      "Deklarativ one-liner — ord animeras in med blur. *kursiv* och **fet** ger accentfärg.",
+    fields: [
+      {
+        name: "text",
+        label: "Text",
+        type: "multiline",
+        hint: "Lämna tomt för att använda children istället",
+      },
+      {
+        name: "variant",
+        label: "Variant",
+        type: "select",
+        options: ["display", "serif", "condensed"],
+        default: "display",
+        variant: "pills",
+      },
+      {
+        name: "align",
+        label: "Justering",
+        type: "select",
+        options: ["left", "center"],
+        default: "left",
+        variant: "pills",
+      },
+      { name: "chapter", label: "Kapitel-markör (UPPERCASE)", type: "text", placeholder: "§ III · Titel" },
+      { name: "background", label: "Bakgrund (bild eller CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      {
+        name: "decoration",
+        label: "Dekorativ glyph/nummer",
+        type: "text",
+        hint: "Stort tecken bakom texten, t.ex. 'III' eller '01'",
+      },
+    ],
+    hasContent: true,
+  },
+
+  PromptHero: {
+    name: "PromptHero",
+    description:
+      "Hero-slide med stor titel, exempel-prompt i chattbubbla och karaktärsbild till höger",
+    fields: [
+      { name: "eyebrow", label: "Eyebrow / fråga (stödjer **fet**)", type: "text" },
+      { name: "title", label: "Titel", type: "text", required: true },
+      {
+        name: "titleSize",
+        label: "Titel-storlek",
+        type: "select",
+        options: ["md", "lg", "xl"],
+        default: "xl",
+      },
+      { name: "subtitle", label: "Undertitel (stödjer **fet**)", type: "multiline" },
+      { name: "image", label: "Karaktärsbild", type: "image", required: true },
+      { name: "imageAlt", label: "Alt-text för bild", type: "text" },
+      { name: "background", label: "Bakgrundsbild", type: "image" },
+      { name: "prompt", label: "Prompt-text i chattbubbla", type: "multiline" },
+      { name: "promptModel", label: "Avsändarnamn i bubbla", type: "text", default: "ChatGPT" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      {
+        name: "imageOffsetY",
+        label: "Bildens vertikala förskjutning",
+        type: "text",
+        placeholder: "10% eller 4rem",
+      },
+    ],
+  },
+
+  ThreeUp: {
+    name: "ThreeUp",
+    description:
+      "Tre-kolumners grid med jämförbara exempel. Format per punkt: **Label** · hint · /bild.png · tag:Tag",
+    fields: [
+      { name: "kicker", label: "Kicker (UPPERCASE)", type: "text" },
+      { name: "title", label: "Titel", type: "text", required: true },
+      { name: "body", label: "Brödtext under titel", type: "multiline" },
+      { name: "background", label: "Bakgrund (CSS)", type: "text" },
+      { name: "accent", label: "Accentfärg", type: "color" },
+      {
+        name: "stepped",
+        label: "Stega fram en i taget",
+        type: "boolean",
+        default: true,
+      },
+    ],
+    hasContent: true,
+  },
 };
 
 export function getTemplateSchema(name: string): TemplateSchema | undefined {
