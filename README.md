@@ -28,23 +28,109 @@ theme: editorial
 
 That MDX is a real, working 3-slide deck.
 
-## What it is
+---
 
-- **Code-based slides** — every slide is a React component. You compose decks in MDX. Real animations, real interaction, real data.
-- **160 templates** out of the box — title slides, hero statements, comparisons, statistics, AI conversation mocks, particle systems, polls, reflections, pedagogical models (SAMR / Bloom / SOLO / dimension maps), pattern grids, definition slides, and many more. See [docs/TEMPLATES.md](docs/TEMPLATES.md).
-- **Floating overlays** — `<FloatingImage>`, `<FloatingVideo>`, `<FloatingChat>`, `<FloatingText>`, `<FloatingPills>`, `<FloatingPhone>` can be dragged, resized, and rotated on top of any slide directly in the editor. Saved positions render statically in present mode.
-- **8 themes** — `default`, `editorial`, `forest`, `minimal`, `retro_futurism`, `sunset`, plus two example brand themes (`omtnk`, `karlskrona`). Themes can also use `backgroundTexture` to set a slide-wide image; frosted-glass content panels auto-activate when set.
-- **Audience mode** (Supabase) — 6-digit session code, phones join, live slide sync, anonymous Q&A, real-time polls (`<LivePoll>`) and reflections (`<LiveReflection>`).
-- **Cloudflare Tunnel built in** — `npm run present` gives you a public URL pointing at your laptop, no deploy required.
-- **An editor** — visual editing with structured field controls per template. Inline edits, drag-and-resize for floating overlays, in-editor image/video upload (`AddImageModal`/`AddVideoModal`). Edits write back to MDX so everything stays git-tracked.
-- **Full-deck PDF export** — render the whole presentation to a single PDF via `modern-screenshot`.
-- **A planning skill** for Claude Code (`.claude/skills/planera/`) that drafts decks from a brief, picks the right templates, and creates new ones when nothing fits.
+## What you can do with slidecraft
+
+### 📝 Write a presentation in MDX
+
+Each MDX file in `content/` is one deck. Each component you place in it becomes one slide. You compose your deck from a catalog of **160 purpose-built templates** — title slides, bullet builds, comparisons, statistics, quotes, AI chat mocks, pedagogical models (SAMR / Bloom / SOLO), data visualisations, particle systems, and a lot more. Browse the full catalog in [docs/TEMPLATES.md](docs/TEMPLATES.md).
+
+```mdx
+<BigStat
+  eyebrow="From the catalog"
+  contextAbove="Slidecraft ships with"
+  value={160}
+  contextBelow="purpose-built slide templates."
+/>
+```
+
+When you save the file, the dashboard updates. No build step. No deploy.
+
+### ✏️ Edit visually in the browser — no MDX required
+
+Open `/my-talk/edit` and you get a structured editor. Click any text on the slide to **edit it inline**. Click the field panel to edit props with proper input controls (sliders, dropdowns, color pickers, image pickers). Switch templates from a typed picker. Add new slides from a catalog. Your edits write back to the MDX file in `content/`, so everything stays git-tracked and diff-able.
+
+You don't have to touch MDX to edit a deck. But you can if you want to.
+
+### 🖼️ Drop images, videos, and chat mockups anywhere on a slide
+
+`<FloatingImage>`, `<FloatingVideo>`, `<FloatingChat>`, `<FloatingText>`, `<FloatingPills>`, and `<FloatingPhone>` are draggable overlays you can place on top of any slide. In the editor:
+
+- **Click** to select, **drag the centre** to move, **drag a corner** to resize
+- Rotate, change opacity, send to back/front
+- **Upload images and videos directly** from the browser — no separate file management
+- Your saved positions render statically when you present
+
+This is how you handle "I want this image *here* on this slide" without writing a custom layout.
+
+### 🎤 Present from your laptop
+
+Press space to advance. Hit **F** for fullscreen, **N** for speaker notes, **M** for the slide menu, **left-arrow** to go back. Bullet templates do **stepped reveal** — each press reveals the next item; the slide doesn't advance until all items are out.
+
+You also get:
+
+- **Speaker view** at `/my-talk/presenter` — notes, timer, next-slide preview, in a separate window
+- **`<Notes>` blocks** in your MDX become speaker notes (press N to see them)
+- **Touch-swipe** support on tablets
+
+### 📱 Engage your audience live
+
+Set up Supabase once ([04-supabase.md](docs/04-supabase.md)) and your decks gain a phone-friendly companion view. When you press **S** to start a session you get:
+
+- A **6-digit session code** + QR code. Audience scans or enters at `/join`.
+- **Live slide sync** — when you advance a slide, every phone in the room updates instantly
+- **Anonymous Q&A** — anyone can submit questions tied to the current slide. You see them in an overlay (press Q).
+- **`<LivePoll>`** — multiple-choice polls with live tallies that you can reveal results for on stage
+- **`<LiveReflection>`** — open-text responses that appear as a growing wall of cards
+- **Audience navigation controls** — let phones scroll back through slides they missed (toggleable)
+- **Reactions** that float across the screen during the talk
+
+It's IRL audience interaction without a third-party menti-style service.
+
+### 🌐 Share your deck three ways
+
+| Mode | When | How |
+|------|------|-----|
+| **Permanent URL** | Evergreen decks, async viewing, "send the link" | `git push` → Vercel/Cloudflare Pages auto-deploys at `slides.yourdomain.com`. Done. |
+| **Live tunnel** | Present from your laptop with heavy media that won't deploy | `npm run present` opens a Cloudflare Tunnel. Audience hits a public URL pointing at your laptop. No deploy, no commit. |
+| **Hybrid** | Audience needs permanent URL but you've got gigabytes of media | Audience view at deployed URL; presenter at localhost; both share state via Supabase. Set `deploy: local-only` in frontmatter and demos render placeholders for absent media. |
+
+Details and trade-offs in [docs/02-local-media.md](docs/02-local-media.md) and [docs/03-cloudflare.md](docs/03-cloudflare.md).
+
+### 📄 Export to PDF (or video)
+
+`Cmd/Ctrl+K` → **Export PDF** renders the entire deck as a single PDF via `modern-screenshot` — animations frozen, layout pixel-perfect. Useful for handouts, documentation, or pre-talk distribution.
+
+For polished MP4s with full animation, wire to **[remotion-playwright](https://github.com/Pluggentipsar/remotion-playwright)**. See [docs/07-remotion-playwright.md](docs/07-remotion-playwright.md).
+
+### 🎨 Use any of 8 themes — or define your own
+
+```yaml
+---
+theme: forest   # default | sunset | editorial | minimal | retro_futurism | forest | omtnk | karlskrona
+---
+```
+
+Themes are **complete token systems** — colour, typography, geometry, motion, ornament. Switch themes and the entire visual register changes; your content doesn't move. Themes can also set a `backgroundTexture` (URL or image path) which renders as a slide-wide background image; **frosted-glass content panels auto-activate** so text stays readable on busy backgrounds.
+
+Two of the eight themes (`omtnk`, `karlskrona`) are intentional examples — copy them as a starting point for your own brand theme.
+
+### 🤖 Plan whole decks with AI
+
+This repo includes a [Claude Code skill](.claude/skills/planera/SKILL.md) that drafts presentations from a brief. Give it a topic, audience, duration, and tone — it picks templates from the catalog, builds new ones when nothing fits, writes your MDX, and follows the six-step template-creation ritual when it adds new components.
+
+Works with other AI assistants too — point them at `docs/TEMPLATES.md` + `src/lib/template-schemas.ts` and they have enough context to draft good decks.
+
+---
 
 ## What it isn't
 
-- **Not WYSIWYG.** You build slides by composing components. The editor helps, but you'll touch MDX. That's a feature.
-- **Not a SaaS.** You self-host. Your slides are yours.
-- **Not a one-click PowerPoint replacement.** It's slower to start than Keynote and faster to iterate than Keynote. Pick accordingly.
+- **Not WYSIWYG.** You can build entire decks visually in the editor, but the file format is MDX. Power users can edit MDX directly. That trade-off is intentional.
+- **Not a SaaS.** You self-host. Your slides are yours. They live in your git repo.
+- **Not a one-click PowerPoint replacement.** It's slower to start than Keynote (you'll need 5 minutes to install) and faster to iterate than Keynote once you're in. Pick accordingly.
+
+---
 
 ## Quickstart
 
@@ -74,24 +160,26 @@ slug: hello
 
 Reload <http://localhost:3000>. Your deck is on the dashboard.
 
-Full quickstart in [docs/01-quickstart.md](docs/01-quickstart.md).
+Full quickstart — including how to add audience mode, host your own tunnel, and deploy — in [docs/01-quickstart.md](docs/01-quickstart.md).
+
+---
 
 ## Documentation
 
 | Doc | What's in it |
 |-----|--------------|
-| [01-quickstart.md](docs/01-quickstart.md) | Install, first deck, key shortcuts |
-| [02-local-media.md](docs/02-local-media.md) | Where to put images / video, three deploy strategies |
+| [01-quickstart.md](docs/01-quickstart.md) | Install, your first deck, key shortcuts, the editor |
+| [02-local-media.md](docs/02-local-media.md) | Where to put images / video, the three deploy strategies |
 | [03-cloudflare.md](docs/03-cloudflare.md) | `npm run present` — share your laptop with the world via Cloudflare Tunnel |
 | [04-supabase.md](docs/04-supabase.md) | Set up audience mode (live polls, Q&A, slide sync) |
 | [05-deploy-vercel.md](docs/05-deploy-vercel.md) | Deploy to Vercel, Cloudflare Pages, or self-host |
 | [06-llm-integration.md](docs/06-llm-integration.md) | Wire to [llm-knowledge-base](https://github.com/Pluggentipsar/llm-knowledge-base) for AI-organised source material |
-| [07-remotion-playwright.md](docs/07-remotion-playwright.md) | Auto-record polished MP4 videos of your decks via [remotion-playwright](https://github.com/Pluggentipsar/remotion-playwright) |
-| [TEMPLATES.md](docs/TEMPLATES.md) | The full catalog — every slide template with props, examples, and "don't use when" |
+| [07-remotion-playwright.md](docs/07-remotion-playwright.md) | Auto-record polished MP4 videos of your decks |
+| [TEMPLATES.md](docs/TEMPLATES.md) | The full template catalog — every slide template with props, examples, and "don't use when" |
 
-## How presenting works
+---
 
-Three views, one MDX file:
+## Three views, one MDX file
 
 ```
 content/my-talk.mdx
@@ -102,64 +190,32 @@ content/my-talk.mdx
 ```
 
 Plus:
-- `/audience/[code]` — phones join here when you start an audience session.
-- `/join` — public landing where the audience enters the 6-digit code.
+- `/audience/[code]` — phones join here when you start an audience session
+- `/join` — public landing where the audience enters the 6-digit code
 
-## Three modes for sharing your deck
+---
 
-| Mode | Best for | Setup |
-|------|----------|-------|
-| **Self-contained** | Evergreen reference decks | `git push` → Vercel auto-deploys at `slides.yourdomain.com`. Done. |
-| **Laptop-as-server** | Live talks, heavy demo media | `npm run present` opens a Cloudflare Tunnel. Audience hits a public URL pointing at your laptop. |
-| **Hybrid** | Audience needs a permanent URL but you have huge media | Audience view at deployed URL; presenter at localhost; both share state via Supabase. |
-
-## Templates ≠ HTML, but neither do they have to be
+## How templates work
 
 Slidecraft slides are **just React components**. Every existing template is in `src/templates/`. They:
 
-- Accept typed props
-- Use CSS variables for theming (`var(--accent)`, `var(--bg)`, etc.)
-- Use Framer Motion for animation
-- Use `useSlideSteps()` for in-slide step-reveal (space advances within slide before moving on)
+- Accept typed props (so the editor can render structured form controls)
+- Use CSS variables for theming (`var(--accent)`, `var(--bg)`, etc.) — every template adapts to every theme
+- Use Framer Motion for animation; respect `prefers-reduced-motion: reduce`
+- Use `useSlideSteps()` for in-slide step-reveal (space advances within the slide before moving on)
 - Wrap editable text in `<EditableText>` so the editor can do inline edits
 
-Adding a new template is a six-step ritual (write component, register, schema, doc, demo, commit). The `/planera` skill walks the user through it. See [.claude/skills/planera/SKILL.md](.claude/skills/planera/SKILL.md).
+Adding a new template is a six-step ritual (write component, register, schema, doc, demo, commit). The `/planera` skill walks an AI assistant through it. See [.claude/skills/planera/SKILL.md](.claude/skills/planera/SKILL.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## Themes
-
-Themes set tokens, not just colors:
-
-```ts
-{
-  bg, bgSurface, text, textMuted, accent, accentGlow, accentDim,    // color
-  fontDisplay, fontBody, fontMono, headingWeight, headingTracking,   // typography
-  radius, borderWidth, slideMaxWidth,                                // geometry
-  motionEase, motionDuration, entranceStyle,                         // motion
-  ornamentStyle, ornamentColor, backgroundTexture                    // ornament
-}
-```
-
-Switch themes in frontmatter:
-
-```yaml
 ---
-theme: forest
----
-```
-
-Same content, different aesthetic. Eight themes ship; `omtnk` and `karlskrona` are example brand-themes you can copy as a starting point.
 
 ## Stepped reveal
 
-Templates that build content inside the slide (BulletBuild, NumberedReveal, Timeline, PollQuestion, ParticleField morphs, …) advance one *step* at a time before moving to the next slide. Space goes forward, left-arrow back. Audience sees the same step you're on.
+Templates that build content inside the slide (`BulletBuild`, `NumberedReveal`, `Timeline`, `PollQuestion`, `ParticleField`, the various `Floating*`, …) advance one *step* at a time before moving to the next slide. Space goes forward, left-arrow back. The audience sees the same step you're on.
 
-Add stepping to your own templates by reading `useSlideSteps(count)` and rendering up to `currentStep`.
+Add stepping to your own templates by reading `useSlideSteps(count)` from `@/lib/slide-steps` and rendering up to `currentStep`.
 
-## Working with Claude Code (or other agentic tools)
-
-The repo includes [`.claude/skills/planera/SKILL.md`](.claude/skills/planera/SKILL.md) — a structured prompt for Claude Code to plan presentations from a brief, pick the right templates, build new templates when nothing fits, and commit them properly.
-
-Adapt for other AI assistants by reading `docs/TEMPLATES.md` (the catalog) plus `src/lib/template-schemas.ts` (the typed schemas) plus a sample MDX. That's enough context to draft good decks.
+---
 
 ## Contributing
 
@@ -169,6 +225,8 @@ A few non-obvious rules:
 - Templates added to `src/templates/` must also land in `docs/TEMPLATES.md` and `src/lib/template-schemas.ts` in the same PR.
 - Themes added to `src/themes/index.ts` should include a `description` comment that explains the use-case.
 - Don't add framework-level dependencies without an issue first — the stack is intentionally tight.
+
+---
 
 ## Stack
 
@@ -180,6 +238,8 @@ A few non-obvious rules:
 - **modern-screenshot** for full-deck PDF export
 - **Cloudflare Tunnel** + `concurrently` for the `npm run present` flow
 - **TypeScript** throughout
+
+---
 
 ## License
 
