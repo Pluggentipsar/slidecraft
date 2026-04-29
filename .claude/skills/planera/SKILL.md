@@ -7,7 +7,7 @@ description: Plan and generate Slidecraft presentations from a brief. Picks the 
 
 You are designing a presentation that will be rendered by **Slidecraft** (Next.js + React + MDX). Your output is an MDX file in `content/`. Each component you place becomes one full-screen slide.
 
-The user has a topic, an audience, and a duration. You have a catalog of ~100 slide templates and the ability to **build new templates when nothing fits**. The result should be more interesting than a deck of bullet points — because that's the entire reason we're not in PowerPoint.
+The user has a topic, an audience, and a duration. You have a catalog of 160+ slide templates (plus floating overlays — `<FloatingImage>`, `<FloatingVideo>`, `<FloatingText>`, `<FloatingChat>`, etc. — that drop on top of any other slide) and the ability to **build new templates when nothing fits**. The result should be more interesting than a deck of bullet points — because that's the entire reason we're not in PowerPoint.
 
 ## Core principle
 

@@ -17,7 +17,8 @@ theme: editorial
 </GiantText>
 
 <BulletBuild title="What slidecraft gives you">
-- 100+ purpose-built slide templates (with new ones easy to add)
+- 160+ purpose-built slide templates (with new ones easy to add)
+- Floating overlays — drop images, videos, chats, text on any slide
 - Live polls, Q&A, slide sync to phones in the room
 - Themes that actually feel like themes — typography, motion, ornament
 - Cloudflare Tunnel preset for "share my laptop's deck right now"
@@ -30,11 +31,13 @@ That MDX is a real, working 3-slide deck.
 ## What it is
 
 - **Code-based slides** — every slide is a React component. You compose decks in MDX. Real animations, real interaction, real data.
-- **~100 templates** out of the box — title slides, hero statements, comparisons, statistics, AI conversation mocks, particle systems, polls, reflections, and many more.
-- **8 themes** — `default`, `editorial`, `forest`, `minimal`, `retro_futurism`, `sunset`, plus two example brand themes (`omtnk`, `karlskrona`).
-- **Audience mode** (Supabase) — 6-digit session code, phones join, live slide sync, anonymous Q&A, real-time polls and reflections.
+- **160 templates** out of the box — title slides, hero statements, comparisons, statistics, AI conversation mocks, particle systems, polls, reflections, pedagogical models (SAMR / Bloom / SOLO / dimension maps), pattern grids, definition slides, and many more. See [docs/TEMPLATES.md](docs/TEMPLATES.md).
+- **Floating overlays** — `<FloatingImage>`, `<FloatingVideo>`, `<FloatingChat>`, `<FloatingText>`, `<FloatingPills>`, `<FloatingPhone>` can be dragged, resized, and rotated on top of any slide directly in the editor. Saved positions render statically in present mode.
+- **8 themes** — `default`, `editorial`, `forest`, `minimal`, `retro_futurism`, `sunset`, plus two example brand themes (`omtnk`, `karlskrona`). Themes can also use `backgroundTexture` to set a slide-wide image; frosted-glass content panels auto-activate when set.
+- **Audience mode** (Supabase) — 6-digit session code, phones join, live slide sync, anonymous Q&A, real-time polls (`<LivePoll>`) and reflections (`<LiveReflection>`).
 - **Cloudflare Tunnel built in** — `npm run present` gives you a public URL pointing at your laptop, no deploy required.
-- **An editor** — visual editing with structured field controls per template. Edits write back to MDX so everything stays git-tracked.
+- **An editor** — visual editing with structured field controls per template. Inline edits, drag-and-resize for floating overlays, in-editor image/video upload (`AddImageModal`/`AddVideoModal`). Edits write back to MDX so everything stays git-tracked.
+- **Full-deck PDF export** — render the whole presentation to a single PDF via `modern-screenshot`.
 - **A planning skill** for Claude Code (`.claude/skills/planera/`) that drafts decks from a brief, picks the right templates, and creates new ones when nothing fits.
 
 ## What it isn't
@@ -174,6 +177,7 @@ A few non-obvious rules:
 - **Framer Motion 12** for animations
 - **MDX** + `next-mdx-remote` for content
 - **Supabase** (Postgres + Realtime) for audience mode
+- **modern-screenshot** for full-deck PDF export
 - **Cloudflare Tunnel** + `concurrently` for the `npm run present` flow
 - **TypeScript** throughout
 

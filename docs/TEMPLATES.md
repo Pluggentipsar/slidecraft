@@ -1971,4 +1971,524 @@ Mönstren ska gås igenom i strikt ordning och kräver pil-animation i en lista
 
 ---
 
-**Totalt templates nu: 107** (106 + InvisibleChildPatterns).
+## Fas 10: Floating overlays + 53 nya templates (2026-04-29)
+
+**Stor port** av infrastruktur och templates som utvecklats i en privat
+downstream-fork. Två huvudteman:
+
+1. **Floating overlays** — `<FloatingImage>` / `<FloatingVideo>` /
+   `<FloatingText>` / `<FloatingChat>` / `<FloatingPills>` /
+   `<FloatingPhone>` läggs som overlays *ovanpå* en parent-slide. I
+   editorn kan de dras, resizas, roteras — i presenter-läget renderas
+   de statiskt på sina sparade positioner. Driven av `<SlideWithOverlays>`
+   (wrapper) som `mdx-parser`'s `preprocessOverlaysForPresenter()` lägger
+   in automatiskt när en slide har overlay-children.
+2. **53 nya slide-templates** — statements, mönster-grids, pedagogiska
+   modeller, AI-demos, process- och datavisualiseringar.
+
+Alla entries nedan är *kondenserade* — läs själva `.tsx`-filen för full
+prop-uppsättning och animation-detaljer.
+
+### Floating overlays
+
+#### `<FloatingImage>` — Drag-and-resize bild som overlay
+
+Frittflyttande bild som kan placeras ovanpå en annan slide. I edit-läget
+markeras den med outline + 4 corner-handles + delete-knapp. Drag i mitten
+flyttar; drag i hörn resizar. I presenter-läget renderas statiskt.
+
+**Props:** `src` (krävs), `alt?`, `x?`/`y?` (% eller px), `width?`,
+`height?`, `rotation?`, `opacity?`, `zIndex?`, `layer?` (`"front"` (default)
+| `"back"` — bakom template-content), `background?`, `overlay?`.
+
+#### `<FloatingVideo>` — Drag-and-resize video som overlay
+
+Som `FloatingImage` men för video. Stödjer lokala paths (.mp4/.webm/.mov),
+direktlänkar och YouTube/Vimeo-URL:er (auto-embed). Spelar muted+looped
+i presenter-läget. Server actions för uppladdning kräver
+`bodySizeLimit: "500mb"` i `next.config.ts`.
+
+**Props:** Samma som FloatingImage + `chapter?`, `accent?`, `showControls?`.
+
+#### `<FloatingText>` — Drag-and-resize textruta som overlay
+
+Fri text-ruta. I edit-läget kan storleken justeras via preset (xs/sm/md/lg/xl/xxl)
+eller direkt cqw-värde. **bold** + *italic* stöds.
+
+**Props:** `text?` (alternativt children), `x?`/`y?`/`width?`/`height?`,
+`size?`, `color?`, `weight?` (regular/medium/bold/black eller nummer),
+`align?`, `style?` (display/body/mono), `background?`, `padding?`.
+
+#### `<FloatingChat>` — Animerad chat-widget som overlay
+
+Mockad chat med user-/AI-bubblor som rullar in en i taget. Användbart för
+att lägga ett konkret exempel bredvid en siffra eller statement.
+
+**Format:** `- **Avsändare:** text`. Avsändare som matchar `du|user|jag`
+blir user-bubbla.
+
+**Props:** `x?`/`y?`/`width?`/`height?`, `widgetName?`, `widgetStatus?`,
+`accent?`, `showWindowControls?`, `kicker?`, `autoplay?`, `beat?`.
+
+#### `<FloatingPills>` — Små stat-chips som overlay
+
+Pill-formade stat-chips som revealas med stagger. Använd för supporting-
+statistik på en slide där huvud-siffran redan är något annat.
+
+**Format:** `- Text · Källa`
+
+**Props:** `x?`/`y?`/`width?`, `accent?`, `layout?` (`"wrap"` (default) | `"stack"`),
+`initialDelay?`, `stagger?`.
+
+#### `<FloatingPhone>` — Mobiltelefon-overlay med chat
+
+Renderar en stiliserad mobiltelefon med chat på skärmen. Bra för att visa
+hur en elev/användare interagerar med en chatbot på sin telefon. `:screenshot`-
+prefix på meddelande triggar skärmdumps-vy.
+
+**Props:** `x?`/`y?`/`width?`, `appName?`, `time?`, `accent?`, `autoplay?`,
+`beat?`.
+
+#### `<SlideWithOverlays>` — Wrapper för slides med overlays
+
+Pre-processad automatiskt av MDX-parsern — du behöver inte skriva den själv.
+Tillhandahåller `OverlayInstanceProvider`/`useOverlayInstance`-context.
+
+---
+
+### Statement & framing
+
+#### `<BigDefinition>` — Definitionsslide
+
+Stort begrepp i mitten, fullt namn i italic ovanför, definition under.
+
+**Props:** `term` (krävs), `fullName?`, `definition?`, `chapter?`, `accent?`,
+`source?`, `children?`.
+
+#### `<CoreInsight>` — Build-up + punchline
+
+Setup-text i mindre format, dramatisk paus, sen LANDAR punchlinen i stor
+skala med accent-glow. **bold** i punchline = accent-färg.
+
+**Props:** `setup?`, `punchline` (krävs), `chapter?`, `kicker?`, `accent?`.
+
+#### `<BildningContrast>` — Två vertikala spalter med glödande mittlinje
+
+Vänster = något AI levererar (information, fakta). Höger = något människan
+står för (bildning, omdöme, mening). Stega för att tända spalterna i tur.
+
+**Format:** `- Vänster-rad · Höger-rad`
+
+**Props:** `chapter?`, `title?`, `leftLabel?`, `leftWord?`, `rightLabel?`,
+`rightWord?`.
+
+#### `<HumanOnlyTriad>` — Tre pelare med saker AI inte kan göra
+
+Varje pelare har strikethrough på "AI" och "DU" i accent under. Stega för
+att tända en pelare i taget.
+
+**Format:** `- Titel · Beskrivning`
+
+**Props:** `chapter?`, `title?`, `subtitle?`, `negatedLabel?` (default "AI:n"),
+`activeLabel?` (default "Du").
+
+#### `<NarrativeFrames>` — Fyra paralella narrativ, avslöjas en i taget
+
+Tänkt för "Berättelsen om AI"-beatet. Prefix `★` markerar primary-narrativet
+(extra glow på sista step).
+
+**Format:** `- ★ Namn · Beskrivning`
+
+**Props:** `chapter?`, `title?`, `subtitle?`, `accent?`, `hint?`.
+
+#### `<Denials>` — Spektakulär lista av negationer med strikethrough
+
+Varje fras revealas BIG, får strikethrough-animering, mattas. Avslutas med
+valfri konklusion ("vad det ÄR").
+
+**Format:** `- ett orakel`
+
+**Props:** `prefix?` (intro), `conclusion?`, `accent?`, `beat?` (ms),
+`strikeDelay?` (ms).
+
+#### `<WeirdSummary>` — Sammanfattningsslide för ett "weird"-moment
+
+Listar 3-5 udda observationer i kompakt grid. Bra för att summera ett
+moment där du visat overraskande exempel.
+
+**Props:** `chapter?`, `title?`, `accent?`, `children` (markdown-lista).
+
+#### `<WeirdReveal>` — Avslöjar en "weird" sak med dramatisk uppbyggnad
+
+Setup → reveal → konsekvens. Prosa-fokuserat med tre register.
+
+**Props:** `chapter?`, `setup?`, `reveal`, `consequence?`, `accent?`.
+
+#### `<TackSlide>` — Bespoke avslutnings-slide
+
+Stort "Tack!" till vänster, hero-bild i mitten, bok-thumbnail nere, kontakt-
+rader till höger med plattforms-ikoner (linkedin/instagram/gmail/spotify/web).
+
+**Format:** `- Plattform · Etikett`
+
+**Props:** `chapter?`, `title?` (default "Tack!"), `subtitle?`, `personImage?`,
+`bookImage?`, `accent?`, `overlay?`.
+
+#### `<ParadoxStat>` — Paradox: setup → bryggord → MASSIV siffra → källa
+
+Räkneverket startar efter setup + bridge har landat. Numret är visuellt
+hjärtat, allt annat är dimmat.
+
+**Props:** `chapter?`, `setup?`, `bridge?` (typ "Ändå..."), `value` (krävs),
+`suffix?`, `caption?`, `source?`.
+
+---
+
+### Pattern grids & lists
+
+#### `<PrincipleStack>` — Lager av principer i staplad layout
+
+Numrerade principer, varje med stort tag-ord + utveckling. Stagger-reveal.
+
+**Format:** `- **Princip-namn** · utveckling`
+
+**Props:** `chapter?`, `title?`, `accent?`.
+
+#### `<PowerStack>` — Hierarki av makt-positioner
+
+Stigande tier-stack med vikt-progression visualiserad genom typografi och
+färgintensitet.
+
+**Format:** `- **Position** · beskrivning`
+
+**Props:** `chapter?`, `title?`, `accent?`.
+
+#### `<SkillStack>` — Färdighetsstack från grundläggande till avancerat
+
+Visualiserar skill progression. Liknar TierStack men mer pedagogisk-
+specifik.
+
+**Format:** `- **Färdighet** · vad det innebär`
+
+**Props:** `chapter?`, `title?`, `accent?`.
+
+#### `<TaskBucket>` — Buckets med tasks/aktiviteter
+
+Tre eller fler kategori-buckets med items i varje. Bra för "vad gör vi
+imorgon"-strukturer.
+
+**Format:** Markdown-lista med `**Bucket-namn**` följt av items.
+
+**Props:** `chapter?`, `title?`, `accent?`.
+
+#### `<RapidFireIdeas>` — Snabb sekvens av korta idéer
+
+Idéer slås upp en i taget i hög hastighet, lämnar visuella spår. Bra för
+brainstorm-moments eller "femton sätt att..."-sekvenser.
+
+**Props:** `chapter?`, `title?`, `beat?` (ms mellan idéer), `accent?`.
+
+#### `<MandateMap>` — Koncentriska ringar runt en glödpunkt i centrum
+
+Varje ring har ett räckvidd-stat (t.ex. elever/år, elever/karriär).
+Stega för att tända ringarna eller låt komma med stagger.
+
+**Format:** `- siffra · etikett`
+
+**Props:** `chapter?`, `title?`, `subtitle?`, `centerLabel?`,
+`centerSublabel?`, `accent?`.
+
+#### `<CaseGrid>` — Rutnät av case/exempel-kort
+
+Stödjer valfri tumnagelbild per kort — "wall of evidence"-känsla med
+bilder, mer typografiskt utan. `display="carousel"` ger en peek-vy med
+ett aktivt kort + dimmade.
+
+**Format:** `- Plats · Datum · Beskrivning · /path/till/bild.jpg`
+
+**Props:** `chapter?`, `title?`, `columns?`, `display?` (`"grid"` (default)
+| `"carousel"`), `hint?`.
+
+#### `<RoleConstellation>` — Roller klustrade i en konstellation
+
+Visualiserar olika roller/aktörer som planeter i ett system. Klustras i
+mitten, med relationer markerade.
+
+**Format:** `- **Roll** · beskrivning`
+
+**Props:** `chapter?`, `title?`, `centerLabel?`, `accent?`.
+
+#### `<OccupationRadar>` — Radar/spider-chart för yrkespåverkan
+
+Theoretical vs observed AI-påverkan över N yrkeskategorier (Anthropic
+Economic Index Figure 2-style). Stega: grid → theoretical-polygon →
+observed-polygon.
+
+**Format:** `- Yrke · theoretical-värde · observed-värde`
+
+**Props:** `chapter?`, `title?`, `theoreticalLabel?`, `observedLabel?`,
+`conclusion?`.
+
+#### `<HopeMontage>` — Hope-grid med video/bilder
+
+Auto-detect video vs bild från filändelse. Videos spelar muted, looped
+direkt vid mount.
+
+**Format:** `- /path/till/media · Beskrivning`
+
+**Props:** `chapter?`, `title?`, `subtitle?`, `accent?`, `overlay?`.
+
+#### `<QuoteWall>` — Wall av citat med stagger-reveal
+
+Grid av citat-kort. Varje kort har citat + attribution + valfri context.
+
+**Format:** `- "Citat" · Attribution · Context`
+
+**Props:** `chapter?`, `title?`, `accent?`, `columns?`.
+
+#### `<BiasShowcase>` — Centerstage-mode för en serie kognitiva bias
+
+Stega framåt för att crossfade till nästa bias. Varje bias visar bias-namn
+(stort accent), beskrivning (italic), chat-bubble (AI:s claim), reaktion
+(vad hjärnan gör), truth-reveal (vad som FAKTISKT är sant).
+
+**Format:** Markdown-lista med strukturerad data per bias.
+
+**Props:** `chapter?`, `title?`, `subtitle?`, `accent?`.
+
+---
+
+### Models & pedagogy
+
+#### `<SOLOGraph>` — SOLO-taxonomi visualiserad som graf
+
+Pre-strukturella → multi-strukturella → relationella → utvidgade abstrakta.
+Stega genom nivåerna med konkret exempel-scenario per.
+
+**Props:** `chapter?`, `title?`, `scenario?`, `accent?`.
+
+#### `<JaggedFrontier>` — "Samma modell, olika uppgift"
+
+Horisontell kapacitetslinje med vertikala par-staplar: dot uppåt
+(excellence) + dot neråt (weakness). Visualiserar AI:s ojämna kapacitets-
+profil.
+
+**Format:** `- Excellence-uppgift · Weakness-uppgift`
+
+**Props:** `chapter?`, `title?`, `landing?`, `accent?`.
+
+#### `<DimensionMap>` — N-dimensionellt ramverk som karta
+
+Renderar dimensioner som horisontell rad av numrerade kort kopplade av
+topplinje. `activeIndex` markerar nuvarande position med "Här är vi"-label.
+
+**Format:** `- Namn · Beskrivning`
+
+**Props:** `chapter?`, `title?`, `subtitle?`, `activeIndex?`, `activeLabel?`.
+
+#### `<ZoneShift>` — Visualiserar skifte mellan zoner
+
+Bra för "förr-zon → AI-zon"-narrativ. Animerad övergång mellan två
+visuella tillstånd.
+
+**Props:** `chapter?`, `fromLabel?`, `toLabel?`, `accent?`.
+
+#### `<WithAboutAgainstThrough>` — Fyra prepositionella förhållningssätt till AI
+
+Med, Om, Mot, Genom — fyra perspektiv på AI-pedagogik. Roterar/staggar
+genom dem.
+
+**Format:** `- **Preposition** · vad det innebär`
+
+**Props:** `chapter?`, `title?`, `accent?`.
+
+#### `<MirrorReveal>` — Final-manifesto med spegel-effekt
+
+Texten landar i översta halvan, en (svagt distorderad) reflektion landar
+i undre. Subtil shimmer-pulse mellan dem. Tänkt som klimax i en presen-
+tation där spegeln är genomgående metafor.
+
+**Props:** `chapter?`, `kicker?`, `signature?`, `accent?`, `children`.
+
+#### `<TimeHorizons>` — Korta/medel/långa tidshorisonter
+
+Tre kolumner med olika tidshorisonter (t.ex. 6 mån / 5 år / 50 år) och
+vad som troligen är sant i varje.
+
+**Format:** `- **Horisont** · vad som händer`
+
+**Props:** `chapter?`, `title?`, `accent?`.
+
+#### `<TimelineCompression>` — Komprimerad tidslinje med exponentiell skala
+
+Visualiserar att tidsavstånd minskar exponentiellt — gjort för att visa
+hur snabbt AI-utveckling går.
+
+**Props:** `chapter?`, `title?`, `events` (markdown-lista), `accent?`.
+
+#### `<ParallaxTimeline>` — Tidslinje med parallax-scroll
+
+Tidslinje där varje event har olika scroll-hastigheter för parallax-känsla.
+Tänkt för långa tidsaxlar (decennier+).
+
+**Format:** `- **År** · Händelse · Detaljer`
+
+**Props:** `chapter?`, `title?`, `accent?`.
+
+#### `<NextTokenDemo>` — Demonstration av next-token-prediction
+
+Visualiserar hur AI väljer nästa token i en mening. Tokens svävar i halo
+kring markören, vinnaren pulsar och materialiseras som nästa token.
+
+**Format:** `decisions={[[['öster', 0.87], ['väster', 0.04]], ...]}` eller
+`decisionsText="öster:0.87,väster:0.04 / och:0.62,över:0.18"`.
+
+**Props:** `chapter?`, `bridge?`, `prefix` (krävs), `decisions?`,
+`decisionsText?`, `closing?`, `accent?`.
+
+---
+
+### AI demos & interactive
+
+#### `<BiasCode>` — Kod-fil som avslöjar bias steg för steg
+
+Stiliserat som editor med syntax highlighting. Block separeras av
+blankrader och avslöjas stegvis. Visar hur datan formar mönstret.
+
+**Props:** `chapter?`, `title?`, `filename?` (default "bias.py"),
+`autoReveal?`, `accent?`.
+
+#### `<DesignChoices>` — Central kategorilista med chat-bubblor runtom
+
+När du stegar revealas ett chat-citat i taget. Matchande kategori i centern
+highlightas. Bra för "AI:s designval"-moment.
+
+**Format:** `- Chat-text · Kategori`
+
+**Props:** `chapter?`, `title?`, `categories?` (komma-separerad),
+`accent?`.
+
+#### `<DataRedaction>` — Visar VAD som ska/inte ska skickas till AI
+
+Pedagogiskt grepp: formen ÄR innehållet. En faktisk prompt med elevdata
+visas; klick → "censur-tejp" slår över riskorden. Slutligen ersätts allt
+av anonymiserad version med GODKÄND-stämpel.
+
+**Markup:** `{N:text}` i prompt = text ska redactas i kategori N.
+
+**Props:** `chapter?`, `title?`, `prompt` (krävs, med markup), `categories?`,
+`safePrompt` (krävs), `tumregel?`, `okLabel?`.
+
+#### `<PrivacyDecree>` — Sekretess-dekret i officiellt format
+
+Stiliserat som regerings-/myndighetsdokument. Punkter avslöjas stegvis.
+
+**Format:** `- **Paragraf** · text`
+
+**Props:** `chapter?`, `title?`, `seal?`, `accent?`.
+
+#### `<PromptToImage>` — Prompt → genererad bild
+
+Prompt typas, sen tonas en bild in som "resultatet". Bra för att visa
+text-to-image-flöden.
+
+**Props:** `chapter?`, `prompt` (krävs), `imageSrc` (krävs), `caption?`,
+`accent?`.
+
+#### `<DarkPatternsApp>` — Interaktiv app: dark patterns i AI-chatbots
+
+Full-slide live-demo med 5 scenarier (skuld, tidsbrist, intimitet,
+datainsamling, FOMO), quiz och resultatsida. Presentatören klickar igenom
+under presentationen.
+
+**Props:** `chapter?`, `background?`.
+
+#### `<LiveEmbed>` — Embedda en URL som iframe
+
+Bra för Claude Artifacts, Codepen, externa demos. Visar "Spela upp"-poster
+tills användaren klickar.
+
+**Props:** `url` (krävs), `title?`, `description?`, `chapter?`,
+`aspectRatio?`, `autoload?`, `playLabel?`.
+
+#### `<LiveReflection>` — Open-text-svar från publiken via Supabase
+
+Som `LivePoll` men för fri-text. Visar svar som "wall of cards" där nya
+svar dimper in. Kräver `pollKey` för att koppla till Supabase realtime.
+
+**Props:** `chapter?`, `title?`, `subtitle?`, `pollKey` (krävs),
+`maxCards?` (default 24), `accent?`.
+
+#### `<VoiceReveal>` — Röstinmatning som avslöjar text
+
+Animerad rösttranskribering där röstvågor visualiserar input och text
+typas fram. Bra för "tal-till-text"-demos.
+
+**Props:** `chapter?`, `transcript` (krävs), `accent?`.
+
+---
+
+### Process & data
+
+#### `<InfluenceChain>` — Horisontell pipeline av N stadier
+
+Tänkt för "kedjan av X": Skapa → Sprida → Träna → Tillit → Oss.
+Glas-kort med nummer-badge, namn, mekanism, exempel. Pilar pulsar mellan
+korten. Stega för att lyfta ett stadium i taget.
+
+**Format:** `- Namn · mekanism · exempel`
+
+**Props:** `chapter?`, `title?`, `subtitle?`, `accent?`.
+
+#### `<ProcessLogPreview>` — Loggfil som avslöjas stegvis
+
+Visualiserar en process-logg med tidsstämplar och meddelanden. Stega för
+att avslöja rad för rad.
+
+**Format:** `- HH:MM:SS · log-meddelande`
+
+**Props:** `chapter?`, `title?`, `accent?`.
+
+#### `<ContractMockup>` — Klassrumskontrakt som autentiskt dokument
+
+Stiliserat som officiellt dokument: titel, undertitel, numrerade artiklar
+(§ 1, § 2, …), signaturlinjer. Animation: dokument scale-fadar in →
+artiklar tänds i sekvens → signaturer.
+
+**Format:** Markdown-lista, varje punkt blir en artikel.
+
+**Props:** `chapter?`, `title?` (default "KLASSRUMSKONTRAKT"),
+`subtitle?`, `leftSignature?` (default "Lärare"), `rightSignature?`
+(default "Klassen"), `date?`.
+
+#### `<NegotiationStory>` — Förhandling mellan lärare och elev visualiserad
+
+Scen från ovan: lärare till vänster, elev till höger. Klick → ord-bubblor
+flyger ut, möts i mitten, materialiseras som post-it. 5 punkter.
+
+**Format:** `- Vad AI **får** vara · samtalspartner, granskare`
+
+**Props:** `chapter?`, `intro?`, `landing?`, `leftLabel?`, `rightLabel?`.
+
+#### `<MediaCarousel>` — Text-kolumn + horisontell carousel av video/bild
+
+Aktiv media i mitten, övriga peekar in från sidorna. Auto-detect video
+vs bild från filändelse. Stega med pil-höger för att slidea till nästa.
+
+**Format:** `- /path/till/media · Caption`
+
+**Props:** `chapter?`, `title?`, `stat1?`, `stat2?`, `subtitle?`,
+`orientation?` (`"landscape"` (default) | `"portrait"`).
+
+---
+
+**Totalt templates nu: 160** (107 från Fas 1-9 + 53 nya i Fas 10).
+
+**För /planera-skillen i Fas 10:** Floating-overlays möjliggör manuell
+media-insättning ovanpå vilken slide som helst — använd när en template
+inte räcker till för att placera bild/video/text exakt där det behövs.
+För definition-slides → `BigDefinition`. För "klimax-payoff" efter setup
+→ `CoreInsight`. För "AI kan inte X" → `HumanOnlyTriad`. För taxonomier
+→ `SOLOGraph` / `JaggedFrontier` / `DimensionMap`. För iframe-demos →
+`LiveEmbed`. För publik-input → `LivePoll` (val) eller `LiveReflection`
+(fri-text).
