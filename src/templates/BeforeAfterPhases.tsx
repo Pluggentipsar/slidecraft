@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Children, isValidElement } from "react";
 import type { ReactElement, ReactNode } from "react";
 import { EditableText } from "@/lib/inline-edit";
+import { useSlideSteps } from "@/lib/slide-steps";
 
 /**
  * BeforeAfterPhases — visualiserar lärarens designram (Före → AI → Efter).
@@ -38,6 +39,8 @@ interface BeforeAfterPhasesProps {
   accent?: string;
   /** Markera sista fasen som länk till nästa akt. Default true. */
   highlightLast?: boolean;
+  /** Aktivera stegvis reveal — varje klick visar en fas åt gången. Default true. */
+  stepped?: boolean;
   children?: ReactNode;
 }
 
@@ -120,9 +123,14 @@ export function BeforeAfterPhases({
   overlay = 0.7,
   accent = "#EC7E26",
   highlightLast = true,
+  stepped = true,
   children,
 }: BeforeAfterPhasesProps) {
   const phases = parsePhases(children);
+  // Stegsystem: en step per fas
+  const totalSteps = stepped ? Math.max(1, phases.length) : 1;
+  const activeStep = useSlideSteps(totalSteps);
+  const visibleCount = stepped ? activeStep + 1 : phases.length;
 
   return (
     <div
@@ -220,15 +228,52 @@ export function BeforeAfterPhases({
               index={i}
               total={phases.length}
               accent={accent}
-              delay={0.5 + i * 0.4}
+              delay={stepped ? 0.2 : 0.5 + i * 0.4}
               isLast={i === phases.length - 1}
               highlightLast={highlightLast}
+              isVisible={i < visibleCount}
+              stepped={stepped}
             />
           ))}
         </div>
 
         {/* Tidslinje under alla faser */}
         <Timeline phaseCount={phases.length} accent={accent} delay={0.5 + phases.length * 0.4 + 0.3} />
+
+        {/* Progress-indikator när stegvis */}
+        {stepped && phases.length > 1 ? (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              fontFamily: "var(--font-mono)",
+              fontSize: "clamp(0.65rem, 0.75vw, 0.78rem)",
+              letterSpacing: "0.25em",
+              textTransform: "uppercase",
+              color: "var(--text-muted)",
+              alignSelf: "center",
+            }}
+          >
+            <div style={{ display: "flex", gap: "0.4rem" }}>
+              {phases.map((_, i) => (
+                <span
+                  key={i}
+                  style={{
+                    height: "2px",
+                    width: i === activeStep ? "1.6rem" : "0.4rem",
+                    background: i <= activeStep ? accent : "color-mix(in srgb, var(--text) 25%, transparent)",
+                    transition: "all 300ms ease",
+                    borderRadius: "1px",
+                  }}
+                />
+              ))}
+            </div>
+            <span style={{ marginLeft: "0.6rem" }}>
+              {activeStep + 1} / {phases.length}
+            </span>
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -246,6 +291,8 @@ function PhaseColumn({
   delay,
   isLast,
   highlightLast,
+  isVisible,
+  stepped,
 }: {
   phase: Phase;
   index: number;
@@ -254,14 +301,17 @@ function PhaseColumn({
   delay: number;
   isLast: boolean;
   highlightLast: boolean;
+  isVisible: boolean;
+  stepped: boolean;
 }) {
   const isHighlighted = isLast && highlightLast;
   const phaseNumber = String(index + 1).padStart(2, "0");
+  const dimmed = stepped && !isVisible;
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
+      animate={{ opacity: dimmed ? 0.12 : 1, y: 0 }}
       transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
       style={{
         display: "flex",

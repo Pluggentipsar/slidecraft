@@ -162,6 +162,7 @@ export function LivePoll({
     }
 
     let cancelled = false;
+    let activeChannel: ReturnType<typeof sb.channel> | null = null;
 
     (async () => {
 
@@ -263,30 +264,36 @@ export function LivePoll({
       if (cancelled) return;
       if (existingResponses) setResponses(existingResponses as InteractionResponse[]);
 
-      // Subscribe på nya responses
-      const channel = sb
-        .channel(`poll:${current.id}`)
-        .on(
-          "postgres_changes",
-          {
-            event: "INSERT",
-            schema: "public",
-            table: "interaction_responses",
-            filter: `interaction_id=eq.${current.id}`,
-          },
-          (payload) => {
-            setResponses((prev) => [...prev, payload.new as InteractionResponse]);
-          }
-        )
-        .subscribe();
+      if (cancelled) return;
 
-      return () => {
-        sb.removeChannel(channel);
-      };
+      // Unik kanal per mount så vi aldrig återanvänder en redan-subscribad
+      const nonce =
+        typeof crypto !== "undefined" && "randomUUID" in crypto
+          ? crypto.randomUUID().slice(0, 8)
+          : Math.random().toString(36).slice(2, 10);
+      const channel = sb.channel(`poll:${current.id}:${nonce}`);
+      channel.on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "interaction_responses",
+          filter: `interaction_id=eq.${current.id}`,
+        },
+        (payload) => {
+          setResponses((prev) => [...prev, payload.new as InteractionResponse]);
+        }
+      );
+      channel.subscribe();
+      activeChannel = channel;
     })();
 
     return () => {
       cancelled = true;
+      if (activeChannel) {
+        const sb2 = getSupabase();
+        if (sb2) sb2.removeChannel(activeChannel);
+      }
     };
   }, [pollKey, editMode, options, title]);
 

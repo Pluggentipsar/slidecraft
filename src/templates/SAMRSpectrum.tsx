@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Children, isValidElement } from "react";
 import type { ReactElement, ReactNode } from "react";
 import { EditableText } from "@/lib/inline-edit";
+import { useSlideSteps } from "@/lib/slide-steps";
 
 /**
  * SAMRSpectrum — visualiserar SAMR-modellen som ett HORISONTELLT spektrum,
@@ -45,6 +46,8 @@ interface SAMRSpectrumProps {
   background?: string;
   overlay?: number;
   accent?: string;
+  /** Aktivera stegvis reveal — varje klick visar en station åt gången. Default true. */
+  stepped?: boolean;
   children?: ReactNode;
 }
 
@@ -153,10 +156,15 @@ export function SAMRSpectrum({
   background,
   overlay = 0.7,
   accent = "#EC7E26",
+  stepped = true,
   children,
 }: SAMRSpectrumProps) {
   const positions = parsePositions(children);
   const hasExamples = positions.some((p) => p.example.length > 0);
+  // Stegsystem: en step per station
+  const totalSteps = stepped ? Math.max(1, positions.length) : 1;
+  const activeStep = useSlideSteps(totalSteps);
+  const visibleCount = stepped ? activeStep + 1 : positions.length;
 
   return (
     <div
@@ -293,8 +301,44 @@ export function SAMRSpectrum({
             accent={accent}
             hasExamples={hasExamples}
             startDelay={0.9}
+            visibleCount={visibleCount}
+            stepped={stepped}
           />
         </div>
+
+        {/* Progress-indikator när stegvis */}
+        {stepped && positions.length > 1 ? (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              fontFamily: "var(--font-mono)",
+              fontSize: "clamp(0.65rem, 0.75vw, 0.78rem)",
+              letterSpacing: "0.25em",
+              textTransform: "uppercase",
+              color: "var(--text-muted)",
+            }}
+          >
+            <div style={{ display: "flex", gap: "0.4rem" }}>
+              {positions.map((_, i) => (
+                <span
+                  key={i}
+                  style={{
+                    height: "2px",
+                    width: i === activeStep ? "1.6rem" : "0.4rem",
+                    background: i <= activeStep ? accent : "color-mix(in srgb, var(--text) 25%, transparent)",
+                    transition: "all 300ms ease",
+                    borderRadius: "1px",
+                  }}
+                />
+              ))}
+            </div>
+            <span style={{ marginLeft: "0.6rem" }}>
+              {activeStep + 1} / {positions.length}
+            </span>
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -309,11 +353,15 @@ function SpectrumScale({
   accent,
   hasExamples,
   startDelay,
+  visibleCount,
+  stepped,
 }: {
   positions: Position[];
   accent: string;
   hasExamples: boolean;
   startDelay: number;
+  visibleCount: number;
+  stepped: boolean;
 }) {
   return (
     <div
@@ -337,8 +385,10 @@ function SpectrumScale({
           key={i}
           position={pos}
           accent={accent}
-          delay={startDelay + 0.4 + i * 0.35}
+          delay={stepped ? 0.2 : startDelay + 0.4 + i * 0.35}
           hasExamples={hasExamples}
+          isVisible={i < visibleCount}
+          stepped={stepped}
         />
       ))}
     </div>
@@ -445,14 +495,21 @@ function SpectrumStation({
   accent,
   delay,
   hasExamples,
+  isVisible,
+  stepped,
 }: {
   position: Position;
   accent: string;
   delay: number;
   hasExamples: boolean;
+  isVisible: boolean;
+  stepped: boolean;
 }) {
+  const dimmed = stepped && !isVisible;
   return (
-    <div
+    <motion.div
+      animate={{ opacity: dimmed ? 0.18 : 1 }}
+      transition={{ duration: 0.5 }}
       style={{
         display: "flex",
         flexDirection: "column",
@@ -559,6 +616,6 @@ function SpectrumStation({
           {renderInline(position.example, accent)}
         </motion.div>
       ) : null}
-    </div>
+    </motion.div>
   );
 }

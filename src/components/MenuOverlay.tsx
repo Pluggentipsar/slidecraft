@@ -38,6 +38,13 @@ interface MenuOverlayProps {
     onStartQuiz: () => void;
     onStartReflection: () => void;
   };
+  /**
+   * Trigger för PDF-export av hela presentationen som visuell PDF.
+   * Stänger menyn och visar progress under export.
+   */
+  onExportPdf?: () => void | Promise<void>;
+  /** Öppna AddImageModal för att byta bakgrund på aktuell slide. */
+  onChangeBackgroundImage?: () => void;
 }
 
 export function MenuOverlay({
@@ -58,6 +65,8 @@ export function MenuOverlay({
   isFullscreenSupported,
   audience,
   interactions,
+  onExportPdf,
+  onChangeBackgroundImage,
 }: MenuOverlayProps) {
   const handleGoTo = (i: number) => {
     onGoTo(i);
@@ -137,11 +146,29 @@ export function MenuOverlay({
                   disabled={!isFullscreenSupported}
                 />
                 <MenuActionLink
-                  href={`/${slug}/edit`}
+                  href={`/${slug}/edit?slide=${currentIndex + 1}`}
                   icon={<IconEdit />}
                   label="Redigera"
-                  hint="Öppnar redigeringsvy"
+                  hint="Öppnar redigeringsvy på aktuell slide"
                 />
+                {onExportPdf ? (
+                  <MenuAction
+                    icon={<IconPdf />}
+                    label="Spara som PDF"
+                    hint="Hela presentationen som bilder · tar 1-2 min"
+                    onClick={() => {
+                      void onExportPdf();
+                    }}
+                  />
+                ) : null}
+                {onChangeBackgroundImage ? (
+                  <MenuAction
+                    icon={<IconBackground />}
+                    label="Byt bakgrund"
+                    hint={`Slide ${currentIndex + 1} · ladda upp eller välj bild`}
+                    onClick={onChangeBackgroundImage}
+                  />
+                ) : null}
               </div>
             </section>
 
@@ -396,3 +423,27 @@ function IconEdit() {
     </svg>
   );
 }
+
+function IconPdf() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <path d="M14 2v6h6" />
+      <path d="M9 13h1.5a1.5 1.5 0 1 1 0 3H9v-3z" />
+      <path d="M9 13v5" />
+      <path d="M14 13h2v5" />
+      <path d="M14 16h2" />
+    </svg>
+  );
+}
+
+function IconBackground() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <circle cx="8.5" cy="8.5" r="1.5" />
+      <path d="m21 15-5-5L5 21" />
+    </svg>
+  );
+}
+

@@ -38,11 +38,11 @@ const TITLE_SIZES: Record<Size, string> = {
  *
  * <Outro
  *   title="Tack!"
- *   subtitle="Hör av dig — bygg vidare."
+ *   subtitle="Hör av dig - bygg vidare."
  *   email="hello@example.com"
- *   web="example.com"
- *   socials="@example"
- *   qrUrl="https://example.com/material"
+ *   web="example.com/material"
+ *   socials="@handle"
+ *   qrUrl="https://example.com"
  *   qrCaption="Allt material"
  * />
  */

@@ -18,6 +18,10 @@ interface EditorPreviewProps {
   onUpdateProp?: (propName: string, value: string) => void;
   /** Uppdatera markdown-children på aktiv slide. */
   onUpdateContent?: (content: string) => void;
+  /** Uppdatera en prop på en av aktiv slides overlays. */
+  onUpdateOverlayProp?: (overlayIndex: number, propName: string, value: string) => void;
+  /** Ta bort en overlay från aktiv slide. */
+  onDeleteOverlay?: (overlayIndex: number) => void;
 }
 
 // Designstorlek som presentation-views är byggda för.
@@ -44,6 +48,8 @@ export function EditorPreview({
   onToggleEditMode,
   onUpdateProp,
   onUpdateContent,
+  onUpdateOverlayProp,
+  onDeleteOverlay,
 }: EditorPreviewProps) {
   const themeTokens = getTheme(theme);
   const cssVars = themeToCssVars(themeTokens);
@@ -112,6 +118,8 @@ export function EditorPreview({
                 editMode={editMode}
                 onUpdateProp={onUpdateProp}
                 onUpdateContent={onUpdateContent}
+                onUpdateOverlayProp={onUpdateOverlayProp}
+                onDeleteOverlay={onDeleteOverlay}
               />
             </div>
           </div>

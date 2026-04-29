@@ -110,6 +110,59 @@ import {
   JagAIJagFlow,
   LensApplication,
   BeforeAfterPhases,
+  ProcessLogPreview,
+  ContractMockup,
+  TimeHorizons,
+  FloatingImage,
+  FloatingVideo,
+  SlideWithOverlays,
+  RoleConstellation,
+  SOLOGraph,
+  NegotiationStory,
+  ParallaxTimeline,
+  JaggedFrontier,
+  FloatingChat,
+  NarrativeFrames,
+  DimensionMap,
+  BigDefinition,
+  Denials,
+  PromptToImage,
+  WeirdReveal,
+  WeirdSummary,
+  BiasCode,
+  DesignChoices,
+  LiveEmbed,
+  DarkPatternsApp,
+  QuoteWall,
+  FloatingPills,
+  FloatingPhone,
+  VoiceReveal,
+  PowerStack,
+  InfluenceChain,
+  CaseGrid,
+  MediaCarousel,
+  MandateMap,
+  HumanOnlyTriad,
+  PrincipleStack,
+  ZoneShift,
+  WithAboutAgainstThrough,
+  MirrorReveal,
+  BildningContrast,
+  TaskBucket,
+  SkillStack,
+  CoreInsight,
+  OccupationRadar,
+  FloatingText,
+  TimelineCompression,
+  ParadoxStat,
+  BiasShowcase,
+  RapidFireIdeas,
+  HopeMontage,
+  TackSlide,
+  NextTokenDemo,
+  DataRedaction,
+  PrivacyDecree,
+  LiveReflection,
   InvisibleChildPatterns,
 } from "@/templates";
 import { Slide } from "./Slide";
@@ -117,6 +170,7 @@ import { SlideViewer } from "./SlideViewer";
 import { extractNotes } from "@/lib/extract-notes";
 import { extractSlideMetas } from "@/lib/extract-slide-types";
 import { extractMediaUrls } from "@/lib/extract-media-urls";
+import { preprocessOverlaysForPresenter } from "@/lib/mdx-parser";
 import { getTheme, themeToCssVars } from "@/themes";
 import { PresentationPreloader } from "./PresentationPreloader";
 import type { BrandWatermark } from "@/lib/types";
@@ -244,14 +298,70 @@ const mdxComponents = {
   JagAIJagFlow,
   LensApplication,
   BeforeAfterPhases,
+  ProcessLogPreview,
+  ContractMockup,
+  TimeHorizons,
+  FloatingImage,
+  FloatingVideo,
+  SlideWithOverlays,
+  RoleConstellation,
+  SOLOGraph,
+  NegotiationStory,
+  ParallaxTimeline,
+  JaggedFrontier,
+  FloatingChat,
+  NarrativeFrames,
+  DimensionMap,
+  BigDefinition,
+  Denials,
+  PromptToImage,
+  WeirdReveal,
+  WeirdSummary,
+  BiasCode,
+  DesignChoices,
+  LiveEmbed,
+  DarkPatternsApp,
+  QuoteWall,
+  FloatingPills,
+  FloatingPhone,
+  VoiceReveal,
+  PowerStack,
+  InfluenceChain,
+  CaseGrid,
+  MediaCarousel,
+  MandateMap,
+  HumanOnlyTriad,
+  PrincipleStack,
+  ZoneShift,
+  WithAboutAgainstThrough,
+  MirrorReveal,
+  BildningContrast,
+  TaskBucket,
+  SkillStack,
+  CoreInsight,
+  OccupationRadar,
+  FloatingText,
+  TimelineCompression,
+  ParadoxStat,
+  BiasShowcase,
+  RapidFireIdeas,
+  HopeMontage,
+  TackSlide,
+  NextTokenDemo,
+  DataRedaction,
+  PrivacyDecree,
+  LiveReflection,
   InvisibleChildPatterns,
 };
 
 export async function PresentationRenderer({ source, slug, theme, title, brand, ambient }: PresentationRendererProps) {
   const { content, notes } = extractNotes(source);
-  const slideMetas = extractSlideMetas(content);
+  // Wrap slides med overlays (FloatingImage etc.) i SlideWithOverlays så de
+  // renderas tillsammans med sin parent-template istället för som egen slide.
+  const processedContent = preprocessOverlaysForPresenter(content);
+  const slideMetas = extractSlideMetas(processedContent);
   // Samla alla media-URL:er för preload (server-side för att undvika hydration-mismatch).
-  const mediaUrls = extractMediaUrls(content);
+  const mediaUrls = extractMediaUrls(processedContent);
   const themeTokens = getTheme(theme);
   const cssVars = themeToCssVars(themeTokens);
 
@@ -276,7 +386,7 @@ export async function PresentationRenderer({ source, slug, theme, title, brand, 
           brand={brand}
           ambient={ambient}
         >
-          <MDXRemote source={content} components={mdxComponents} />
+          <MDXRemote source={processedContent} components={mdxComponents} />
         </SlideViewer>
       </PresentationPreloader>
     </div>

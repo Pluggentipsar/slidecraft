@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, animate } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { EditableText } from "@/lib/inline-edit";
 
@@ -65,19 +65,32 @@ export function BigStat({
   const durationNum =
     typeof duration === "string" ? parseFloat(duration) : duration;
 
-  const motionValue = useMotionValue(0);
   const [displayValue, setDisplayValue] = useState(0);
 
   useEffect(() => {
     if (!Number.isFinite(targetValue)) return;
-    const controls = animate(motionValue, targetValue, {
-      duration: durationNum,
-      delay: 0.45,
-      ease: [0.22, 1, 0.36, 1],
-      onUpdate: (latest) => setDisplayValue(latest),
-    });
-    return () => controls.stop();
-  }, [targetValue, durationNum, motionValue]);
+    // Manuell ramp via rAF — robust över alla render-paths.
+    const startMs = performance.now();
+    const delayMs = 450;
+    const totalMs = durationNum * 1000;
+    let raf = 0;
+    const easeOut = (t: number) => 1 - Math.pow(1 - t, 4);
+    const tick = (now: number) => {
+      const elapsed = now - startMs - delayMs;
+      if (elapsed < 0) {
+        setDisplayValue(0);
+      } else if (elapsed >= totalMs) {
+        setDisplayValue(targetValue);
+        return;
+      } else {
+        const progress = elapsed / totalMs;
+        setDisplayValue(targetValue * easeOut(progress));
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [targetValue, durationNum]);
 
   const formatted = displayValue.toLocaleString("sv-SE", {
     minimumFractionDigits: decimalsNum,

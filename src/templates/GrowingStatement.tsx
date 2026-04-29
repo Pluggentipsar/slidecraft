@@ -173,7 +173,7 @@ export function GrowingStatement({
               fontStyle: "italic",
               fontWeight: 400,
               fontSize: "clamp(1.25rem, 2.2vw, 2.2rem)",
-              color: "color-mix(in srgb, var(--text) 75%, transparent)",
+              color: "color-mix(in srgb, var(--text) 78%, transparent)",
               textAlign: align,
               lineHeight: 1.25,
               letterSpacing: "-0.015em",
@@ -203,7 +203,7 @@ export function GrowingStatement({
             color: "var(--text)",
             textAlign: align,
             maxWidth: "16em",
-            textShadow: "none",
+            textShadow: "0 8px 40px rgba(0,0,0,0.5)",
           }}
         >
           {chunks.map((chunk, ci) => {

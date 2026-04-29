@@ -10,7 +10,7 @@
 
 import matter from "gray-matter";
 
-export type PropValue = string | number | boolean | null;
+export type PropValue = string | number | boolean | null | unknown[] | Record<string, unknown>;
 
 export interface ParsedComponent {
   tag: string;
@@ -22,7 +22,24 @@ export interface ParsedComponent {
   children: ParsedComponent[];
   /** Notes-block som följde direkt efter denna komponent (för slides) */
   notes?: string;
+  /** Overlay-komponenter (t.ex. FloatingImage) som ligger ovanpå denna slide */
+  overlays?: ParsedComponent[];
 }
+
+/**
+ * Tag-namn som ska behandlas som "overlays" istället för fristående slides.
+ * När parsern ser en av dessa som top-level efter en annan slide, bifogas
+ * den till föregående slides `overlays`-array istället för att räknas som
+ * egen slide.
+ */
+const OVERLAY_TAGS = new Set([
+  "FloatingImage",
+  "FloatingVideo",
+  "FloatingChat",
+  "FloatingPills",
+  "FloatingPhone",
+  "FloatingText",
+]);
 
 export interface ParsedPresentation {
   frontmatter: Record<string, unknown>;
@@ -55,7 +72,7 @@ function parseTopLevelComponents(content: string): ParsedComponent[] {
     const tag = startMatch[1];
 
     // Hitta slutet på öppningstagg (kan sträcka sig över flera rader)
-    let openingEnd = findOpeningTagEnd(lines, i);
+    const openingEnd = findOpeningTagEnd(lines, i);
     if (openingEnd === -1) {
       i++;
       continue;
@@ -107,13 +124,25 @@ function parseTopLevelComponents(content: string): ParsedComponent[] {
     const props = parseProps(openingLines);
     const children = contentText != null ? parseInnerComponents(contentText) : [];
 
-    components.push({
+    const parsedComponent: ParsedComponent = {
       tag,
       props,
       content: contentText,
       children,
       notes: notesContent,
-    });
+    };
+
+    // Overlay-komponenter (t.ex. FloatingImage) bifogas som overlays till
+    // föregående slide istället för att räknas som egen slide. Det ger
+    // "äkta overlay på existing template"-funktionalitet utan att behöva
+    // modifiera varje template-implementation.
+    if (OVERLAY_TAGS.has(tag) && components.length > 0) {
+      const last = components[components.length - 1];
+      if (!last.overlays) last.overlays = [];
+      last.overlays.push(parsedComponent);
+    } else {
+      components.push(parsedComponent);
+    }
 
     i = notesEndIndex + 1;
   }
@@ -258,14 +287,29 @@ function parseProps(openingTag: string): Record<string, PropValue> {
       // String literal
       props[name] = rawValue.slice(1, -1).replace(/\\"/g, '"').replace(/\\'/g, "'");
     } else if (rawValue.startsWith("{")) {
-      // JSX expression - försök tolka som primitiv
+      // JSX expression - försök tolka som primitiv eller komplex
       const expr = rawValue.slice(1, -1).trim();
       if (expr === "true") props[name] = true;
       else if (expr === "false") props[name] = false;
       else if (/^-?\d+(\.\d+)?$/.test(expr)) props[name] = parseFloat(expr);
       else if (/^"(?:[^"\\]|\\.)*"$/.test(expr))
         props[name] = expr.slice(1, -1).replace(/\\"/g, '"');
-      else props[name] = expr; // behåll som string (går att skriva ut igen)
+      else if (
+        (expr.startsWith("[") && expr.endsWith("]")) ||
+        (expr.startsWith("{") && expr.endsWith("}"))
+      ) {
+        // Array eller object literal — försök parsa som JSON.
+        // Konvertera single-quotes till double-quotes (JSX-stil → JSON).
+        try {
+          const json = expr.replace(/'/g, '"');
+          props[name] = JSON.parse(json);
+        } catch {
+          // Om JSON.parse misslyckas, behåll som sträng
+          props[name] = expr;
+        }
+      } else {
+        props[name] = expr; // behåll som string (går att skriva ut igen)
+      }
     }
   }
 
@@ -274,14 +318,37 @@ function parseProps(openingTag: string): Record<string, PropValue> {
 
 /**
  * Serialize parsed structure tillbaka till MDX-källa.
+ *
+ * Overlays serialiseras som top-level komponenter EFTER sin parent — det är
+ * formatet användaren skrev från början, så det rundtripping:ar rent.
  */
 export function serializeMdx(parsed: ParsedPresentation): string {
   const frontmatter = matter.stringify("", parsed.frontmatter).replace(/\n\s*$/, "\n");
-  const body = parsed.slides.map((s) => serializeComponent(s, 0)).join("\n\n");
+  const body = parsed.slides
+    .map((s) => {
+      const main = serializeComponent(s, 0);
+      if (s.overlays && s.overlays.length > 0) {
+        const overlaysStr = s.overlays
+          .map((o) => serializeComponent(o, 0, { skipOverlays: true }))
+          .join("\n\n");
+        return `${main}\n\n${overlaysStr}`;
+      }
+      return main;
+    })
+    .join("\n\n");
   return `${frontmatter}\n${body}\n`;
 }
 
-function serializeComponent(comp: ParsedComponent, indent: number): string {
+interface SerializeOpts {
+  /** Hoppa över komponentens egna overlays (de hanteras separat i top-level). */
+  skipOverlays?: boolean;
+}
+
+function serializeComponent(
+  comp: ParsedComponent,
+  indent: number,
+  opts: SerializeOpts = {},
+): string {
   const pad = "  ".repeat(indent);
   const propsStr = serializeProps(comp.props);
 
@@ -317,7 +384,7 @@ function serializeComponent(comp: ParsedComponent, indent: number): string {
   let body = "";
   if (hasChildren) {
     body = comp.children
-      .map((child) => serializeComponent(child, indent + 1))
+      .map((child) => serializeComponent(child, indent + 1, opts))
       .join("\n");
   } else if (hasContent) {
     body = comp.content ?? "";
@@ -328,6 +395,41 @@ function serializeComponent(comp: ParsedComponent, indent: number): string {
     result += `\n\n${pad}<Notes>\n${comp.notes}\n${pad}</Notes>`;
   }
   return result;
+}
+
+// ============================================================================
+// Pre-processing för presenter-mode (MDXRemote-rendering)
+// ============================================================================
+
+/**
+ * Wrap:ar slides som har overlays i en `<SlideWithOverlays>`-komponent så
+ * MDXRemote i presenter-mode kan rendera template + overlays tillsammans
+ * inom samma slide-canvas.
+ *
+ * Editor-mode använder vår egen SlideRenderer som hanterar overlays direkt
+ * från ParsedComponent.overlays-arrayen — denna pre-processing behövs bara
+ * för presenter-mode.
+ */
+export function preprocessOverlaysForPresenter(rawMdx: string): string {
+  const { frontmatter, slides } = parseMdx(rawMdx);
+
+  let body = "";
+  for (const slide of slides) {
+    if (slide.overlays && slide.overlays.length > 0) {
+      // Wrap template + overlays i SlideWithOverlays
+      body += "\n<SlideWithOverlays>\n";
+      body += serializeComponent(slide, 0, { skipOverlays: true });
+      for (const overlay of slide.overlays) {
+        body += "\n\n" + serializeComponent(overlay, 0, { skipOverlays: true });
+      }
+      body += "\n</SlideWithOverlays>\n";
+    } else {
+      body += "\n" + serializeComponent(slide, 0) + "\n";
+    }
+  }
+
+  const fm = matter.stringify("", frontmatter).replace(/\n\s*$/, "\n");
+  return `${fm}\n${body}`;
 }
 
 function serializeProps(props: Record<string, PropValue>): {
@@ -353,6 +455,11 @@ function serializeProps(props: Record<string, PropValue>): {
     }
     if (typeof v === "number") return `${k}={${v}}`;
     if (typeof v === "boolean") return `${k}={${v}}`;
+    if (Array.isArray(v) || (typeof v === "object" && v !== null)) {
+      // Arrays och objects serialiseras som JSON inom {...} så MDX kan
+      // evaluera dem tillbaka till samma JS-värden.
+      return `${k}={${JSON.stringify(v)}}`;
+    }
     return `${k}="${String(v)}"`;
   });
 

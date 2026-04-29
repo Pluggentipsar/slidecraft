@@ -10,15 +10,18 @@ import {
   useRef,
   useState,
 } from "react";
+import { useRouter } from "next/navigation";
 import type { ReactElement, ReactNode } from "react";
 import { NotesOverlay } from "./NotesOverlay";
 import { MenuOverlay } from "./MenuOverlay";
 import { QuestionsOverlay } from "./QuestionsOverlay";
 import { InteractionStartModal } from "./InteractionStartModal";
 import { InteractionPresenterPanel } from "./InteractionPresenterPanel";
+import { AddImageModal } from "./editor/AddImageModal";
 import { getPresenterChannel, type PresenterMessage } from "@/lib/presenter-sync";
 import { usePresenterSession } from "@/lib/use-presenter-session";
 import { usePresenterInteractions } from "@/lib/use-presenter-interactions";
+import { updateSlideProp } from "@/lib/edit-actions";
 import type { InteractionType } from "@/lib/interactions";
 import type { StepController } from "@/lib/slide-steps";
 import { SlideWithSteps } from "./SlideWithSteps";
@@ -70,8 +73,20 @@ export function SlideViewer({
   const [interactionModal, setInteractionModal] = useState<InteractionType | null>(null);
 
   const stepsController = useRef<StepController | null>(null);
+  const slideStageRef = useRef<HTMLDivElement | null>(null);
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
+
+  const [pdfExport, setPdfExport] = useState<{
+    active: boolean;
+    current: number;
+    total: number;
+    label: string;
+  } | null>(null);
+
+  // M-mode: snabb byt-bakgrund (bild)
+  const [bgImageModalOpen, setBgImageModalOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setFullscreenSupported(document.fullscreenEnabled ?? false);
@@ -83,24 +98,30 @@ export function SlideViewer({
     return () => clearTimeout(timer);
   }, []);
 
-  // Sync with URL ?slide=N on mount
+  // Synka index med URL ?slide=N. Konsoliderad så vi inte skriver över
+  // ?slide-paramen vid mount innan vi hunnit läsa den.
+  // (Tidigare hade vi två separata useEffects, men URL-write körde med
+  // index=0 vid mount innan URL-read hunnit triggra re-render.)
+  const slideUrlSyncedRef = useRef(false);
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const param = params.get("slide");
-    if (param) {
-      const n = parseInt(param, 10);
-      if (!isNaN(n) && n >= 1 && n <= total) {
-        setIndex(n - 1);
+    if (!slideUrlSyncedRef.current) {
+      // Första körningen: läs URL, sätt ref, returnera utan att skriva
+      slideUrlSyncedRef.current = true;
+      const params = new URLSearchParams(window.location.search);
+      const param = params.get("slide");
+      if (param) {
+        const n = parseInt(param, 10);
+        if (!isNaN(n) && n >= 1 && n <= total) {
+          setIndex(n - 1);
+        }
       }
+      return;
     }
-  }, [total]);
-
-  // Update URL when index changes
-  useEffect(() => {
+    // Efterföljande körningar: skriv URL
     const url = new URL(window.location.href);
     url.searchParams.set("slide", String(index + 1));
     window.history.replaceState({}, "", url.toString());
-  }, [index]);
+  }, [index, total]);
 
   // Broadcast slide till publikläget när session är aktiv
   useEffect(() => {
@@ -201,6 +222,51 @@ export function SlideViewer({
       document.documentElement.requestFullscreen();
     }
   }, []);
+
+  const handleBackgroundPick = useCallback(
+    async (path: string) => {
+      if (!slug) return;
+      const result = await updateSlideProp(slug, index, "background", path);
+      if (!result.ok) {
+        console.error("Bakgrundsbyte misslyckades:", result.error);
+      } else {
+        // Hämta nya MDX-rendret från server
+        router.refresh();
+      }
+    },
+    [slug, index, router],
+  );
+
+  const handleOpenBackgroundImage = useCallback(() => {
+    setMenuVisible(false);
+    setBgImageModalOpen(true);
+  }, []);
+
+  const handleExportPdf = useCallback(async () => {
+    setMenuVisible(false);
+    // Vänta på att menyn försvinner från DOM så den inte syns i slide-fångsten
+    await new Promise<void>((resolve) => setTimeout(resolve, 350));
+    setPdfExport({ active: true, current: 0, total, label: "Förbereder export…" });
+    try {
+      const { exportFullPresentationPdf } = await import("@/lib/full-presentation-pdf");
+      await exportFullPresentationPdf({
+        slideStageRef,
+        currentIndex: index,
+        total,
+        setIndex,
+        stepsControllerRef: stepsController,
+        title: title ?? slug ?? "presentation",
+        slug,
+        onProgress: (current, totalCount, label) => {
+          setPdfExport({ active: true, current, total: totalCount, label });
+        },
+      });
+    } catch (err) {
+      console.error("PDF-export misslyckades:", err);
+    } finally {
+      setPdfExport(null);
+    }
+  }, [index, total, title, slug]);
 
   const openPresenter = useCallback(() => {
     if (!slug) return;
@@ -327,29 +393,31 @@ export function SlideViewer({
         }
         return null;
       })()}
-      <AnimatePresence mode="wait" custom={direction}>
-        <motion.div
-          key={index}
-          custom={direction}
-          variants={{
-            enter: (dir: number) => ({ opacity: 0, x: dir * 40 }),
-            center: { opacity: 1, x: 0 },
-            exit: (dir: number) => ({ opacity: 0, x: dir * -40 }),
-          }}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={{
-            x: { type: "spring", stiffness: 300, damping: 32 },
-            opacity: { duration: 0.2 },
-          }}
-          className="absolute inset-0"
-        >
-          <SlideWithSteps slideKey={index} controllerRef={stepsController}>
-            {current}
-          </SlideWithSteps>
-        </motion.div>
-      </AnimatePresence>
+      <div ref={slideStageRef} className="absolute inset-0">
+        <AnimatePresence mode="wait" custom={direction}>
+          <motion.div
+            key={index}
+            custom={direction}
+            variants={{
+              enter: (dir: number) => ({ opacity: 0, x: dir * 40 }),
+              center: { opacity: 1, x: 0 },
+              exit: (dir: number) => ({ opacity: 0, x: dir * -40 }),
+            }}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 32 },
+              opacity: { duration: 0.2 },
+            }}
+            className="absolute inset-0"
+          >
+            <SlideWithSteps slideKey={index} controllerRef={stepsController}>
+              {current}
+            </SlideWithSteps>
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
       {/* Brand-watermark (frontmatter.brand) — alltid synlig om satt */}
       {brand && !(brand.hideOnFirst && index === 0) && (
@@ -414,7 +482,58 @@ export function SlideViewer({
           onStartQuiz: () => setInteractionModal("quiz"),
           onStartReflection: () => setInteractionModal("reflection"),
         }}
+        onExportPdf={handleExportPdf}
+        onChangeBackgroundImage={slug ? handleOpenBackgroundImage : undefined}
       />
+
+      {/* M-mode: byt bakgrund-bild */}
+      {slug ? (
+        <AddImageModal
+          open={bgImageModalOpen}
+          slug={slug}
+          onClose={() => setBgImageModalOpen(false)}
+          onPick={(path) => {
+            void handleBackgroundPick(path);
+            setBgImageModalOpen(false);
+          }}
+        />
+      ) : null}
+
+      {/* PDF-export progress-overlay */}
+      <AnimatePresence>
+        {pdfExport && pdfExport.active && (
+          <motion.div
+            data-pdf-exclude="true"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="flex w-[min(28rem,90vw)] flex-col gap-4 rounded-2xl border border-white/10 bg-bg-surface/90 p-8 text-center">
+              <div className="text-xs uppercase tracking-[0.3em] text-accent">
+                Exporterar PDF
+              </div>
+              <div className="text-lg font-semibold text-text">
+                {pdfExport.label}
+              </div>
+              <div className="relative h-2 w-full overflow-hidden rounded-full bg-white/10">
+                <motion.div
+                  className="absolute left-0 top-0 h-full bg-accent"
+                  initial={{ width: "0%" }}
+                  animate={{
+                    width: `${(pdfExport.current / Math.max(pdfExport.total, 1)) * 100}%`,
+                  }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                />
+              </div>
+              <div className="text-xs text-text-muted">
+                {pdfExport.current} av {pdfExport.total} · navigera inte under tiden
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <InteractionStartModal
         visible={interactionModal != null}

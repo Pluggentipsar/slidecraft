@@ -123,6 +123,59 @@ const REGISTRY: Record<string, ComponentType<Record<string, unknown>>> = {
   JagAIJagFlow: Templates.JagAIJagFlow as unknown as ComponentType<Record<string, unknown>>,
   LensApplication: Templates.LensApplication as unknown as ComponentType<Record<string, unknown>>,
   BeforeAfterPhases: Templates.BeforeAfterPhases as unknown as ComponentType<Record<string, unknown>>,
+  ProcessLogPreview: Templates.ProcessLogPreview as unknown as ComponentType<Record<string, unknown>>,
+  ContractMockup: Templates.ContractMockup as unknown as ComponentType<Record<string, unknown>>,
+  TimeHorizons: Templates.TimeHorizons as unknown as ComponentType<Record<string, unknown>>,
+  FloatingImage: Templates.FloatingImage as unknown as ComponentType<Record<string, unknown>>,
+  FloatingVideo: Templates.FloatingVideo as unknown as ComponentType<Record<string, unknown>>,
+  SlideWithOverlays: Templates.SlideWithOverlays as unknown as ComponentType<Record<string, unknown>>,
+  RoleConstellation: Templates.RoleConstellation as unknown as ComponentType<Record<string, unknown>>,
+  SOLOGraph: Templates.SOLOGraph as unknown as ComponentType<Record<string, unknown>>,
+  NegotiationStory: Templates.NegotiationStory as unknown as ComponentType<Record<string, unknown>>,
+  ParallaxTimeline: Templates.ParallaxTimeline as unknown as ComponentType<Record<string, unknown>>,
+  JaggedFrontier: Templates.JaggedFrontier as unknown as ComponentType<Record<string, unknown>>,
+  FloatingChat: Templates.FloatingChat as unknown as ComponentType<Record<string, unknown>>,
+  NarrativeFrames: Templates.NarrativeFrames as unknown as ComponentType<Record<string, unknown>>,
+  DimensionMap: Templates.DimensionMap as unknown as ComponentType<Record<string, unknown>>,
+  BigDefinition: Templates.BigDefinition as unknown as ComponentType<Record<string, unknown>>,
+  Denials: Templates.Denials as unknown as ComponentType<Record<string, unknown>>,
+  PromptToImage: Templates.PromptToImage as unknown as ComponentType<Record<string, unknown>>,
+  WeirdReveal: Templates.WeirdReveal as unknown as ComponentType<Record<string, unknown>>,
+  WeirdSummary: Templates.WeirdSummary as unknown as ComponentType<Record<string, unknown>>,
+  BiasCode: Templates.BiasCode as unknown as ComponentType<Record<string, unknown>>,
+  DesignChoices: Templates.DesignChoices as unknown as ComponentType<Record<string, unknown>>,
+  LiveEmbed: Templates.LiveEmbed as unknown as ComponentType<Record<string, unknown>>,
+  DarkPatternsApp: Templates.DarkPatternsApp as unknown as ComponentType<Record<string, unknown>>,
+  QuoteWall: Templates.QuoteWall as unknown as ComponentType<Record<string, unknown>>,
+  FloatingPills: Templates.FloatingPills as unknown as ComponentType<Record<string, unknown>>,
+  FloatingPhone: Templates.FloatingPhone as unknown as ComponentType<Record<string, unknown>>,
+  VoiceReveal: Templates.VoiceReveal as unknown as ComponentType<Record<string, unknown>>,
+  PowerStack: Templates.PowerStack as unknown as ComponentType<Record<string, unknown>>,
+  InfluenceChain: Templates.InfluenceChain as unknown as ComponentType<Record<string, unknown>>,
+  CaseGrid: Templates.CaseGrid as unknown as ComponentType<Record<string, unknown>>,
+  MediaCarousel: Templates.MediaCarousel as unknown as ComponentType<Record<string, unknown>>,
+  MandateMap: Templates.MandateMap as unknown as ComponentType<Record<string, unknown>>,
+  HumanOnlyTriad: Templates.HumanOnlyTriad as unknown as ComponentType<Record<string, unknown>>,
+  PrincipleStack: Templates.PrincipleStack as unknown as ComponentType<Record<string, unknown>>,
+  ZoneShift: Templates.ZoneShift as unknown as ComponentType<Record<string, unknown>>,
+  WithAboutAgainstThrough: Templates.WithAboutAgainstThrough as unknown as ComponentType<Record<string, unknown>>,
+  MirrorReveal: Templates.MirrorReveal as unknown as ComponentType<Record<string, unknown>>,
+  BildningContrast: Templates.BildningContrast as unknown as ComponentType<Record<string, unknown>>,
+  TaskBucket: Templates.TaskBucket as unknown as ComponentType<Record<string, unknown>>,
+  SkillStack: Templates.SkillStack as unknown as ComponentType<Record<string, unknown>>,
+  CoreInsight: Templates.CoreInsight as unknown as ComponentType<Record<string, unknown>>,
+  OccupationRadar: Templates.OccupationRadar as unknown as ComponentType<Record<string, unknown>>,
+  FloatingText: Templates.FloatingText as unknown as ComponentType<Record<string, unknown>>,
+  TimelineCompression: Templates.TimelineCompression as unknown as ComponentType<Record<string, unknown>>,
+  ParadoxStat: Templates.ParadoxStat as unknown as ComponentType<Record<string, unknown>>,
+  BiasShowcase: Templates.BiasShowcase as unknown as ComponentType<Record<string, unknown>>,
+  RapidFireIdeas: Templates.RapidFireIdeas as unknown as ComponentType<Record<string, unknown>>,
+  HopeMontage: Templates.HopeMontage as unknown as ComponentType<Record<string, unknown>>,
+  TackSlide: Templates.TackSlide as unknown as ComponentType<Record<string, unknown>>,
+  NextTokenDemo: Templates.NextTokenDemo as unknown as ComponentType<Record<string, unknown>>,
+  DataRedaction: Templates.DataRedaction as unknown as ComponentType<Record<string, unknown>>,
+  PrivacyDecree: Templates.PrivacyDecree as unknown as ComponentType<Record<string, unknown>>,
+  LiveReflection: Templates.LiveReflection as unknown as ComponentType<Record<string, unknown>>,
 };
 
 interface SlideRendererProps {
@@ -135,6 +188,10 @@ interface SlideRendererProps {
   onUpdateProp?: (propName: string, value: string) => void;
   /** Callback när markdown-children uppdateras via inline-editorn. */
   onUpdateContent?: (content: string) => void;
+  /** Callback när en overlay-prop uppdateras (t.ex. FloatingImage's x/y/width). */
+  onUpdateOverlayProp?: (overlayIndex: number, propName: string, value: string) => void;
+  /** Callback för att ta bort en overlay från sliden. */
+  onDeleteOverlay?: (overlayIndex: number) => void;
 }
 
 /**
@@ -155,6 +212,8 @@ export function SlideRenderer({
   editMode = false,
   onUpdateProp,
   onUpdateContent,
+  onUpdateOverlayProp,
+  onDeleteOverlay,
 }: SlideRendererProps) {
   const controllerRef = useRef<StepController | null>(null);
 
@@ -166,13 +225,22 @@ export function SlideRenderer({
       updateContent={onUpdateContent ?? (() => {})}
     >
       <SlideStepsProvider slideKey={slideKey} controllerRef={controllerRef}>
-        {renderComponent(slide)}
+        {renderComponent(slide, undefined, { onUpdateOverlayProp, onDeleteOverlay })}
       </SlideStepsProvider>
     </EditProvider>
   );
 }
 
-function renderComponent(comp: ParsedComponent, key?: React.Key): React.ReactNode {
+interface RenderContext {
+  onUpdateOverlayProp?: (overlayIndex: number, propName: string, value: string) => void;
+  onDeleteOverlay?: (overlayIndex: number) => void;
+}
+
+function renderComponent(
+  comp: ParsedComponent,
+  key?: React.Key,
+  ctx: RenderContext = {},
+): React.ReactNode {
   const Component = REGISTRY[comp.tag];
 
   if (!Component) {
@@ -194,7 +262,7 @@ function renderComponent(comp: ParsedComponent, key?: React.Key): React.ReactNod
   // Bygg children: nested ParsedComponents har företräde, annars markdown från content
   let children: React.ReactNode = null;
   if (comp.children.length > 0) {
-    children = comp.children.map((c, i) => renderComponent(c, i));
+    children = comp.children.map((c, i) => renderComponent(c, i, ctx));
   } else if (comp.content != null && comp.content.trim() !== "") {
     children = markdownToReact(comp.content);
   }
@@ -205,9 +273,55 @@ function renderComponent(comp: ParsedComponent, key?: React.Key): React.ReactNod
     if (v !== null && v !== undefined) cleanProps[k] = v;
   }
 
-  return (
+  const baseElement = (
     <Component key={key} {...cleanProps}>
       {children}
     </Component>
   );
+
+  // Om sliden har overlays, wrap i SlideWithOverlays-container så overlays
+  // (t.ex. FloatingImage) kan absolutpositioneras ovanpå templaten.
+  // Varje overlay får en OverlayInstanceProvider med callbacks som muterar
+  // PARENT slidens overlays-array (inte parent slidens egna props).
+  if (comp.overlays && comp.overlays.length > 0) {
+    const SlideWithOverlays = Templates.SlideWithOverlays as ComponentType<{
+      children?: React.ReactNode;
+    }>;
+    const renderedOverlays = comp.overlays.map((overlay, i) => (
+      <Templates.OverlayInstanceProvider
+        key={`overlay-${i}`}
+        value={{
+          onUpdateProp: ctx.onUpdateOverlayProp
+            ? (prop, val) => ctx.onUpdateOverlayProp?.(i, prop, val)
+            : undefined,
+          onDelete: ctx.onDeleteOverlay
+            ? () => ctx.onDeleteOverlay?.(i)
+            : undefined,
+        }}
+      >
+        {renderComponent(overlay, `overlay-${i}-content`, ctx)}
+      </Templates.OverlayInstanceProvider>
+    ));
+
+    if (SlideWithOverlays) {
+      return (
+        <SlideWithOverlays key={key}>
+          {baseElement}
+          {renderedOverlays}
+        </SlideWithOverlays>
+      );
+    }
+    // Fallback: enkel relative-container
+    return (
+      <div
+        key={key}
+        style={{ position: "relative", width: "100%", height: "100%" }}
+      >
+        {baseElement}
+        {renderedOverlays}
+      </div>
+    );
+  }
+
+  return baseElement;
 }

@@ -11,6 +11,8 @@ import { EditorPreview } from "./EditorPreview";
 import { EditorNavigator } from "./EditorNavigator";
 import { TemplatePicker } from "./TemplatePicker";
 import { SlideActions } from "./SlideActions";
+import { AddImageModal } from "./AddImageModal";
+import { AddVideoModal } from "./AddVideoModal";
 
 interface EditorViewProps {
   slug: string;
@@ -28,7 +30,11 @@ export function EditorView({ slug, meta, initialParsed }: EditorViewProps) {
   const [navigatorOpen, setNavigatorOpen] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [panelOpen, setPanelOpen] = useState(true);
-  const [editMode, setEditMode] = useState(false);
+  // Inline-edit aktiveras per default när man går in i edit-vyn —
+  // användaren kan stänga av med "Inline"-toggle eller "I"-tangenten.
+  const [editMode, setEditMode] = useState(true);
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
   const saveTimer = useRef<NodeJS.Timeout | null>(null);
   const latestParsed = useRef(parsed);
   latestParsed.current = parsed;
@@ -38,6 +44,33 @@ export function EditorView({ slug, meta, initialParsed }: EditorViewProps) {
     document.body.classList.add("allow-scroll");
     return () => document.body.classList.remove("allow-scroll");
   }, []);
+
+  // Synka activeIndex med URL ?slide=N. På mount: läs URL och initialisera
+  // activeIndex. Vid efterföljande activeIndex-ändringar: uppdatera URL.
+  // Två separata useEffects funkade inte eftersom URL-update-effecten kör
+  // med activeIndex=0 vid mount INNAN read-effekten hunnit triggra re-render
+  // — vilket skrev över ?slide=47 till ?slide=1 omedelbart.
+  const slideUrlSyncedRef = useRef(false);
+  useEffect(() => {
+    if (!slideUrlSyncedRef.current) {
+      // Första körningen: läs URL
+      slideUrlSyncedRef.current = true;
+      const params = new URLSearchParams(window.location.search);
+      const param = params.get("slide");
+      if (param) {
+        const n = parseInt(param, 10);
+        const total = initialParsed.slides.length;
+        if (!isNaN(n) && n >= 1 && n <= total) {
+          setActiveIndex(n - 1);
+        }
+      }
+      return;
+    }
+    // Efterföljande körningar: uppdatera URL
+    const url = new URL(window.location.href);
+    url.searchParams.set("slide", String(activeIndex + 1));
+    window.history.replaceState({}, "", url.toString());
+  }, [activeIndex, initialParsed.slides.length]);
 
   // Keyboard shortcuts i editorn
   useEffect(() => {
@@ -173,6 +206,125 @@ export function EditorView({ slug, meta, initialParsed }: EditorViewProps) {
         return { ...prev, slides };
       });
       setActiveIndex((i) => i + 1);
+      scheduleSave();
+    },
+    [activeIndex, scheduleSave]
+  );
+
+  const addOverlayImage = useCallback(
+    (src: string) => {
+      const newOverlay: ParsedComponent = {
+        tag: "FloatingImage",
+        props: { src, x: "30%", y: "30%", width: "14%" },
+        content: null,
+        children: [],
+      };
+      setParsed((prev) => {
+        const slides = [...prev.slides];
+        const current = slides[activeIndex];
+        if (!current) return prev;
+        slides[activeIndex] = {
+          ...current,
+          overlays: [...(current.overlays ?? []), newOverlay],
+        };
+        return { ...prev, slides };
+      });
+      scheduleSave();
+    },
+    [activeIndex, scheduleSave]
+  );
+
+  const addOverlayVideo = useCallback(
+    (src: string) => {
+      const newOverlay: ParsedComponent = {
+        tag: "FloatingVideo",
+        props: { src, x: "30%", y: "30%", width: "30%" },
+        content: null,
+        children: [],
+      };
+      setParsed((prev) => {
+        const slides = [...prev.slides];
+        const current = slides[activeIndex];
+        if (!current) return prev;
+        slides[activeIndex] = {
+          ...current,
+          overlays: [...(current.overlays ?? []), newOverlay],
+        };
+        return { ...prev, slides };
+      });
+      scheduleSave();
+    },
+    [activeIndex, scheduleSave]
+  );
+
+  const addOverlayText = useCallback(() => {
+    const newOverlay: ParsedComponent = {
+      tag: "FloatingText",
+      props: {
+        text: "Ny textruta",
+        x: "30%",
+        y: "30%",
+        width: "30%",
+        size: "md",
+      },
+      content: null,
+      children: [],
+    };
+    setParsed((prev) => {
+      const slides = [...prev.slides];
+      const current = slides[activeIndex];
+      if (!current) return prev;
+      slides[activeIndex] = {
+        ...current,
+        overlays: [...(current.overlays ?? []), newOverlay],
+      };
+      return { ...prev, slides };
+    });
+    scheduleSave();
+  }, [activeIndex, scheduleSave]);
+
+  const updateOverlayProp = useCallback(
+    (overlayIndex: number, propName: string, value: string) => {
+      setParsed((prev) => {
+        const slides = [...prev.slides];
+        const current = slides[activeIndex];
+        if (!current?.overlays) return prev;
+        const overlays = [...current.overlays];
+        const target = overlays[overlayIndex];
+        if (!target) return prev;
+        // Tom sträng → ta bort prop helt (för booleans som noShadow=true/false)
+        const newProps: Record<string, PropValue> = { ...target.props };
+        if (value === "") {
+          delete newProps[propName];
+        } else if (value === "true") {
+          newProps[propName] = true;
+        } else if (value === "false") {
+          newProps[propName] = false;
+        } else {
+          newProps[propName] = value;
+        }
+        overlays[overlayIndex] = { ...target, props: newProps };
+        slides[activeIndex] = { ...current, overlays };
+        return { ...prev, slides };
+      });
+      scheduleSave();
+    },
+    [activeIndex, scheduleSave]
+  );
+
+  const deleteOverlay = useCallback(
+    (overlayIndex: number) => {
+      setParsed((prev) => {
+        const slides = [...prev.slides];
+        const current = slides[activeIndex];
+        if (!current?.overlays) return prev;
+        const overlays = current.overlays.filter((_, i) => i !== overlayIndex);
+        slides[activeIndex] = {
+          ...current,
+          overlays: overlays.length > 0 ? overlays : undefined,
+        };
+        return { ...prev, slides };
+      });
       scheduleSave();
     },
     [activeIndex, scheduleSave]
@@ -406,6 +558,27 @@ export function EditorView({ slug, meta, initialParsed }: EditorViewProps) {
         <div className="flex shrink-0 items-center gap-2">
           <SaveIndicator status={saveStatus} error={saveError} />
           <button
+            onClick={() => setImageModalOpen(true)}
+            className="rounded border border-white/10 bg-bg-surface/40 px-2 py-1 text-xs text-text-muted transition-all hover:border-accent hover:text-accent"
+            title="Lägg till bild som overlay på aktuell slide"
+          >
+            + Bild
+          </button>
+          <button
+            onClick={() => setVideoModalOpen(true)}
+            className="rounded border border-white/10 bg-bg-surface/40 px-2 py-1 text-xs text-text-muted transition-all hover:border-accent hover:text-accent"
+            title="Lägg till video som overlay på aktuell slide"
+          >
+            + Video
+          </button>
+          <button
+            onClick={addOverlayText}
+            className="rounded border border-white/10 bg-bg-surface/40 px-2 py-1 text-xs text-text-muted transition-all hover:border-accent hover:text-accent"
+            title="Lägg till fri textruta som overlay på aktuell slide"
+          >
+            + Text
+          </button>
+          <button
             onClick={() => setEditMode((v) => !v)}
             className={`rounded border px-2 py-1 text-xs uppercase tracking-[0.1em] transition-all ${
               editMode
@@ -445,6 +618,8 @@ export function EditorView({ slug, meta, initialParsed }: EditorViewProps) {
             onToggleEditMode={() => setEditMode((v) => !v)}
             onUpdateProp={updateSlidePropInline}
             onUpdateContent={updateSlideContent}
+            onUpdateOverlayProp={updateOverlayProp}
+            onDeleteOverlay={deleteOverlay}
           />
         </div>
         {panelOpen && (
@@ -496,6 +671,22 @@ export function EditorView({ slug, meta, initialParsed }: EditorViewProps) {
         activeIndex={activeIndex}
         onSelect={setActiveIndex}
         onReorder={reorderSlides}
+      />
+
+      {/* Lägg till bild som overlay på aktuell slide */}
+      <AddImageModal
+        open={imageModalOpen}
+        slug={slug}
+        onClose={() => setImageModalOpen(false)}
+        onPick={addOverlayImage}
+      />
+
+      {/* Lägg till video som overlay på aktuell slide */}
+      <AddVideoModal
+        open={videoModalOpen}
+        slug={slug}
+        onClose={() => setVideoModalOpen(false)}
+        onPick={addOverlayVideo}
       />
 
     </div>

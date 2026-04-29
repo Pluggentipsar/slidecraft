@@ -182,7 +182,7 @@ export function HookStatement({
             color: "var(--text)",
             textAlign: "center",
             maxWidth: "22em",
-            textShadow: "none",
+            textShadow: "0 8px 40px rgba(0,0,0,0.6)",
           }}
         >
           {timings.map((t, i) => {

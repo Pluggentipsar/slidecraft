@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Children, isValidElement, useMemo } from "react";
 import type { ReactElement, ReactNode } from "react";
 import { EditableText } from "@/lib/inline-edit";
+import { useSlideSteps } from "@/lib/slide-steps";
 
 /**
  * EvidenceConstellation — visualiserar forskningsläget som stjärnbilder.
@@ -51,6 +52,9 @@ interface EvidenceConstellationProps {
   rightLabel: string;
   rightTone?: Tone;
   rightDensity?: number;
+
+  /** Aktivera stegvis reveal — vänster konstellationer först, sen höger. Default true. */
+  stepped?: boolean;
 
   children?: ReactNode;
 }
@@ -332,6 +336,7 @@ export function EvidenceConstellation({
   rightLabel,
   rightTone = "warning",
   rightDensity,
+  stepped = true,
   children,
 }: EvidenceConstellationProps) {
   const { left, right } = parseSides(children);
@@ -342,6 +347,12 @@ export function EvidenceConstellation({
 
   // Bakgrundsstjärnor (en gång, deterministisk)
   const ambientStars = useMemo(() => generateAmbientStars("ambient-bg", 80), []);
+
+  // Stegsystem: en step per fakta totalt (vänster + höger)
+  const totalFacts = left.length + right.length;
+  const totalSteps = stepped ? Math.max(1, totalFacts) : 1;
+  const activeStep = useSlideSteps(totalSteps);
+  const visibleCount = stepped ? activeStep + 1 : totalFacts;
 
   return (
     <div
@@ -499,6 +510,9 @@ export function EvidenceConstellation({
             starsPerFact={leftN}
             seedPrefix="L"
             startDelay={0.6}
+            firstFactIndex={0}
+            visibleCount={visibleCount}
+            stepped={stepped}
           />
           <ConstellationColumn
             label={rightLabel}
@@ -507,8 +521,46 @@ export function EvidenceConstellation({
             starsPerFact={rightN}
             seedPrefix="R"
             startDelay={1.0}
+            firstFactIndex={left.length}
+            visibleCount={visibleCount}
+            stepped={stepped}
           />
         </div>
+
+        {/* Progress-indikator när stegvis */}
+        {stepped && totalFacts > 1 ? (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              fontFamily: "var(--font-mono)",
+              fontSize: "clamp(0.65rem, 0.75vw, 0.78rem)",
+              letterSpacing: "0.25em",
+              textTransform: "uppercase",
+              color: "var(--text-muted)",
+              marginTop: "clamp(0.4rem, 0.8vh, 0.7rem)",
+            }}
+          >
+            <div style={{ display: "flex", gap: "0.4rem" }}>
+              {Array.from({ length: totalFacts }).map((_, i) => (
+                <span
+                  key={i}
+                  style={{
+                    height: "2px",
+                    width: i === activeStep ? "1.6rem" : "0.4rem",
+                    background: i <= activeStep ? accent : "color-mix(in srgb, var(--text) 25%, transparent)",
+                    transition: "all 300ms ease",
+                    borderRadius: "1px",
+                  }}
+                />
+              ))}
+            </div>
+            <span style={{ marginLeft: "0.6rem" }}>
+              {activeStep + 1} / {totalFacts}
+            </span>
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -525,6 +577,9 @@ interface ConstellationColumnProps {
   starsPerFact: number;
   seedPrefix: string;
   startDelay: number;
+  firstFactIndex: number;
+  visibleCount: number;
+  stepped: boolean;
 }
 
 function ConstellationColumn({
@@ -534,6 +589,9 @@ function ConstellationColumn({
   starsPerFact,
   seedPrefix,
   startDelay,
+  firstFactIndex,
+  visibleCount,
+  stepped,
 }: ConstellationColumnProps) {
   return (
     <div
@@ -573,16 +631,22 @@ function ConstellationColumn({
           gap: "clamp(0.8rem, 1.5vh, 1.4rem)",
         }}
       >
-        {facts.map((fact, i) => (
-          <Constellation
-            key={i}
-            text={fact}
-            color={color}
-            starCount={starsPerFact}
-            seed={`${seedPrefix}-${i}-${fact}`}
-            delay={startDelay + i * 0.5}
-          />
-        ))}
+        {facts.map((fact, i) => {
+          const globalIndex = firstFactIndex + i;
+          const isVisible = stepped ? globalIndex < visibleCount : true;
+          return (
+            <Constellation
+              key={i}
+              text={fact}
+              color={color}
+              starCount={starsPerFact}
+              seed={`${seedPrefix}-${i}-${fact}`}
+              delay={stepped ? 0.2 : startDelay + i * 0.5}
+              isVisible={isVisible}
+              stepped={stepped}
+            />
+          );
+        })}
       </div>
     </div>
   );
@@ -598,13 +662,18 @@ interface ConstellationProps {
   starCount: number;
   seed: string;
   delay: number;
+  isVisible: boolean;
+  stepped: boolean;
 }
 
-function Constellation({ text, color, starCount, seed, delay }: ConstellationProps) {
+function Constellation({ text, color, starCount, seed, delay, isVisible, stepped }: ConstellationProps) {
   const stars = useMemo(() => generateStars(seed, starCount), [seed, starCount]);
+  const dimmed = stepped && !isVisible;
 
   return (
-    <div
+    <motion.div
+      animate={{ opacity: dimmed ? 0.12 : 1 }}
+      transition={{ duration: 0.5 }}
       style={{
         display: "grid",
         gridTemplateColumns: "clamp(8rem, 14vw, 12rem) 1fr",
@@ -703,6 +772,6 @@ function Constellation({ text, color, starCount, seed, delay }: ConstellationPro
       >
         {renderInline(text, color)}
       </motion.div>
-    </div>
+    </motion.div>
   );
 }

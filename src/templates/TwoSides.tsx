@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Children, isValidElement } from "react";
 import type { ReactElement, ReactNode } from "react";
 import { EditableText } from "@/lib/inline-edit";
+import { useSlideSteps } from "@/lib/slide-steps";
 
 /**
  * TwoSides — två-kolumn-jämförelse med tonalitet.
@@ -59,6 +60,9 @@ interface TwoSidesProps {
 
   /** Mittseparator-text (t.ex. "vs" eller "&"). Default ingen för list, "&" för study. */
   separator?: string;
+
+  /** Aktivera stegvis reveal — vänster sida först, sen höger. Default true. */
+  stepped?: boolean;
 
   children?: ReactNode;
 }
@@ -232,12 +236,18 @@ export function TwoSides({
   rightTone = "warning",
   rightMeta,
   separator,
+  stepped = true,
   children,
 }: TwoSidesProps) {
   const { left, right } = parseSides(children);
   const leftColors = toneColors(leftTone, accent);
   const rightColors = toneColors(rightTone, accent);
   const middle = separator ?? (variant === "study" ? "&" : "");
+  // Stegsystem: 2 steps — vänster först, sen båda
+  const totalSteps = stepped ? 2 : 1;
+  const activeStep = useSlideSteps(totalSteps);
+  const leftVisible = true; // alltid synlig
+  const rightVisible = stepped ? activeStep >= 1 : true;
 
   return (
     <div
@@ -336,12 +346,17 @@ export function TwoSides({
             variant={variant}
             delay={0.5}
             from="left"
+            isVisible={leftVisible}
+            stepped={stepped}
           />
 
           {middle ? (
             <motion.div
               initial={{ opacity: 0, scaleY: 0 }}
-              animate={{ opacity: 1, scaleY: 1 }}
+              animate={{
+                opacity: stepped && !rightVisible ? 0.15 : 1,
+                scaleY: 1,
+              }}
               transition={{ duration: 1, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
               style={{
                 display: "flex",
@@ -370,10 +385,47 @@ export function TwoSides({
             colors={rightColors}
             data={right}
             variant={variant}
-            delay={0.7}
+            delay={stepped ? 0.2 : 0.7}
             from="right"
+            isVisible={rightVisible}
+            stepped={stepped}
           />
         </div>
+
+        {/* Progress-indikator när stegvis */}
+        {stepped ? (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              fontFamily: "var(--font-mono)",
+              fontSize: "clamp(0.65rem, 0.75vw, 0.78rem)",
+              letterSpacing: "0.25em",
+              textTransform: "uppercase",
+              color: "var(--text-muted)",
+              marginTop: "clamp(0.4rem, 0.8vh, 0.7rem)",
+            }}
+          >
+            <div style={{ display: "flex", gap: "0.4rem" }}>
+              {[0, 1].map((i) => (
+                <span
+                  key={i}
+                  style={{
+                    height: "2px",
+                    width: i === activeStep ? "1.6rem" : "0.4rem",
+                    background: i <= activeStep ? accent : "color-mix(in srgb, var(--text) 25%, transparent)",
+                    transition: "all 300ms ease",
+                    borderRadius: "1px",
+                  }}
+                />
+              ))}
+            </div>
+            <span style={{ marginLeft: "0.6rem" }}>
+              {activeStep + 1} / 2
+            </span>
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -391,13 +443,16 @@ interface SideColumnProps {
   variant: "list" | "study";
   delay: number;
   from: "left" | "right";
+  isVisible: boolean;
+  stepped: boolean;
 }
 
-function SideColumn({ label, meta, colors, data, variant, delay, from }: SideColumnProps) {
+function SideColumn({ label, meta, colors, data, variant, delay, from, isVisible, stepped }: SideColumnProps) {
+  const dimmed = stepped && !isVisible;
   return (
     <motion.div
       initial={{ opacity: 0, x: from === "left" ? -16 : 16 }}
-      animate={{ opacity: 1, x: 0 }}
+      animate={{ opacity: dimmed ? 0.12 : 1, x: 0 }}
       transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
       style={{
         display: "flex",
@@ -577,7 +632,7 @@ function StudyParagraph({
         alignItems: "baseline",
         marginTop: "auto",
         paddingTop: "clamp(0.6rem, 1.2vh, 1rem)",
-        borderTop: "1px solid color-mix(in srgb, var(--text) 12%, transparent)",
+        borderTop: "1px solid rgba(247,241,230,0.12)",
       }}
     >
       <div

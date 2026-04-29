@@ -259,34 +259,13 @@ export function AudienceViewer({
             )}
           </AnimatePresence>
 
-          <div
-            className="relative overflow-hidden rounded-xl border border-white/10 bg-black"
-            style={{ aspectRatio: "16 / 9" }}
+          <ScaledSlideViewport
+            index={index}
+            direction={direction}
+            stepsController={stepsController}
           >
-            <AnimatePresence mode="wait" custom={direction}>
-              <motion.div
-                key={index}
-                custom={direction}
-                variants={{
-                  enter: (dir: number) => ({ opacity: 0, x: dir * 20 }),
-                  center: { opacity: 1, x: 0 },
-                  exit: (dir: number) => ({ opacity: 0, x: dir * -20 }),
-                }}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{
-                  x: { type: "spring", stiffness: 300, damping: 32 },
-                  opacity: { duration: 0.2 },
-                }}
-                className="absolute inset-0"
-              >
-                <SlideWithSteps slideKey={index} controllerRef={stepsController}>
-                  {current}
-                </SlideWithSteps>
-              </motion.div>
-            </AnimatePresence>
-          </div>
+            {current}
+          </ScaledSlideViewport>
 
           {/* Navigation-kontroller för publiken */}
           <div className="flex items-center justify-between gap-2">
@@ -572,6 +551,89 @@ function AskQuestionPanel({
           {sending ? "Skickar…" : "Skicka"}
         </button>
       </div>
+    </div>
+  );
+}
+
+// =============================================================================
+// ScaledSlideViewport — renderar slide vid 1920×1080 design-storlek och
+// skalar ner med CSS transform så templates aldrig overrunner mobilskärmen.
+// Samma pattern som EditorPreview använder för att visa preview-zon.
+// =============================================================================
+
+const SLIDE_DESIGN_WIDTH = 1920;
+const SLIDE_DESIGN_HEIGHT = 1080;
+
+function ScaledSlideViewport({
+  index,
+  direction,
+  stepsController,
+  children,
+}: {
+  index: number;
+  direction: number;
+  stepsController: React.MutableRefObject<StepController | null>;
+  children: ReactNode;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const update = () => {
+      const w = el.clientWidth;
+      const h = el.clientHeight;
+      if (w === 0 || h === 0) return;
+      const s = Math.min(w / SLIDE_DESIGN_WIDTH, h / SLIDE_DESIGN_HEIGHT);
+      setScale(s);
+    };
+
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative overflow-hidden rounded-xl border border-white/10 bg-black"
+      style={{ aspectRatio: "16 / 9" }}
+    >
+      <AnimatePresence mode="wait" custom={direction}>
+        <motion.div
+          key={index}
+          custom={direction}
+          variants={{
+            enter: (dir: number) => ({ opacity: 0, x: dir * 20 }),
+            center: { opacity: 1, x: 0 },
+            exit: (dir: number) => ({ opacity: 0, x: dir * -20 }),
+          }}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{
+            x: { type: "spring", stiffness: 300, damping: 32 },
+            opacity: { duration: 0.2 },
+          }}
+          className="absolute inset-0"
+        >
+          <div
+            style={{
+              width: SLIDE_DESIGN_WIDTH,
+              height: SLIDE_DESIGN_HEIGHT,
+              transform: `scale(${scale})`,
+              transformOrigin: "top left",
+            }}
+          >
+            <SlideWithSteps slideKey={index} controllerRef={stepsController}>
+              {children}
+            </SlideWithSteps>
+          </div>
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }

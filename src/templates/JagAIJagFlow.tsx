@@ -6,7 +6,7 @@ import type { ReactElement, ReactNode } from "react";
 import { EditableText } from "@/lib/inline-edit";
 
 /**
- * JagAIJagFlow — visualiserar JAG-AI-JAG-modellen för pedagogisk AI-användning.
+ * JagAIJagFlow — visualiserar Jag-AI-Jag-modellen (en pedagogisk modell för medveten AI-användning).
  *
  * Tre kognitiva faser horisontellt: JAG → AI → JAG. Eleven tänker själv
  * först, använder AI med avsikt, värderar sedan resultatet kritiskt.

@@ -27,7 +27,7 @@ export function AiHyperobject({
   title = "AI är inte en sak till!",
   emphasis = "inte",
   tags,
-  background = "/bilder/karlskrona/bg-caramel.jpg",
+  background,
   darken = 0.72,
 }: AiHyperobjectProps) {
   const tagList = useMemo(() => {

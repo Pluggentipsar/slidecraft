@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Children, isValidElement } from "react";
 import type { ReactElement, ReactNode } from "react";
 import { EditableText } from "@/lib/inline-edit";
+import { useSlideSteps } from "@/lib/slide-steps";
 
 /**
  * AcronymList — visa en akronym/modell genom att expandera bokstav för bokstav.
@@ -34,6 +35,8 @@ interface AcronymListProps {
   background?: string;
   overlay?: number;
   accent?: string;
+  /** Aktivera stegvis reveal — varje klick visar ett item åt gången. Default true. */
+  stepped?: boolean;
   children?: ReactNode;
 }
 
@@ -127,10 +130,15 @@ export function AcronymList({
   background,
   overlay = 0.7,
   accent = "#EC7E26",
+  stepped = true,
   children,
 }: AcronymListProps) {
   const items = parseItems(children);
   const hasLetters = items.some((item) => item.letter.length > 0);
+  // Stegsystem: en step per item
+  const totalSteps = stepped ? Math.max(1, items.length) : 1;
+  const activeStep = useSlideSteps(totalSteps);
+  const visibleCount = stepped ? activeStep + 1 : items.length;
 
   return (
     <div
@@ -224,11 +232,48 @@ export function AcronymList({
               key={i}
               item={item}
               accent={accent}
-              delay={0.5 + i * 0.25}
+              delay={stepped ? 0.2 : 0.5 + i * 0.25}
               hasLetters={hasLetters}
+              isVisible={i < visibleCount}
+              stepped={stepped}
             />
           ))}
         </div>
+
+        {/* Progress-indikator när stegvis */}
+        {stepped && items.length > 1 ? (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              fontFamily: "var(--font-mono)",
+              fontSize: "clamp(0.65rem, 0.75vw, 0.78rem)",
+              letterSpacing: "0.25em",
+              textTransform: "uppercase",
+              color: "var(--text-muted)",
+              marginTop: "clamp(0.4rem, 0.8vh, 0.7rem)",
+            }}
+          >
+            <div style={{ display: "flex", gap: "0.4rem" }}>
+              {items.map((_, i) => (
+                <span
+                  key={i}
+                  style={{
+                    height: "2px",
+                    width: i === activeStep ? "1.6rem" : "0.4rem",
+                    background: i <= activeStep ? accent : "color-mix(in srgb, var(--text) 25%, transparent)",
+                    transition: "all 300ms ease",
+                    borderRadius: "1px",
+                  }}
+                />
+              ))}
+            </div>
+            <span style={{ marginLeft: "0.6rem" }}>
+              {activeStep + 1} / {items.length}
+            </span>
+          </div>
+        ) : null}
 
         {/* Tagline */}
         {tagline ? (
@@ -266,16 +311,21 @@ function AcronymRow({
   accent,
   delay,
   hasLetters,
+  isVisible,
+  stepped,
 }: {
   item: Item;
   accent: string;
   delay: number;
   hasLetters: boolean;
+  isVisible: boolean;
+  stepped: boolean;
 }) {
+  const dimmed = stepped && !isVisible;
   return (
     <motion.div
       initial={{ opacity: 0, x: -16 }}
-      animate={{ opacity: 1, x: 0 }}
+      animate={{ opacity: dimmed ? 0.12 : 1, x: 0 }}
       transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
       style={{
         display: "grid",

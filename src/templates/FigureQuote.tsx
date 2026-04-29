@@ -43,7 +43,7 @@ export function FigureQuote({
   context,
   image,
   alt = "",
-  background = "/bilder/karlskrona/bg-caramel.jpg",
+  background,
   imageCorner = "bottom-right",
   darken = 0.55,
   quoteSize = "xl",

@@ -1,20 +1,20 @@
 "use client";
 
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { EditableText } from "@/lib/inline-edit";
 
 interface StatCompareProps {
-  /** Första värdet (tex 3) */
-  from: number;
+  /** Första värdet (tex 3 eller "3") */
+  from: number | string;
   /** Första suffix (tex "%") */
   fromSuffix?: string;
   /** Första prefix (tex "kr") */
   fromPrefix?: string;
   /** Etikett för första (tex "2022") */
   fromLabel?: string;
-  /** Andra värdet (tex 68) */
-  to: number;
+  /** Andra värdet (tex 68 eller "68") */
+  to: number | string;
   /** Andra suffix */
   toSuffix?: string;
   /** Andra prefix */
@@ -26,9 +26,9 @@ interface StatCompareProps {
   /** Caption under siffrorna - sätter statistiken i kontext */
   caption?: string;
   /** Animationstid i sekunder. Default 1.8 */
-  duration?: number;
+  duration?: number | string;
   /** Hur siffran ska visas */
-  decimals?: number;
+  decimals?: number | string;
 }
 
 /**
@@ -57,6 +57,10 @@ export function StatCompare({
   duration = 1.8,
   decimals = 0,
 }: StatCompareProps) {
+  const fromNum = typeof from === "string" ? parseFloat(from) : from;
+  const toNum = typeof to === "string" ? parseFloat(to) : to;
+  const durationNum = typeof duration === "string" ? parseFloat(duration) : duration;
+  const decimalsNum = typeof decimals === "string" ? parseInt(decimals, 10) : decimals;
   return (
     <div className="slide-container">
       <div
@@ -80,13 +84,13 @@ export function StatCompare({
 
         <div className="flex items-center justify-center gap-6 md:gap-12">
           <AnimatedStat
-            value={from}
+            value={fromNum}
             prefix={fromPrefix}
             suffix={fromSuffix}
             label={fromLabel}
-            duration={duration}
+            duration={durationNum}
             delay={0.2}
-            decimals={decimals}
+            decimals={decimalsNum}
             muted
           />
 
@@ -94,7 +98,7 @@ export function StatCompare({
             className="flex flex-col items-center gap-1 text-accent"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: duration * 0.5 }}
+            transition={{ duration: 0.5, delay: durationNum * 0.5 }}
           >
             <svg
               width="56"
@@ -112,19 +116,19 @@ export function StatCompare({
                 d="M5 12h14M12 5l7 7-7 7"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
-                transition={{ duration: 0.7, delay: duration * 0.5 }}
+                transition={{ duration: 0.7, delay: durationNum * 0.5 }}
               />
             </svg>
           </motion.div>
 
           <AnimatedStat
-            value={to}
+            value={toNum}
             prefix={toPrefix}
             suffix={toSuffix}
             label={toLabel}
-            duration={duration}
-            delay={duration * 0.5 + 0.5}
-            decimals={decimals}
+            duration={durationNum}
+            delay={durationNum * 0.5 + 0.5}
+            decimals={decimalsNum}
           />
         </div>
 
@@ -133,7 +137,7 @@ export function StatCompare({
             className="mx-auto max-w-3xl text-center text-[clamp(1rem,1.8vw,1.375rem)] leading-snug text-text-muted"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: duration + 0.4 }}
+            transition={{ duration: 0.6, delay: durationNum + 0.4 }}
           >
             <EditableText path="caption" value={caption ?? ""}>{caption}</EditableText>
           </motion.p>
@@ -164,22 +168,31 @@ function AnimatedStat({
   decimals,
   muted = false,
 }: AnimatedStatProps) {
-  const motionValue = useMotionValue(0);
-  const rounded = useTransform(motionValue, (v) => v.toFixed(decimals));
-  const [display, setDisplay] = useState("0");
+  const [display, setDisplay] = useState((0).toFixed(decimals));
 
   useEffect(() => {
-    const controls = animate(motionValue, value, {
-      duration,
-      delay,
-      ease: [0.22, 1, 0.36, 1],
-    });
-    const unsub = rounded.on("change", (v) => setDisplay(v));
-    return () => {
-      controls.stop();
-      unsub();
+    if (!Number.isFinite(value)) return;
+    const startMs = performance.now();
+    const delayMs = delay * 1000;
+    const totalMs = duration * 1000;
+    let raf = 0;
+    const easeOut = (t: number) => 1 - Math.pow(1 - t, 4);
+    const tick = (now: number) => {
+      const elapsed = now - startMs - delayMs;
+      if (elapsed < 0) {
+        setDisplay((0).toFixed(decimals));
+      } else if (elapsed >= totalMs) {
+        setDisplay(value.toFixed(decimals));
+        return;
+      } else {
+        const progress = elapsed / totalMs;
+        setDisplay((value * easeOut(progress)).toFixed(decimals));
+      }
+      raf = requestAnimationFrame(tick);
     };
-  }, [motionValue, rounded, value, duration, delay]);
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [value, duration, delay, decimals]);
 
   return (
     <motion.div

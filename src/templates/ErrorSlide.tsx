@@ -27,8 +27,8 @@ interface ErrorSlideProps {
  */
 export function ErrorSlide({
   errorCode = "404",
-  errorTitle = "FÖRELÄSNINGEN KUNDE INTE LADDAS",
-  errorMessage = "AI försökte ta över föreläsningen men misslyckades.\nPresentatören är tillbaka vid kontrollerna.",
+  errorTitle = "PRESENTATIONEN KUNDE INTE LADDAS",
+  errorMessage = "AI försökte ta över presentationen men misslyckades.\nPresentatören är tillbaka vid kontrollerna.",
   errorTag = "ERR_AI_TAKEOVER",
   timestamp = "2026-04-29T14:17:43Z",
   showProgress = true,

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Children, isValidElement } from "react";
 import type { ReactElement, ReactNode } from "react";
 import { EditableText } from "@/lib/inline-edit";
+import { useSlideSteps } from "@/lib/slide-steps";
 
 /**
  * DualAffordance — visualiserar att samma verktyg har två affordanser samtidigt.
@@ -42,6 +43,8 @@ interface DualAffordanceProps {
   positiveColor?: string;
   /** Färg för negativ kolumn. Default warning-gul. */
   negativeColor?: string;
+  /** Aktivera stegvis reveal — varje klick visar ett verktyg åt gången. Default true. */
+  stepped?: boolean;
   children?: ReactNode;
 }
 
@@ -158,9 +161,14 @@ export function DualAffordance({
   negativeLabel = "Inbjuder till genväg",
   positiveColor = "#7BC474",
   negativeColor = "#E8A845",
+  stepped = true,
   children,
 }: DualAffordanceProps) {
   const tools = parseTools(children);
+  // Stegsystem: en step per verktyg
+  const totalSteps = stepped ? Math.max(1, tools.length) : 1;
+  const activeStep = useSlideSteps(totalSteps);
+  const visibleCount = stepped ? activeStep + 1 : tools.length;
 
   return (
     <div
@@ -313,10 +321,47 @@ export function DualAffordance({
               positiveColor={positiveColor}
               negativeColor={negativeColor}
               accent={accent}
-              delay={1.0 + i * 0.5}
+              delay={stepped ? 0.2 : 1.0 + i * 0.5}
+              isVisible={i < visibleCount}
+              stepped={stepped}
             />
           ))}
         </div>
+
+        {/* Progress-indikator när stegvis */}
+        {stepped && tools.length > 1 ? (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              fontFamily: "var(--font-mono)",
+              fontSize: "clamp(0.65rem, 0.75vw, 0.78rem)",
+              letterSpacing: "0.25em",
+              textTransform: "uppercase",
+              color: "var(--text-muted)",
+              marginTop: "clamp(0.4rem, 0.8vh, 0.7rem)",
+            }}
+          >
+            <div style={{ display: "flex", gap: "0.4rem" }}>
+              {tools.map((_, i) => (
+                <span
+                  key={i}
+                  style={{
+                    height: "2px",
+                    width: i === activeStep ? "1.6rem" : "0.4rem",
+                    background: i <= activeStep ? accent : "color-mix(in srgb, var(--text) 25%, transparent)",
+                    transition: "all 300ms ease",
+                    borderRadius: "1px",
+                  }}
+                />
+              ))}
+            </div>
+            <span style={{ marginLeft: "0.6rem" }}>
+              {activeStep + 1} / {tools.length}
+            </span>
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -332,15 +377,22 @@ function ToolRow({
   negativeColor,
   accent,
   delay,
+  isVisible,
+  stepped,
 }: {
   tool: ToolRow;
   positiveColor: string;
   negativeColor: string;
   accent: string;
   delay: number;
+  isVisible: boolean;
+  stepped: boolean;
 }) {
+  const dimmed = stepped && !isVisible;
   return (
-    <div
+    <motion.div
+      animate={{ opacity: dimmed ? 0.12 : 1 }}
+      transition={{ duration: 0.5 }}
       style={{
         display: "grid",
         gridTemplateColumns: "1fr clamp(8rem, 14vw, 12rem) 1fr",
@@ -433,6 +485,6 @@ function ToolRow({
         <span style={{ color: negativeColor, marginRight: "0.4rem", fontFamily: "var(--font-mono)", fontWeight: 700 }}>−</span>
         {renderInline(tool.negative, negativeColor)}
       </motion.div>
-    </div>
+    </motion.div>
   );
 }

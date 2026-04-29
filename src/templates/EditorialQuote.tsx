@@ -155,7 +155,7 @@ function getPreset(style: Style, accent: string): StylePreset {
         fontFamily: "var(--font-display)",
         fontWeight: 400,
         fontStyle: "italic",
-        color: "color-mix(in srgb, var(--text) 65%, transparent)",
+        color: "color-mix(in srgb, var(--text) 60%, transparent)",
         letterSpacing: "0.02em",
         lineHeight: 1.4,
         beat: 0.45,

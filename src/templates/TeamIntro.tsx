@@ -82,14 +82,14 @@ function extractMembers(
  *
  * <TeamIntro
  *   background="/videos/hero.mp4"
- *   title="Acme Studio"
+ *   title="Rangsjö Creation AB"
  *   gradient="both"
  * >
- *   <TeamMember name="Avery Chen" role="Founder & Designer">
- *   Designar verktyg för **kreativt arbete**. Tidigare hos Linear.
+ *   <TeamMember name="Förnamn Efternamn" role="Roll">
+ *   Författare till *Med AI som stöd* (Liber). Nominerad till årets AI-svensk.
  *   </TeamMember>
- *   <TeamMember name="Sam Patel" role="Head of Engineering">
- *   Bygger system som **förstår sig själva**. Open source-bidragare.
+ *   <TeamMember name="Nadia Rangsjö" role="Utvecklingsstrateg & författare">
+ *   Författare till *Skolans roll mot heder*. Hederssamordnare.
  *   </TeamMember>
  * </TeamIntro>
  */

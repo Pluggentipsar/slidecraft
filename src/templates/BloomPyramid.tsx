@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Children, isValidElement } from "react";
 import type { ReactElement, ReactNode } from "react";
 import { EditableText } from "@/lib/inline-edit";
+import { useSlideSteps } from "@/lib/slide-steps";
 
 /**
  * BloomPyramid — visualiserar Bloom som en pyramid med två möjliga riktningar.
@@ -49,6 +50,8 @@ interface BloomPyramidProps {
   upLabel?: string;
   /** Etikett för nedåt-pilen (omvänd designriktning). */
   downLabel?: string;
+  /** Aktivera stegvis reveal — varje klick visar ett band åt gången. Default true. */
+  stepped?: boolean;
   children?: ReactNode;
 }
 
@@ -129,6 +132,7 @@ export function BloomPyramid({
   arrows = "both",
   upLabel = "Klassisk byggriktning",
   downLabel = "Omvänd designriktning",
+  stepped = true,
   children,
 }: BloomPyramidProps) {
   const levels = parseLevels(children);
@@ -139,6 +143,10 @@ export function BloomPyramid({
     if (total <= 1) return maxWidth;
     return minWidth + (maxWidth - minWidth) * (i / (total - 1));
   };
+  // Stegsystem: en step per nivå
+  const totalSteps = stepped ? Math.max(1, levels.length) : 1;
+  const activeStep = useSlideSteps(totalSteps);
+  const visibleCount = stepped ? activeStep + 1 : levels.length;
 
   return (
     <div
@@ -255,7 +263,9 @@ export function BloomPyramid({
                 level={level}
                 widthPercent={widthFor(i, levels.length)}
                 accent={accent}
-                delay={0.6 + i * 0.18}
+                delay={stepped ? 0.2 : 0.6 + i * 0.18}
+                isVisible={i < visibleCount}
+                stepped={stepped}
               />
             ))}
           </div>
@@ -269,6 +279,41 @@ export function BloomPyramid({
             delay={1.8}
           />
         </div>
+
+        {/* Progress-indikator när stegvis */}
+        {stepped && levels.length > 1 ? (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              fontFamily: "var(--font-mono)",
+              fontSize: "clamp(0.65rem, 0.75vw, 0.78rem)",
+              letterSpacing: "0.25em",
+              textTransform: "uppercase",
+              color: "var(--text-muted)",
+              alignSelf: "center",
+            }}
+          >
+            <div style={{ display: "flex", gap: "0.4rem" }}>
+              {levels.map((_, i) => (
+                <span
+                  key={i}
+                  style={{
+                    height: "2px",
+                    width: i === activeStep ? "1.6rem" : "0.4rem",
+                    background: i <= activeStep ? accent : "color-mix(in srgb, var(--text) 25%, transparent)",
+                    transition: "all 300ms ease",
+                    borderRadius: "1px",
+                  }}
+                />
+              ))}
+            </div>
+            <span style={{ marginLeft: "0.6rem" }}>
+              {activeStep + 1} / {levels.length}
+            </span>
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -283,16 +328,21 @@ function BloomBand({
   widthPercent,
   accent,
   delay,
+  isVisible,
+  stepped,
 }: {
   level: Level;
   widthPercent: number;
   accent: string;
   delay: number;
+  isVisible: boolean;
+  stepped: boolean;
 }) {
+  const dimmed = stepped && !isVisible;
   return (
     <motion.div
       initial={{ opacity: 0, scaleX: 0 }}
-      animate={{ opacity: 1, scaleX: 1 }}
+      animate={{ opacity: dimmed ? 0.15 : 1, scaleX: 1 }}
       transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
       style={{
         width: `${widthPercent}%`,

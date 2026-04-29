@@ -25,6 +25,14 @@ const nextConfig: NextConfig = {
     "172.20.*.*",
     "192.168.*.*",
   ],
+  experimental: {
+    // Default body-limit för Server Actions är 1 MB. Höjs så FloatingVideo-
+    // uploads går igenom. Uppladdning sker lokalt (Cloudflare-tunneln
+    // används bara för att visa, inte ladda upp).
+    serverActions: {
+      bodySizeLimit: "500mb",
+    },
+  },
 };
 
 export default nextConfig;

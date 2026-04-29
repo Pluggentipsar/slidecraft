@@ -24,6 +24,17 @@ interface ManifestoProps {
   accent?: string;
   /** Extra dekorativt nummer eller glyph stort i bakgrunden. */
   decoration?: string;
+  /**
+   * Mörk overlay-styrka (0-1) på bakgrundsbild. Default 0.6.
+   * Höga värden = mer dimmad bakgrund (bra när bakgrund tävlar med text).
+   */
+  overlay?: number | string;
+  /**
+   * Compact-mode = mindre font, snävare maxWidth. Bra när Manifesto
+   * är på en sida tillsammans med overlay-element (FloatingChat,
+   * FloatingPills) och behöver hålla sig på sin halva.
+   */
+  compact?: boolean | string;
   /** Alternativ input: MDX-innehåll i stället för `text`-prop. */
   children?: ReactNode;
 }
@@ -84,11 +95,17 @@ function parseWords(text: string): Word[] {
  * Deklarativa one-liners. Ord animeras in ett i taget med blur → skarpt.
  * Betonade ord (*em*, **strong**) får accent-färg. Stor generös tomrum.
  */
-function resolveBackground(bg: string | undefined, fallback: string): string {
+function resolveBackground(
+  bg: string | undefined,
+  fallback: string,
+  overlay: number = 0.6,
+): string {
   if (!bg) return fallback;
   if (bg.startsWith("/") || bg.startsWith("http")) {
     // Bildfilssökväg — lägg på en mörk dim för läsbarhet
-    return `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.65)), url('${bg}') center/cover no-repeat, ${fallback}`;
+    const a = Math.max(0, Math.min(1, overlay));
+    const b = Math.min(1, a + 0.1);
+    return `linear-gradient(rgba(0,0,0,${a}), rgba(0,0,0,${b})), url('${bg}') center/cover no-repeat, ${fallback}`;
   }
   return bg;
 }
@@ -101,6 +118,8 @@ export function Manifesto({
   background,
   accent = "#B4763A",
   decoration,
+  overlay,
+  compact,
   children,
 }: ManifestoProps) {
   const resolvedText =
@@ -109,7 +128,16 @@ export function Manifesto({
       : extractMdxText(children).trim()) || "";
   const words = parseWords(resolvedText);
 
-  const variantStyle = {
+  const overlayNum =
+    overlay === undefined
+      ? 0.6
+      : typeof overlay === "string"
+        ? parseFloat(overlay)
+        : overlay;
+  const compactBool =
+    typeof compact === "string" ? compact !== "false" : !!compact;
+
+  const fullVariantStyle = {
     display: {
       fontFamily: "var(--font-display)",
       fontWeight: 700,
@@ -135,6 +163,41 @@ export function Manifesto({
     },
   }[variant];
 
+  const compactVariantStyle = {
+    display: {
+      fontFamily: "var(--font-display)",
+      fontWeight: 700,
+      fontSize: "clamp(2rem, 4vw, 4.4rem)",
+      lineHeight: 1.08,
+      letterSpacing: "-0.025em",
+    },
+    serif: {
+      fontFamily: "var(--font-display)",
+      fontStyle: "italic",
+      fontWeight: 400,
+      fontSize: "clamp(2rem, 4vw, 4.2rem)",
+      lineHeight: 1.15,
+      letterSpacing: "-0.02em",
+    },
+    condensed: {
+      fontFamily: "var(--font-display)",
+      fontWeight: 800,
+      fontSize: "clamp(1.8rem, 3.6vw, 4rem)",
+      lineHeight: 1.05,
+      letterSpacing: "-0.03em",
+      textTransform: "uppercase" as const,
+    },
+  }[variant];
+
+  const variantStyle = compactBool ? compactVariantStyle : fullVariantStyle;
+  const maxWidthValue = compactBool
+    ? align === "center"
+      ? "16em"
+      : "11em"
+    : align === "center"
+      ? "22em"
+      : "18em";
+
   return (
     <div
       className="relative h-full w-full overflow-hidden"
@@ -142,6 +205,7 @@ export function Manifesto({
         background: resolveBackground(
           background,
           "radial-gradient(ellipse at 30% 20%, #1a1612 0%, #0a0908 70%)",
+          overlayNum,
         ),
       }}
     >
@@ -247,14 +311,14 @@ export function Manifesto({
           placeholder="Skriv kort. **fet** för accent, *kursiv* för kursivering. Tom rad = ny strof."
           wrapperStyle={{
             ...variantStyle,
-            maxWidth: align === "center" ? "22em" : "18em",
+            maxWidth: maxWidthValue,
             color: "var(--text)",
           }}
         >
           <div
             style={{
               ...variantStyle,
-              maxWidth: align === "center" ? "22em" : "18em",
+              maxWidth: maxWidthValue,
               color: "var(--text)",
             }}
           >

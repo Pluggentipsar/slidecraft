@@ -109,11 +109,65 @@ import {
   JagAIJagFlow,
   LensApplication,
   BeforeAfterPhases,
+  ProcessLogPreview,
+  ContractMockup,
+  TimeHorizons,
+  FloatingImage,
+  FloatingVideo,
+  SlideWithOverlays,
+  RoleConstellation,
+  SOLOGraph,
+  NegotiationStory,
+  ParallaxTimeline,
+  JaggedFrontier,
+  FloatingChat,
+  NarrativeFrames,
+  DimensionMap,
+  BigDefinition,
+  Denials,
+  PromptToImage,
+  WeirdReveal,
+  WeirdSummary,
+  BiasCode,
+  DesignChoices,
+  LiveEmbed,
+  DarkPatternsApp,
+  QuoteWall,
+  FloatingPills,
+  FloatingPhone,
+  VoiceReveal,
+  PowerStack,
+  InfluenceChain,
+  CaseGrid,
+  MediaCarousel,
+  MandateMap,
+  HumanOnlyTriad,
+  PrincipleStack,
+  ZoneShift,
+  WithAboutAgainstThrough,
+  MirrorReveal,
+  BildningContrast,
+  TaskBucket,
+  SkillStack,
+  CoreInsight,
+  OccupationRadar,
+  FloatingText,
+  TimelineCompression,
+  ParadoxStat,
+  BiasShowcase,
+  RapidFireIdeas,
+  HopeMontage,
+  TackSlide,
+  NextTokenDemo,
+  DataRedaction,
+  PrivacyDecree,
+  LiveReflection,
 } from "@/templates";
 import { Slide } from "./Slide";
 import { AudienceViewer } from "./AudienceViewer";
 import { extractNotes } from "@/lib/extract-notes";
 import { extractSlideMetas } from "@/lib/extract-slide-types";
+import { preprocessOverlaysForPresenter } from "@/lib/mdx-parser";
 import { AudienceEditProvider } from "@/lib/inline-edit";
 import { getTheme, themeToCssVars } from "@/themes";
 import type { AudienceSession } from "@/lib/audience-session";
@@ -238,6 +292,59 @@ const mdxComponents = {
   JagAIJagFlow,
   LensApplication,
   BeforeAfterPhases,
+  ProcessLogPreview,
+  ContractMockup,
+  TimeHorizons,
+  FloatingImage,
+  FloatingVideo,
+  SlideWithOverlays,
+  RoleConstellation,
+  SOLOGraph,
+  NegotiationStory,
+  ParallaxTimeline,
+  JaggedFrontier,
+  FloatingChat,
+  NarrativeFrames,
+  DimensionMap,
+  BigDefinition,
+  Denials,
+  PromptToImage,
+  WeirdReveal,
+  WeirdSummary,
+  BiasCode,
+  DesignChoices,
+  LiveEmbed,
+  DarkPatternsApp,
+  QuoteWall,
+  FloatingPills,
+  FloatingPhone,
+  VoiceReveal,
+  PowerStack,
+  InfluenceChain,
+  CaseGrid,
+  MediaCarousel,
+  MandateMap,
+  HumanOnlyTriad,
+  PrincipleStack,
+  ZoneShift,
+  WithAboutAgainstThrough,
+  MirrorReveal,
+  BildningContrast,
+  TaskBucket,
+  SkillStack,
+  CoreInsight,
+  OccupationRadar,
+  FloatingText,
+  TimelineCompression,
+  ParadoxStat,
+  BiasShowcase,
+  RapidFireIdeas,
+  HopeMontage,
+  TackSlide,
+  NextTokenDemo,
+  DataRedaction,
+  PrivacyDecree,
+  LiveReflection,
 };
 
 export async function AudiencePresentation({
@@ -248,7 +355,9 @@ export async function AudiencePresentation({
   deployMode = "full",
 }: AudiencePresentationProps) {
   const { content } = extractNotes(source);
-  const slideMetas = extractSlideMetas(content);
+  // Wrap slides med overlays (FloatingImage etc.) i SlideWithOverlays.
+  const processedContent = preprocessOverlaysForPresenter(content);
+  const slideMetas = extractSlideMetas(processedContent);
   const themeTokens = getTheme(theme);
   const cssVars = themeToCssVars(themeTokens);
 
@@ -265,7 +374,7 @@ export async function AudiencePresentation({
           slideMetas={slideMetas}
           presentationTitle={presentationTitle}
         >
-          <MDXRemote source={content} components={mdxComponents} />
+          <MDXRemote source={processedContent} components={mdxComponents} />
         </AudienceViewer>
       </AudienceEditProvider>
     </div>

@@ -47,6 +47,8 @@ interface LensApplicationProps {
   background?: string;
   overlay?: number;
   accent?: string;
+  /** Ta bort ram, hörnornament och beskärning — visar hela bilden ren. */
+  noFrame?: boolean;
   /** Valfri children — om angiven används istället för mekanism-prop. */
   children?: ReactNode;
 }
@@ -105,6 +107,7 @@ export function LensApplication({
   background,
   overlay = 0.65,
   accent = "#EC7E26",
+  noFrame = false,
 }: LensApplicationProps) {
   const hasMedia = Boolean(imageUrl || videoUrl);
 
@@ -179,6 +182,7 @@ export function LensApplication({
             videoUrl={videoUrl}
             accent={accent}
             delay={0.5}
+            noFrame={noFrame}
           />
         ) : null}
 
@@ -317,6 +321,7 @@ export function LensApplication({
             videoUrl={videoUrl}
             accent={accent}
             delay={0.6}
+            noFrame={noFrame}
           />
         ) : null}
       </div>
@@ -333,13 +338,16 @@ function MediaPanel({
   videoUrl,
   accent,
   delay,
+  noFrame = false,
 }: {
   imageUrl?: string;
   videoUrl?: string;
   accent: string;
   delay: number;
+  noFrame?: boolean;
 }) {
   const [videoError, setVideoError] = useState(false);
+  const objectFit: "cover" | "contain" = noFrame ? "contain" : "cover";
 
   return (
     <motion.div
@@ -354,10 +362,12 @@ function MediaPanel({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        borderRadius: "0.5rem",
+        borderRadius: noFrame ? 0 : "0.5rem",
         overflow: "hidden",
-        boxShadow: `0 12px 50px rgba(0,0,0,0.5), 0 0 0 1px ${accent}33`,
-        background: "rgba(10,9,8,0.4)",
+        boxShadow: noFrame
+          ? "none"
+          : `0 12px 50px rgba(0,0,0,0.5), 0 0 0 1px ${accent}33`,
+        background: noFrame ? "transparent" : "rgba(10,9,8,0.4)",
       }}
     >
       {videoUrl && !videoError ? (
@@ -371,7 +381,7 @@ function MediaPanel({
           style={{
             width: "100%",
             height: "100%",
-            objectFit: "cover",
+            objectFit,
           }}
         />
       ) : imageUrl ? (
@@ -382,7 +392,7 @@ function MediaPanel({
           style={{
             width: "100%",
             height: "100%",
-            objectFit: "cover",
+            objectFit,
           }}
         />
       ) : (
@@ -404,35 +414,39 @@ function MediaPanel({
         </div>
       )}
 
-      {/* Dekorativ accent-ram i hörnen */}
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          top: 8,
-          left: 8,
-          width: "1.5rem",
-          height: "1.5rem",
-          borderTop: `2px solid ${accent}`,
-          borderLeft: `2px solid ${accent}`,
-          opacity: 0.7,
-          pointerEvents: "none",
-        }}
-      />
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          bottom: 8,
-          right: 8,
-          width: "1.5rem",
-          height: "1.5rem",
-          borderBottom: `2px solid ${accent}`,
-          borderRight: `2px solid ${accent}`,
-          opacity: 0.7,
-          pointerEvents: "none",
-        }}
-      />
+      {/* Dekorativ accent-ram i hörnen — döljs när noFrame=true */}
+      {!noFrame ? (
+        <>
+          <div
+            aria-hidden
+            style={{
+              position: "absolute",
+              top: 8,
+              left: 8,
+              width: "1.5rem",
+              height: "1.5rem",
+              borderTop: `2px solid ${accent}`,
+              borderLeft: `2px solid ${accent}`,
+              opacity: 0.7,
+              pointerEvents: "none",
+            }}
+          />
+          <div
+            aria-hidden
+            style={{
+              position: "absolute",
+              bottom: 8,
+              right: 8,
+              width: "1.5rem",
+              height: "1.5rem",
+              borderBottom: `2px solid ${accent}`,
+              borderRight: `2px solid ${accent}`,
+              opacity: 0.7,
+              pointerEvents: "none",
+            }}
+          />
+        </>
+      ) : null}
     </motion.div>
   );
 }

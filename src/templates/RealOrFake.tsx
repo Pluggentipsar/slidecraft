@@ -216,7 +216,6 @@ function Portrait({
         >
           {name}
         </motion.p>
-        {/* Note: name is exposed as leftName/rightName via the parent — edit via form */}
         <motion.p
           initial={{ opacity: 0, y: 6 }}
           animate={{

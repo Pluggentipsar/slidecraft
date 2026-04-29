@@ -10,7 +10,7 @@ interface NamedPortraitProps {
   alt?: string;
   /** Namn som rullar långsamt i bakgrunden */
   name: string;
-  /** Fotobakgrund (path) — t.ex. /bilder/karlskrona/bg-sage.jpg */
+  /** Fotobakgrund (path eller URL) — valfri. Lämna tom för enbart mörk bakgrund. */
   background?: string;
   /** Mörk overlay 0-1, default 0.55 */
   darken?: number;
@@ -30,7 +30,7 @@ export function NamedPortrait({
   image,
   alt = "",
   name,
-  background = "/bilder/karlskrona/bg-sage.jpg",
+  background,
   darken = 0.55,
   scrollDuration = 40,
   direction = "left",

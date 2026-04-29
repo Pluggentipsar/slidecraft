@@ -71,14 +71,54 @@ function extractText(node: ReactNode): string {
 
 function parseLines(children: ReactNode): ChatLine[] {
   const lines: ChatLine[] = [];
+
   const walkLi = (li: ReactElement<{ children?: ReactNode }>) => {
-    const raw = extractText(li.props.children);
-    const m = raw.match(/^\*\*([^*]+):\*\*\s*(.*)$/s);
-    const label = m ? m[1].trim() : "";
-    const text = m ? m[2].trim() : raw.trim();
-    const side: "user" | "bot" = /^(du|user|jag)\b/i.test(label) ? "user" : "bot";
+    // MDX renderar **Label:** som <strong>Label:</strong>. Hitta första
+    // <strong> som första child = labeln, resten = meddelande-texten.
+    let label = "";
+    const textParts: string[] = [];
+    let foundLabel = false;
+    Children.forEach(li.props.children, (child) => {
+      if (
+        !foundLabel &&
+        isValidElement(child) &&
+        (child as ReactElement).type === "strong"
+      ) {
+        const inner = extractText(
+          (child as ReactElement<{ children?: ReactNode }>).props.children,
+        );
+        label = inner.replace(/:\s*$/, "").trim();
+        foundLabel = true;
+      } else {
+        textParts.push(extractText(child));
+      }
+    });
+    let text = textParts.join("").trim();
+    text = text.replace(/^:\s*/, "");
+
+    if (!foundLabel) {
+      const raw = extractText(li.props.children).trim();
+      const md = raw.match(/^\*\*([^*]+):\*\*\s*(.*)$/s);
+      if (md) {
+        label = md[1].trim();
+        text = md[2].trim();
+      } else {
+        const plain = raw.match(/^([A-Za-zÅÄÖåäö][^:]{0,20}):\s*(.*)$/s);
+        if (plain) {
+          label = plain[1].trim();
+          text = plain[2].trim();
+        } else {
+          text = raw;
+        }
+      }
+    }
+
+    const side: "user" | "bot" = /^(du|user|jag)\b/i.test(label)
+      ? "user"
+      : "bot";
     lines.push({ side, label, text });
   };
+
   Children.forEach(children, (child) => {
     if (!isValidElement(child)) return;
     const el = child as ReactElement<{ children?: ReactNode }>;
